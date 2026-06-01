@@ -992,6 +992,31 @@ body.light { --bg:#f0f4f0; --bg2:#ffffff; --surface:#ffffff; --surface2:#f5f9f5;
           <option value="nao_informado">⚪ Não informado</option>
         </select>
       </div>
+      <div class="form-group full" style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px;">
+        <label class="form-label" style="font-weight:700;color:var(--primary);">🚚 Cobrança de Frete</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px;">
+          <div>
+            <label class="form-label">Frete</label>
+            <select class="form-select" id="fp-frete-tipo">
+              <option value="cif">CIF — Frete incluso (sem cobrança)</option>
+              <option value="fob">FOB — Frete por conta do cliente</option>
+              <option value="sem_frete">Não informado</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Valor do Frete (R$)</label>
+            <input class="form-input" id="fp-frete-valor" placeholder="0,00" type="number" step="0.01">
+          </div>
+          <div>
+            <label class="form-label">Venc. Boleto Frete</label>
+            <input class="form-input" id="fp-frete-venc" type="date">
+          </div>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label class="form-label">Vencimento Boleto do Produto</label>
+        <input class="form-input" id="fp-produto-venc" type="date">
+      </div>
     </div>
 
     <div style="margin-bottom:10px;">
@@ -1332,12 +1357,20 @@ function abrirModalPedido(id){
     document.getElementById('fp-desconto-pedido').value=ped.desconto||0;
     document.getElementById('fp-obs-pedido').value=ped.obs||'';
     document.getElementById('fp-descarga-pedido').value=ped.descarga||'nao_informado';
+    document.getElementById('fp-frete-tipo').value=ped.freteTipo||'cif';
+    document.getElementById('fp-frete-valor').value=ped.freteValor||'';
+    document.getElementById('fp-frete-venc').value=ped.freteVenc||'';
+    document.getElementById('fp-produto-venc').value=ped.produtoVenc||'';
     itensPedido=JSON.parse(JSON.stringify(ped.itens||[]));
   } else {
     document.getElementById('fp-status-pedido').value='aberto';
     document.getElementById('fp-desconto-pedido').value=0;
     document.getElementById('fp-obs-pedido').value='';
     document.getElementById('fp-descarga-pedido').value='nao_informado';
+    document.getElementById('fp-frete-tipo').value='cif';
+    document.getElementById('fp-frete-valor').value='';
+    document.getElementById('fp-frete-venc').value='';
+    document.getElementById('fp-produto-venc').value='';
   }
   renderItensPedido();
   document.getElementById('modal-pedido').classList.add('open');
@@ -1423,6 +1456,10 @@ function salvarPedido(){
     desconto:desc,
     obs:document.getElementById('fp-obs-pedido').value.trim(),
     descarga:document.getElementById('fp-descarga-pedido').value,
+    freteTipo:document.getElementById('fp-frete-tipo').value,
+    freteValor:document.getElementById('fp-frete-valor').value,
+    freteVenc:document.getElementById('fp-frete-venc').value,
+    produtoVenc:document.getElementById('fp-produto-venc').value,
     itens:JSON.parse(JSON.stringify(itensPedido)),
     subtotal:subtotal,
     total:total
@@ -1482,6 +1519,20 @@ function verPedido(id){
   html+='<div style="font-size:20px;font-weight:700;color:var(--accent);margin-top:6px;">Total: '+fmtMoeda(ped.total)+'</div>';
   html+='</div>';
   if(ped.obs) html+='<div style="margin-top:14px;padding:12px;background:var(--bg2);border-radius:8px;font-size:12px;color:var(--text2);"><strong>Obs:</strong> '+esc(ped.obs)+'</div>';
+  // Frete info
+  if(ped.freteTipo){
+    var fLabels={cif:'CIF — Frete incluso',fob:'FOB — Frete por conta do cliente',sem_frete:'Não informado',incluso:'CIF — Frete incluso',separado:'FOB — Frete por conta do cliente'};
+    var fColor=(ped.freteTipo==='fob'||ped.freteTipo==='separado')?'var(--warning)':'var(--text2)';
+    var freteHtml='<div style="margin-top:8px;padding:12px;background:var(--bg2);border-radius:8px;font-size:12px;">';
+    freteHtml+='<strong>Frete:</strong> <span style="color:'+fColor+'">'+fLabels[ped.freteTipo]+'</span>';
+    if(ped.freteTipo==='fob'||ped.freteTipo==='separado'){
+      if(ped.freteValor) freteHtml+=' &bull; <strong>Valor:</strong> R$ '+parseFloat(ped.freteValor).toFixed(2).replace('.',',');
+      if(ped.freteVenc) freteHtml+=' &bull; <strong>Venc. frete:</strong> '+new Date(ped.freteVenc+'T12:00').toLocaleDateString('pt-BR');
+    }
+    if(ped.produtoVenc) freteHtml+='<br><strong>Venc. produto:</strong> '+new Date(ped.produtoVenc+'T12:00').toLocaleDateString('pt-BR');
+    freteHtml+='</div>';
+    html+=freteHtml;
+  }
   var descLabels={cliente:'🔵 Descarga pelo Cliente',representante:'🟠 Descarga pela Transportadora / Representante',nao_informado:'⚪ Não informado'};
   var descLabel=descLabels[ped.descarga||'nao_informado'];
   html+='<div style="margin-top:8px;padding:12px;background:var(--bg2);border-radius:8px;font-size:12px;color:var(--text2);"><strong>Descarga:</strong> '+descLabel+'</div>';
@@ -1545,6 +1596,20 @@ function imprimirPedido(){
     if(ped.desconto)win.document.write('<div style="color:#f59e0b;font-size:13px;margin-bottom:4px;">Desconto: '+ped.desconto+'%</div>');
     win.document.write('<div style="font-size:12px;color:#666;margin-bottom:2px;">TOTAL</div><div class="total-val">R$ '+fmtNum(ped.total)+'</div></div>');
     if(ped.obs)win.document.write('<div style="margin-top:14px;padding:12px;background:#f9f9f9;border-radius:8px;font-size:12px;color:#666;"><strong>Observações:</strong> '+ped.obs+'</div>');
+    // Frete no rodapé da impressão
+    if(ped.freteTipo){
+      var fLabels={cif:'CIF — Frete incluso',fob:'FOB — Frete por conta do cliente',sem_frete:'Não informado',incluso:'CIF — Frete incluso',separado:'FOB — Frete por conta do cliente'};
+      var fColor=(ped.freteTipo==='fob'||ped.freteTipo==='separado')?'#d97706':'#444';
+      var freteRow='<div style="margin-top:8px;padding:12px;border-left:4px solid '+fColor+';background:#fff8ed;border-radius:0 8px 8px 0;font-size:12px;color:#444;">';
+      freteRow+='<strong>Frete:</strong> '+fLabels[ped.freteTipo];
+      if(ped.freteTipo==='fob'||ped.freteTipo==='separado'){
+        if(ped.freteValor) freteRow+=' &bull; <strong>Valor:</strong> R$ '+parseFloat(ped.freteValor).toFixed(2).replace('.',',');
+        if(ped.freteVenc) freteRow+=' &bull; <strong>Vencimento boleto frete:</strong> '+new Date(ped.freteVenc+'T12:00').toLocaleDateString('pt-BR');
+      }
+      if(ped.produtoVenc) freteRow+='<br><strong>Vencimento boleto produto:</strong> '+new Date(ped.produtoVenc+'T12:00').toLocaleDateString('pt-BR');
+      freteRow+='</div>';
+      win.document.write(freteRow);
+    }
     var dLabels={cliente:'Descarga pelo Cliente',representante:'Descarga pela Transportadora / Representante',nao_informado:'Não informado'};
     var dLabel=dLabels[ped.descarga||'nao_informado'];
     var dColor=ped.descarga==='cliente'?'#1d4ed8':ped.descarga==='representante'?'#d97706':'#888';
