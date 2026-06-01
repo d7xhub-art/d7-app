@@ -984,6 +984,14 @@ body.light { --bg:#f0f4f0; --bg2:#ffffff; --surface:#ffffff; --surface2:#f5f9f5;
         <label class="form-label">Observações</label>
         <input class="form-input" id="fp-obs-pedido" placeholder="Observações do pedido">
       </div>
+      <div class="form-group">
+        <label class="form-label">Descarga</label>
+        <select class="form-select" id="fp-descarga-pedido">
+          <option value="cliente">🔵 Descarga pelo Cliente</option>
+          <option value="representante">🟠 Descarga pela Transportadora / Representante</option>
+          <option value="nao_informado">⚪ Não informado</option>
+        </select>
+      </div>
     </div>
 
     <div style="margin-bottom:10px;">
@@ -1323,11 +1331,13 @@ function abrirModalPedido(id){
     document.getElementById('fp-status-pedido').value=ped.status||'aberto';
     document.getElementById('fp-desconto-pedido').value=ped.desconto||0;
     document.getElementById('fp-obs-pedido').value=ped.obs||'';
+    document.getElementById('fp-descarga-pedido').value=ped.descarga||'nao_informado';
     itensPedido=JSON.parse(JSON.stringify(ped.itens||[]));
   } else {
     document.getElementById('fp-status-pedido').value='aberto';
     document.getElementById('fp-desconto-pedido').value=0;
     document.getElementById('fp-obs-pedido').value='';
+    document.getElementById('fp-descarga-pedido').value='nao_informado';
   }
   renderItensPedido();
   document.getElementById('modal-pedido').classList.add('open');
@@ -1412,6 +1422,7 @@ function salvarPedido(){
     status:document.getElementById('fp-status-pedido').value,
     desconto:desc,
     obs:document.getElementById('fp-obs-pedido').value.trim(),
+    descarga:document.getElementById('fp-descarga-pedido').value,
     itens:JSON.parse(JSON.stringify(itensPedido)),
     subtotal:subtotal,
     total:total
@@ -1471,6 +1482,9 @@ function verPedido(id){
   html+='<div style="font-size:20px;font-weight:700;color:var(--accent);margin-top:6px;">Total: '+fmtMoeda(ped.total)+'</div>';
   html+='</div>';
   if(ped.obs) html+='<div style="margin-top:14px;padding:12px;background:var(--bg2);border-radius:8px;font-size:12px;color:var(--text2);"><strong>Obs:</strong> '+esc(ped.obs)+'</div>';
+  var descLabels={cliente:'🔵 Descarga pelo Cliente',representante:'🟠 Descarga pela Transportadora / Representante',nao_informado:'⚪ Não informado'};
+  var descLabel=descLabels[ped.descarga||'nao_informado'];
+  html+='<div style="margin-top:8px;padding:12px;background:var(--bg2);border-radius:8px;font-size:12px;color:var(--text2);"><strong>Descarga:</strong> '+descLabel+'</div>';
   html+='</div>';
   document.getElementById('ver-pedido-content').innerHTML=html;
   document.getElementById('modal-ver-pedido').classList.add('open');
@@ -1531,6 +1545,10 @@ function imprimirPedido(){
     if(ped.desconto)win.document.write('<div style="color:#f59e0b;font-size:13px;margin-bottom:4px;">Desconto: '+ped.desconto+'%</div>');
     win.document.write('<div style="font-size:12px;color:#666;margin-bottom:2px;">TOTAL</div><div class="total-val">R$ '+fmtNum(ped.total)+'</div></div>');
     if(ped.obs)win.document.write('<div style="margin-top:14px;padding:12px;background:#f9f9f9;border-radius:8px;font-size:12px;color:#666;"><strong>Observações:</strong> '+ped.obs+'</div>');
+    var dLabels={cliente:'Descarga pelo Cliente',representante:'Descarga pela Transportadora / Representante',nao_informado:'Não informado'};
+    var dLabel=dLabels[ped.descarga||'nao_informado'];
+    var dColor=ped.descarga==='cliente'?'#1d4ed8':ped.descarga==='representante'?'#d97706':'#888';
+    win.document.write('<div style="margin-top:8px;padding:12px;border-left:4px solid '+dColor+';background:#f9f9f9;border-radius:0 8px 8px 0;font-size:12px;color:#444;"><strong>Descarga:</strong> '+dLabel+'</div>');
   }
   win.document.write('<div class="footer">D7 Representação Comercial &bull; Documento gerado em '+new Date().toLocaleString('pt-BR')+'</div>');
   win.document.write('</body></html>');
