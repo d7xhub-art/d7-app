@@ -1231,7 +1231,7 @@ function acaoPrincipal(){
     menu.style.cssText='position:fixed;top:55px;right:22px;';
     menu.innerHTML='<div class="dropdown-item" onclick="abrirModalFornecedor();this.parentElement.remove();">🏭 Novo Fornecedor</div><div class="dropdown-item" onclick="abrirModalProduto();this.parentElement.remove();">📦 Novo Produto</div><div class="dropdown-item" onclick="importarCSVFornecedores();this.parentElement.remove();">📥 Importar Fornecedores (CSV)</div><div class="dropdown-item" onclick="importarCSVProdutos();this.parentElement.remove();">📥 Importar Produtos (CSV)</div><div class="dropdown-item" onclick="baixarModeloFornecedor();this.parentElement.remove();">⬇️ Modelo CSV Fornecedores</div><div class="dropdown-item" onclick="baixarModeloProduto();this.parentElement.remove();">⬇️ Modelo CSV Produtos</div>';
     document.body.appendChild(menu);
-    setTimeout(function(){document.addEventListener('click',function rm(){menu.remove();document.removeEventListener('click',rm);},{once:true});},100);
+    setTimeout(function(){document.addEventListener('click',function rm(){menu.remove();document.removeEventListener('click',rm);},{once:true});},4000);
   } else if(painelAtual==='pedidos'){
     abrirModalPedido();
   } else {
