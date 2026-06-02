@@ -2507,7 +2507,7 @@ function _nav0(panel){
   var el=document.getElementById('panel-'+panel);if(el)el.classList.add('active');
   var ni=document.querySelector('[data-panel="'+panel+'"]');if(ni)ni.classList.add('active');
   var titles={dashboard:'Dashboard',clientes:'Clientes',pedidos:'Pedidos',catalogo:'Catálogo de Produtos',tabelas:'Tabelas de Preços',ai:'D7X — IA',prospeccao:'Prospecção',funil:'Funil de Vendas',agenda:'Agendamentos',relatorios:'Relatórios',origens:'Origens',config:'Config IA'};
-  document.getElementById('page-title').textContent=titles[panel]||panel;
+  var pt=document.getElementById('page-title');if(pt)pt.textContent=titles[panel]||panel;
 }
 navigate=function(panel){
   _nav0(panel);
