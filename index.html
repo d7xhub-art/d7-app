@@ -2183,7 +2183,7 @@ function limparTodosDados(){
 var gClient=null,gDriveFileId=null,GDRIVE_CLIENT_ID_FIXO='283973846228-d25qk8gglbh8ckc5ba66oq6b592qss60.apps.googleusercontent.com';
 function iniciarGDrive(){
   var cfg=JSON.parse(localStorage.getItem(KEY_CFG)||'{}');
-  var clientId=cfg.gdriveClientId;if(!clientId)return;
+  var clientId=cfg.gdriveClientId||GDRIVE_CLIENT_ID_FIXO;if(!clientId)return;
   var s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';
   s.onload=function(){
     try{
