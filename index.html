@@ -2522,6 +2522,173 @@ navigate=function(panel){
   if(s){s.innerHTML='<option value="">Todos os fornecedores</option>';fornecedores.forEach(function(f){s.innerHTML+='<option value="'+f.id+'">'+esc(f.nome)+'</option>';});}
 })();
 renderDashboard();
+
+// ═══════════════════════════════════════════════════════
+// GOOGLE DRIVE SYNC — D7X
+// ═══════════════════════════════════════════════════════
+const GDRIVE = {
+  CLIENT_ID: '283973846228-d25qk8gglbh8ckc5ba66oq6b592qss60.apps.googleusercontent.com',
+  SCOPES: 'https://www.googleapis.com/auth/drive.file',
+  FILE_NAME: 'd7hub-data.json',
+  fileId: null,
+  token: null,
+
+  init() {
+    const topbarActions = document.querySelector('.topbar-actions');
+    if (!topbarActions) return;
+    const btn = document.createElement('button');
+    btn.id = 'btn-gdrive';
+    btn.className = 'btn btn-outline btn-sm';
+    btn.innerHTML = '☁️ Drive';
+    btn.title = 'Sincronizar com Google Drive';
+    btn.onclick = () => this.authenticate();
+    btn.style.cssText = 'font-size:12px;padding:6px 12px;';
+    topbarActions.prepend(btn);
+    const saved = sessionStorage.getItem('d7_gdrive_token');
+    if (saved) { this.token = saved; this.updateBtn('✅ Drive', '#25D366'); }
+  },
+
+  updateBtn(label, color) {
+    const btn = document.getElementById('btn-gdrive');
+    if (!btn) return;
+    btn.innerHTML = label;
+    btn.style.borderColor = color || '';
+  },
+
+  authenticate() {
+    if (this.token) { this.showDriveMenu(); return; }
+    const params = new URLSearchParams({
+      client_id: this.CLIENT_ID,
+      redirect_uri: location.origin + location.pathname,
+      response_type: 'token',
+      scope: this.SCOPES,
+    });
+    const popup = window.open(
+      'https://accounts.google.com/o/oauth2/v2/auth?' + params,
+      'gdrive_auth', 'width=500,height=600,left=200,top=100'
+    );
+    if (popup) {
+      const poll = setInterval(() => {
+        try {
+          const url = popup.location.href;
+          if (url.includes('access_token')) {
+            const hash = popup.location.hash.substring(1);
+            const p = new URLSearchParams(hash);
+            const token = p.get('access_token');
+            if (token) {
+              clearInterval(poll);
+              popup.close();
+              this.token = token;
+              sessionStorage.setItem('d7_gdrive_token', token);
+              this.updateBtn('✅ Drive', '#25D366');
+              toast('Google Drive conectado!', 'success');
+            }
+          }
+        } catch(e) {}
+        if (popup.closed) clearInterval(poll);
+      }, 500);
+    }
+  },
+
+  showDriveMenu() {
+    const old = document.getElementById('gdrive-menu');
+    if (old) { old.remove(); return; }
+    const btn = document.getElementById('btn-gdrive');
+    const rect = btn.getBoundingClientRect();
+    const menu = document.createElement('div');
+    menu.id = 'gdrive-menu';
+    menu.className = 'dropdown-menu';
+    menu.style.cssText = `top:${rect.bottom+6}px;right:${window.innerWidth-rect.right}px;`;
+    menu.innerHTML = `
+      <div class="dropdown-item" onclick="GDRIVE.save()">💾 Salvar no Drive</div>
+      <div class="dropdown-item" onclick="GDRIVE.load()">📥 Carregar do Drive</div>
+      <div class="dropdown-item" onclick="GDRIVE.disconnect()">🔌 Desconectar</div>
+    `;
+    document.body.appendChild(menu);
+    setTimeout(() => document.addEventListener('click', function h(e){
+      if(!menu.contains(e.target)&&e.target.id!=='btn-gdrive'){menu.remove();document.removeEventListener('click',h);}
+    }), 100);
+  },
+
+  async save() {
+    document.getElementById('gdrive-menu')?.remove();
+    if (!this.token) { this.authenticate(); return; }
+    this.updateBtn('💾 Salvando...', '#f59e0b');
+    const data = JSON.stringify({
+      clientes, pedidos, produtos, fornecedores,
+      funil: typeof funil !== 'undefined' ? funil : [],
+      agenda: typeof agenda !== 'undefined' ? agenda : [],
+      origens: typeof origens !== 'undefined' ? origens : [],
+      exportedAt: new Date().toISOString()
+    }, null, 2);
+    const blob = new Blob([data], {type:'application/json'});
+    try {
+      if (!this.fileId) {
+        const s = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${this.FILE_NAME}'&spaces=drive`,
+          {headers:{Authorization:`Bearer ${this.token}`}});
+        const r = await s.json();
+        if (r.files && r.files.length > 0) this.fileId = r.files[0].id;
+      }
+      const form = new FormData();
+      form.append('metadata', new Blob([JSON.stringify({name:this.FILE_NAME,mimeType:'application/json'})],{type:'application/json'}));
+      form.append('file', blob);
+      const url = this.fileId
+        ? `https://www.googleapis.com/upload/drive/v3/files/${this.fileId}?uploadType=multipart`
+        : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+      const method = this.fileId ? 'PATCH' : 'POST';
+      const res = await fetch(url, {method, headers:{Authorization:`Bearer ${this.token}`}, body:form});
+      const file = await res.json();
+      if (file.id) {
+        this.fileId = file.id;
+        this.updateBtn('✅ Drive', '#25D366');
+        toast('Dados salvos no Google Drive!', 'success');
+      } else throw new Error(file.error?.message||'Erro');
+    } catch(err) {
+      this.updateBtn('⚠️ Drive', '#ef4444');
+      toast('Erro ao salvar: ' + err.message, 'error');
+    }
+  },
+
+  async load() {
+    document.getElementById('gdrive-menu')?.remove();
+    if (!this.token) { this.authenticate(); return; }
+    this.updateBtn('📥 Carregando...', '#3b82f6');
+    try {
+      const s = await fetch(`https://www.googleapis.com/drive/v3/files?q=name='${this.FILE_NAME}'&spaces=drive&fields=files(id,name)`,
+        {headers:{Authorization:`Bearer ${this.token}`}});
+      const r = await s.json();
+      if (!r.files || r.files.length === 0) {
+        toast('Nenhum backup encontrado no Drive', 'error');
+        this.updateBtn('✅ Drive', '#25D366');
+        return;
+      }
+      this.fileId = r.files[0].id;
+      const res = await fetch(`https://www.googleapis.com/drive/v3/files/${this.fileId}?alt=media`,
+        {headers:{Authorization:`Bearer ${this.token}`}});
+      const d = await res.json();
+      if (d.clientes) { clientes = d.clientes; saveC(); }
+      if (d.pedidos)  { pedidos  = d.pedidos;  savePed(); }
+      if (d.produtos) { produtos = d.produtos; saveP(); }
+      if (d.fornecedores) { fornecedores = d.fornecedores; saveF(); }
+      this.updateBtn('✅ Drive', '#25D366');
+      toast('Dados carregados do Google Drive!', 'success');
+      navigate(painelAtual || 'dashboard');
+    } catch(err) {
+      this.updateBtn('⚠️ Drive', '#ef4444');
+      toast('Erro ao carregar: ' + err.message, 'error');
+    }
+  },
+
+  disconnect() {
+    document.getElementById('gdrive-menu')?.remove();
+    this.token = null; this.fileId = null;
+    sessionStorage.removeItem('d7_gdrive_token');
+    this.updateBtn('☁️ Drive', '');
+    toast('Google Drive desconectado', 'success');
+  }
+};
+document.addEventListener('DOMContentLoaded', () => GDRIVE.init());
+
 </script>
 </body>
 </html>
