@@ -1592,7 +1592,8 @@ body.light { --bg:#f0f4f0; --bg2:#ffffff; --surface:#ffffff; --surface2:#f5f9f5;
 
           <option value="">Selecione...</option>
 
-          <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option>
+          <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</opti
+on><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option>
 
         </select>
 
@@ -4099,6 +4100,7 @@ async function buscarCEP(){
   if(raw.length!==8) return;
 
   var hint=document.getElementById('cep-hint');
+
   hint.textContent='⏳ Buscando...';hint.style.color='var(--warning)';
 
   try{
