@@ -1,10 +1,8 @@
-const CACHE_NAME = 'd7-crm-v1';
+const CACHE_NAME = 'd7-hub-v3';
 const ASSETS = [
   './',
   './index.html',
-  './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './manifest.json'
 ];
 
 self.addEventListener('install', function(e) {
