@@ -5395,6 +5395,11 @@ document.addEventListener('DOMContentLoaded', () => GDRIVE.init());
 
 
 
+
+function toggleSidebar(){var s=document.getElementById('sidebar');var o=document.getElementById('sidebar-overlay');if(s){s.classList.toggle('open');}if(o){o.classList.toggle('open');}}
+function closeSidebar(){var s=document.getElementById('sidebar');var o=document.getElementById('sidebar-overlay');if(s)s.classList.remove('open');if(o)o.classList.remove('open');}
+function verPedidoModal(id){verPedido(id);}
+
 </script>
 
 <script>
