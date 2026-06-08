@@ -2521,7 +2521,396 @@ navigate=function(panel){
   var s=document.getElementById('sel-tabela-forn');
   if(s){s.innerHTML='<option value="">Todos os fornecedores</option>';fornecedores.forEach(function(f){s.innerHTML+='<option value="'+f.id+'">'+esc(f.nome)+'</option>';});}
 })();
-renderDashboard();
+renderDashboard();<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:;">
+<meta name="theme-color" content="#075E54">
+<title>D7 Follow-ups</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:#efeae2;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+.app{display:flex;height:100dvh;width:100%;}
+/* SIDEBAR */
+.sidebar{width:100%;max-width:420px;display:flex;flex-direction:column;background:#fff;border-right:1px solid #e9edef;flex-shrink:0;}
+.wpp-header{background:#075E54;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.wpp-av{width:38px;height:38px;border-radius:50%;overflow:hidden;flex-shrink:0;}
+.wpp-av img{width:100%;height:100%;object-fit:cover;}
+.wpp-title{flex:1;color:#fff;font-size:17px;font-weight:600;}
+.wpp-sub{color:rgba(255,255,255,.7);font-size:12px;}
+.btn-plus{background:#25D366;border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+/* TABS */
+.tabs{display:flex;background:#054d44;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.1);}
+.tab{flex:1;padding:10px 4px;background:none;border:none;color:rgba(255,255,255,.6);font-size:13px;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;font-family:inherit;transition:all .15s;}
+.tab.on{color:#fff;border-bottom:3px solid #25D366;}
+/* STATS */
+.stats{display:flex;background:#054d44;flex-shrink:0;}
+.stat{flex:1;text-align:center;padding:8px 4px;}
+.sn{font-size:20px;font-weight:700;color:#fff;}
+.sn.r{color:#ff6b6b;}
+.sl{font-size:10px;color:rgba(255,255,255,.65);margin-top:1px;}
+/* SEARCH */
+.searchbar{padding:7px 12px;background:#f0f2f5;border-bottom:1px solid #e9edef;flex-shrink:0;}
+.si{background:#fff;border-radius:8px;display:flex;align-items:center;padding:7px 12px;gap:8px;}
+.si input{border:none;outline:none;font-size:14px;color:#111;flex:1;background:transparent;}
+/* LIST */
+.clist{flex:1;overflow-y:auto;}
+.sechdr{background:#f0f2f5;padding:6px 16px;font-size:12px;font-weight:600;color:#555;}
+.crow{display:flex;align-items:center;padding:10px 16px;border-bottom:1px solid #f0f2f5;cursor:pointer;gap:10px;transition:background .1s;}
+.crow:hover,.crow.sel{background:#f0f9ff;}
+.av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;flex-shrink:0;}
+.r{background:#ffebee;color:#c62828;}.a{background:#fff8e1;color:#e65100;}.g{background:#e8f5e9;color:#2e7d32;}
+.cbody{flex:1;min-width:0;}
+.cname{font-size:15px;font-weight:500;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cpre{font-size:12px;color:#667;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cright{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.ct{font-size:11px;color:#999;}
+.bdg{min-width:18px;height:18px;border-radius:9px;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;}
+.bdr{background:#ef4444;}.bda{background:#f59e0b;}.bdg2{background:#25D366;}
+/* CATALOG */
+.catlog{flex:1;overflow-y:auto;padding:12px;display:none;}
+.catsec{margin-bottom:18px;}
+.cattit{font-size:12px;font-weight:700;color:#075E54;background:#e8f5e9;padding:6px 12px;border-radius:8px;margin-bottom:8px;letter-spacing:.03em;}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.pcard{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.12);cursor:pointer;}
+.pcard:hover{transform:scale(1.02);}
+.pimg{width:100%;height:120px;object-fit:cover;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:36px;}
+.pimg img{width:100%;height:100%;object-fit:cover;}
+.pinfo{padding:8px 10px;}
+.pname{font-size:13px;font-weight:600;color:#111;line-height:1.3;}
+.pemb{font-size:11px;color:#25D366;margin-top:3px;font-weight:500;}
+.pdesc{font-size:11px;color:#888;margin-top:3px;line-height:1.4;}
+/* DETAIL */
+.detail{flex:1;display:flex;flex-direction:column;background:#efeae2;}
+.dempty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#888;gap:10px;}
+.dempty-icon{font-size:70px;opacity:.3;}
+.dhdr{background:#075E54;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.dhav{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;}
+.dhi{flex:1;}
+.dhn{color:#fff;font-size:17px;font-weight:600;}
+.dhs{color:rgba(255,255,255,.75);font-size:12px;margin-top:2px;}
+.btn-edit{background:none;border:1px solid rgba(255,255,255,.5);color:#fff;padding:6px 12px;border-radius:18px;font-size:12px;cursor:pointer;margin-right:6px;}
+.btn-del{background:none;border:1px solid rgba(255,100,100,.5);color:#ffaaaa;padding:6px 12px;border-radius:18px;font-size:12px;cursor:pointer;}
+.dbody{flex:1;overflow-y:auto;padding:16px;}
+.icard{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.08);}
+.ictit{font-size:11px;font-weight:700;color:#075E54;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
+.irow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:13px;}
+.irow:last-child{border-bottom:none;}
+.il{color:#999;}.iv{color:#111;font-weight:500;text-align:right;}
+.nxtcard{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:12px;border-left:4px solid #25D366;box-shadow:0 1px 2px rgba(0,0,0,.08);}
+.nxtdate{font-size:20px;font-weight:600;color:#111;margin-top:4px;}
+.nxtsub{font-size:12px;color:#667;margin-top:2px;}
+.obscard{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.08);}
+.obsbub{background:#dcf8c6;border-radius:8px;padding:10px 12px;font-size:13px;color:#333;line-height:1.5;margin-top:8px;}
+.dftr{padding:14px 16px;background:#f0f2f5;border-top:1px solid #e9edef;display:flex;gap:10px;flex-shrink:0;}
+.bwpp{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#25D366;color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.bwpp:hover{background:#1fbc5b;}
+.bdone{padding:12px 18px;border-radius:10px;background:#fff;color:#075E54;border:2px solid #075E54;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
+/* FAB */
+.fab{display:none;position:fixed;bottom:22px;right:20px;width:54px;height:54px;border-radius:50%;background:#25D366;color:#fff;border:none;font-size:26px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3);align-items:center;justify-content:center;z-index:10;}
+@media(max-width:700px){.sidebar{max-width:100%;}.detail{display:none;position:fixed;inset:0;z-index:50;}.detail.mopen{display:flex;}.fab{display:flex;}.dback{display:flex!important;}}
+.dback{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;margin-right:4px;}
+/* MODAL */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:none;align-items:center;justify-content:center;}
+.ov.show{display:flex;}
+.modal{background:#fff;border-radius:14px;padding:0 20px 28px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;animation:pop .2s ease;}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.mhdr{background:#075E54;margin:0 -20px 18px;padding:14px 20px;border-radius:14px 14px 0 0;display:flex;align-items:center;justify-content:space-between;}
+.mhtit{color:#fff;font-size:16px;font-weight:600;}
+.mbtn-x{background:none;border:none;color:rgba(255,255,255,.8);font-size:20px;cursor:pointer;}
+.field{margin-bottom:13px;}
+.field label{font-size:11px;color:#667;display:block;margin-bottom:4px;font-weight:500;}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;color:#111;background:#fff;-webkit-appearance:none;}
+.field textarea{resize:none;line-height:1.5;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#25D366;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border:1px solid #ddd;border-radius:18px;font-size:12px;cursor:pointer;background:#fff;color:#333;user-select:none;}
+.chip:hover{border-color:#25D366;}
+.chip.on{background:#e8f5e9;border-color:#25D366;color:#075E54;font-weight:500;}
+.nprev{font-size:12px;color:#075E54;background:#e8f5e9;border-radius:7px;padding:8px 12px;margin-bottom:14px;}
+.macts{display:flex;gap:10px;}
+.bsave{flex:1;padding:12px;background:#25D366;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.bsave:hover{background:#1fbc5b;}
+.bcx{padding:12px 16px;background:#f0f2f5;color:#667;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;}
+.empty{text-align:center;padding:40px 20px;color:#999;font-size:13px;}
+
+
+
+/* AI CHAT */
+.chat-fab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(99,102,241,.4);display:flex;align-items:center;justify-content:center;z-index:200;}
+.chat-fab:hover{transform:scale(1.08);}
+.chat-badge{position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#25D366;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.chat-panel{position:fixed;bottom:90px;right:24px;width:340px;max-width:calc(100vw - 32px);background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:200;display:none;flex-direction:column;overflow:hidden;max-height:70vh;}
+.chat-panel.open{display:flex;}
+.chat-hdr{background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:14px 16px;display:flex;align-items:center;gap:10px;}
+.chat-hdr-av{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.chat-hdr-info{flex:1;}
+.chat-hdr-name{color:#fff;font-size:15px;font-weight:600;}
+.chat-hdr-sub{color:rgba(255,255,255,.75);font-size:11px;}
+.chat-close{background:none;border:none;color:rgba(255,255,255,.8);font-size:20px;cursor:pointer;}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;background:#f0f2f5;display:flex;flex-direction:column;gap:10px;min-height:180px;}
+.msg-ai{background:#fff;color:#111;align-self:flex-start;border-radius:4px 10px 10px 10px;padding:9px 12px;font-size:13px;line-height:1.5;max-width:85%;box-shadow:0 1px 2px rgba(0,0,0,.1);}
+.msg-user{background:#dcf8c6;color:#111;align-self:flex-end;border-radius:10px 4px 10px 10px;padding:9px 12px;font-size:13px;line-height:1.5;max-width:85%;}
+.msg-loading{background:#fff;color:#888;align-self:flex-start;font-style:italic;padding:9px 12px;border-radius:4px 10px 10px 10px;font-size:13px;}
+.chat-sugs{padding:8px 12px;background:#fff;border-top:1px solid #f0f2f5;display:flex;gap:6px;flex-wrap:wrap;}
+.sug{font-size:11px;padding:5px 10px;border:1px solid #6366f1;border-radius:14px;color:#6366f1;background:none;cursor:pointer;white-space:nowrap;}
+.chat-input-row{display:flex;padding:10px 12px;gap:8px;border-top:1px solid #e9edef;background:#fff;}
+.chat-input{flex:1;border:1px solid #ddd;border-radius:20px;padding:8px 14px;font-size:13px;font-family:inherit;outline:none;resize:none;}
+.chat-input:focus{border-color:#6366f1;}
+.btn-send{width:36px;height:36px;border-radius:50%;background:#6366f1;color:#fff;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="app">
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="wpp-header">
+    <div class="wpp-av"><img id="logo" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAsICAoIBwsKCQoNDAsNERwSEQ8PESIZGhQcKSQrKigkJyctMkA3LTA9MCcnOEw5PUNFSElIKzZPVU5GVEBHSEX/2wBDAQwNDREPESESEiFFLicuRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUVFRUX/wAARCAAoACgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD1yub1rxpY6VI0EKm6uF4ZUOFU+hb1+lSeMNXk0zSvLtyRPcZVSOqgDkj37fjXkS6rbueQy/72K6aEKb96o9DuoYaDh7Sq7J7eZ3H/AAsbUPM40+32em9s/nXQ6L41stVlWCdGtLhuFVzlWPoG9frXmEN3bycI249gCOajbUbZjgZz9R/jW9WeDtZ6febwy72ycqUrnu9Fcf4M8VPq8S2MkE8s0C/PccbQv8O45znt74zRXn3T2dzz61GdGbhNalL4iyNFLbMOSYyEBPU55rgba5WMuZZxn8Tj2Ar13xXoUWtaeN8KyyQ5IUjkg9R+g/KvPT4fsYz8tpEPbFcNbGrDz5Z38j2cHKc4RdO146a3/I5tbkzX5nVIVgjYF5mjBYgdgfU09Q+rXWIIkjjU8sFHy/4muil0m1mCiW3RggwoxgD6CnR2sdtGI4Y1RB2UVMcWqzt0PToU5Q+J3b1v/kuhv/D22Fte3aRAhPKXJ9Tnqf1orofCulNp2ntJMu2a4IYqeqjsP6/jRXpSaex83j6kamIk47G7WXfaDbXjmRf3Uh6lRwfqKKKxq0oVY8s1dHLCpKm7wdjLfwnKx4njA9dpq/p3hq0spBLITPKvILDhT7CiisaWEpUneKOieMrzjyuWhs0UUV1HIf/Z" alt="D7"></div>
+    <div style="flex:1"><div class="wpp-title">D7 Follow-ups</div><div class="wpp-sub" id="dtlbl"></div></div>
+    <button class="btn-plus" onclick="openForm()">＋</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="sn r" id="su">0</div><div class="sl">Urgente</div></div>
+    <div class="stat"><div class="sn" id="sw">0</div><div class="sl">Esta semana</div></div>
+    <div class="stat"><div class="sn" id="so">0</div><div class="sl">Em dia</div></div>
+  </div>
+  <div class="tabs">
+    <button class="tab on" id="t-cli" onclick="tab('cli')">👥 Clientes</button>
+    <button class="tab" id="t-cat" onclick="tab('cat')">📦 Catálogo</button>
+  </div>
+  <div class="searchbar" id="sbar">
+    <div class="si"><span>🔍</span><input type="text" placeholder="Buscar..." id="sq" oninput="render()"></div>
+  </div>
+  <div class="clist" id="clist"><div class="empty" id="emp">💬<br><br>Nenhum cliente ainda.<br>Clique no + para começar.</div></div>
+  <div class="catlog" id="catlog"></div>
+</div>
+<!-- DETAIL -->
+<div class="detail" id="detail">
+  <div class="dempty" id="demp"><div class="dempty-icon">💬</div><div>Selecione um cliente</div></div>
+  <div id="dcont" style="display:none;flex-direction:column;height:100%">
+    <div class="dhdr">
+      <button class="dback" onclick="closeDetail()" id="dback">←</button>
+      <div class="dhav" id="dhav"></div>
+      <div class="dhi"><div class="dhn" id="dhn"></div><div class="dhs" id="dhs"></div></div>
+      <button class="btn-edit" onclick="editActive()">✏️ Editar</button>
+      <button class="btn-del" onclick="delActive()">🗑</button>
+    </div>
+    <div class="dbody" id="dbody"></div>
+    <div class="dftr">
+      <button class="bwpp" onclick="wppActive()"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Mandar mensagem</button>
+      <button class="bdone" onclick="doneActive()">✓ Feito</button>
+    </div>
+  </div>
+</div>
+</div>
+<button class="fab" onclick="openForm()">＋</button>
+<!-- MODAL -->
+<div class="ov" id="ov" onclick="handleOv(event)">
+<div class="modal">
+  <div class="mhdr"><div class="mhtit" id="mtit">👤 Novo cliente</div><button class="mbtn-x" onclick="closeForm()">×</button></div>
+<!-- MODAL -->
+<div class="ov" id="ov" onclick="handleOv(event)">
+<div class="modal">
+  <div class="mhdr"><div class="mhtit" id="mtit">👤 Novo cliente</div><button class="mbtn-x" onclick="closeForm()">×</button></div>
+  <div class="frow"><div class="field"><label>CNPJ</label><div style="display:flex;gap:6px"><input id="fcnpj" placeholder="00.000.000/0001-00" maxlength="18" oninput="maskCNPJ(this)" style="flex:1"><button onclick="buscaCNPJ()" style="padding:0 10px;background:#25D366;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px">Buscar</button></div></div></div>
+  <div class="frow"><div class="field"><label>Nome</label><input id="fn" placeholder="João Silva" autocomplete="off"></div><div class="field"><label>Empresa</label><input id="fe" placeholder="Distribuidora..." autocomplete="off"></div></div>
+  <div class="frow"><div class="field"><label>Gestor de Pedidos</label><input id="fgestor" placeholder="Nome do responsável" autocomplete="off"></div><div class="field"><label>WhatsApp</label><input id="ft" type="tel" placeholder="62999990000"></div></div>
+  <div class="frow"><div class="field"><label>CEP</label><div style="display:flex;gap:6px"><input id="fcep" placeholder="00000-000" maxlength="9" oninput="maskCEP(this)" onblur="buscaCEP()" style="flex:1"></div></div><div class="field"><label>Cidade / Estado</label><div style="display:flex;gap:6px"><input id="fcidade" placeholder="Cidade" style="flex:1"><input id="fest" placeholder="UF" maxlength="2" style="width:48px"></div></div></div>
+  <div class="frow"><div class="field"><label>Última interação</label><input type="date" id="fl" onchange="cp()"></div><div class="field"><label>Próximo follow-up</label><input type="date" id="fnx" onchange="updatePrev()"></div></div>
+  <div class="field"><label>Retornar em (sugestão)</label><select id="fi" onchange="cp()"><option value="7">1 semana</option><option value="14" selected>2 semanas</option><option value="21">3 semanas</option><option value="30">1 mês</option></select></div>
+  <div class="field"><label>Produtos de interesse</label><div class="chips" id="chips"><label class="chip" onclick="tc(this)"><input type="checkbox" value="Sal de cozinha" style="display:none"> Sal de cozinha</label><label class="chip" onclick="tc(this)"><input type="checkbox" value="Sal de boi" style="display:none"> Sal de boi</label><label class="chip" onclick="tc(this)"><input type="checkbox" value="Azeite" style="display:none"> Azeite</label><label class="chip" onclick="tc(this)"><input type="checkbox" value="Açúcar mascavo" style="display:none"> Açúcar mascavo</label><label class="chip" onclick="tc(this)"><input type="checkbox" value="Açúcar demerara" style="display:none"> Açúcar demerara</label><label class="chip" onclick="tc(this)"><input type="checkbox" value="Produtos naturais" style="display:none"> Prod. naturais</label><label class="chip" onclick="tc(this)"><input type="checkbox" value="Suco" style="display:none"> Suco</label><label class="chip" onclick="tc(this)"><input type="checkbox" value="Vinho" style="display:none"> Vinho</label></div></div>
+  <div class="field"><label>Observação</label><textarea id="fo" rows="2" placeholder="Ex: deixei amostra, pediu cotação..."></textarea></div>
+  <div class="nprev" id="np"></div>
+  <div class="macts"><button class="bsave" onclick="save()">Salvar cliente</button><button class="bcx" onclick="closeForm()">Cancelar</button></div>
+</div>
+</div>
+<script>
+const K='d7desk1';
+const DI=['dom','seg','ter','qua','qui','sex','sáb'];
+const ME=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+function isLW(d){const l=new Date(d.getFullYear(),d.getMonth()+1,0);return(l.getDate()-d.getDate())<7;}
+function isWD(d){const w=d.getDay();return w>=1&&w<=4&&!isLW(d);}
+function nv(from,n){let d=new Date(from);d.setDate(d.getDate()+n);for(let i=0;i<45;i++){if(isWD(d))return d;d.setDate(d.getDate()+1);}return d;}
+function fmt(d){return d.toISOString().split('T')[0];}
+function fpt(s){if(!s)return'';const d=new Date(s+'T00:00:00');return DI[d.getDay()]+', '+d.getDate()+' de '+ME[d.getMonth()];}
+function load(){try{const r=localStorage.getItem(K);return r?JSON.parse(r):[];}catch(e){return[];}}
+function sv(d){try{localStorage.setItem(K,JSON.stringify(d));}catch(e){}}
+let clients=load(),actId=null,editId=null;
+function st(n){if(!n)return'ok';const d=new Date(n+'T00:00:00');const df=Math.round((d-TODAY)/86400000);return df<0?'urg':df<=6?'wk':'ok';}
+function dl(n){const d=new Date(n+'T00:00:00');const df=Math.round((d-TODAY)/86400000);if(df<-1)return Math.abs(df)+'d atrás';if(df===-1)return'ontem';if(df===0)return'hoje!';if(df===1)return'amanhã';return'em '+df+'d';}
+function ini(n){const p=n.trim().split(' ');return p.length>=2?p[0][0].toUpperCase()+p[1][0].toUpperCase():n.substring(0,2).toUpperCase();}
+function avCl(s){return s==='urg'?'r':s==='wk'?'a':'g';}
+function tc(el){el.classList.toggle('on');el.querySelector('input').checked=el.classList.contains('on');}
+function getChips(){return[...document.querySelectorAll('.chip.on')].map(x=>x.querySelector('input').value);}
+function setChips(arr){document.querySelectorAll('.chip').forEach(c=>{const v=c.querySelector('input').value;const on=Array.isArray(arr)?arr.includes(v):arr===v;c.classList.toggle('on',on);c.querySelector('input').checked=on;});}
+function cp(){const lv=document.getElementById('fl').value;const iv=parseInt(document.getElementById('fi').value)||14;if(!lv)return;const nx=nv(new Date(lv+'T00:00:00'),iv);document.getElementById('fnx').value=fmt(nx);updatePrev();}
+function updatePrev(){const v=document.getElementById('fnx').value;document.getElementById('np').innerHTML=v?'📅 Follow-up: <strong>'+fpt(v)+'</strong>':'';}
+// TAB SWITCH
+let curTab='cli';
+function tab(t){
+  curTab=t;
+  document.getElementById('t-cli').classList.toggle('on',t==='cli');
+  document.getElementById('t-cat').classList.toggle('on',t==='cat');
+  document.getElementById('clist').style.display=t==='cli'?'':'none';
+  document.getElementById('sbar').style.display=t==='cli'?'':'none';
+  document.getElementById('catlog').style.display=t==='cat'?'block':'none';
+  if(t==='cat')renderCat();
+}
+// CATALOG
+const CATALOG=[
+{cat:'🧂 Sal Nota 10',name:'Sal de Parrila',emb:'400g — Frasco',desc:'Ideal para todos os tipos de carne',emoji:'🥩'},
+{cat:'🧂 Sal Nota 10',name:'Sal Marinho Refinado',emb:'Sachê 0,8g',desc:'Sal na medida certa — 100% Natural',emoji:'🌊'},
+{cat:'🧂 Sal Nota 10',name:'Sal Delícia Refinado Iodado',emb:'1 kg',desc:'Uma delícia sem igual',emoji:'🧂'},
+{cat:'🧂 Sal Nota 10',name:'Sal Grosso Churrasco',emb:'1 kg',desc:'Especial para churrasco',emoji:'🔥'},
+{cat:'🧂 Sal Nota 10',name:'Sal Moído Iodado',emb:'1 kg',desc:'Amor em cada pitada',emoji:'❤️'},
+{cat:'🧂 Sal Nota 10',name:'Sal Boi Gordo Mix',emb:'25 kg',desc:'Sal moído especial para animais',emoji:'🐄'},
+{cat:'🫒 Azeite',name:'Azeite Olivê Extra Virgem',emb:'500 ml',desc:'Azeite de oliva extra virgem premium',emoji:'🫒'},
+{cat:'🟫 Açúcar Granelli',name:'Açúcar Mascavo',emb:'500g | 1kg | 20kg',desc:'1º açúcar rastreado do Brasil — Embrapa',emoji:'🟫'},
+{cat:'🟫 Açúcar Granelli',name:'Açúcar Demerara',emb:'1kg | 20kg',desc:'Alto valor nutricional — sabor caramelo',emoji:'🟡'},
+{cat:'🟫 Açúcar Granelli',name:'Açúcar VHP',emb:'Big bag 1000kg',desc:'Açúcar bruto para industrialização',emoji:'🏭'},
+{cat:'🍇 Colheita do Sul',name:'Suco Integral',emb:'1,5L PET',desc:'100% natural',emoji:'🍇'},
+{cat:'🍇 Colheita do Sul',name:'Suco Integral',emb:'1L PET',desc:'100% natural',emoji:'🍇'},
+{cat:'🍇 Colheita do Sul',name:'Suco Integral',emb:'1L Vidro',desc:'Premium em vidro',emoji:'🍷'},
+{cat:'🍇 Colheita do Sul',name:'Vinho',emb:'Linha completa',desc:'Vinhos selecionados',emoji:'🍷'},
+];
+function renderCat(){
+  const wrap=document.getElementById('catlog');
+  const cats=[...new Set(CATALOG.map(p=>p.cat))];
+  wrap.innerHTML=cats.map(cat=>{
+    const prods=CATALOG.filter(p=>p.cat===cat);
+    return'<div class="catsec"><div class="cattit">'+cat+'</div><div class="pgrid">'+
+    prods.map(p=>'<div class="pcard"><div class="pimg" style="display:flex;align-items:center;justify-content:center;font-size:42px;background:#f9f9f9;height:100px;width:100%;">'+p.emoji+'</div><div class="pinfo"><div class="pname">'+p.name+'</div><div class="pemb">📦 '+p.emb+'</div><div class="pdesc">'+p.desc+'</div></div></div>').join('')+
+    '</div></div>';
+  }).join('');
+}
+// CLIENTS
+function sel(id){actId=id;const c=clients.find(x=>x.id===id);if(!c)return;document.querySelectorAll('.crow').forEach(r=>r.classList.remove('sel'));const row=document.getElementById('r'+id);if(row)row.classList.add('sel');const s=st(c.next);const av=document.getElementById('dhav');av.textContent=ini(c.name);av.className='dhav '+avCl(s);document.getElementById('dhn').textContent=c.name;const prods=Array.isArray(c.prod)?c.prod.join(', '):(c.prod||'');document.getElementById('dhs').textContent=(c.emp||'')+(prods?' · '+prods:'');const stt=s==='urg'?'⚠️ Atrasado!':s==='wk'?'📅 Esta semana':'✓ Em dia';document.getElementById('dbody').innerHTML='<div class="icard"><div class="ictit">Informações</div>'+(c.emp?'<div class="irow"><span class="il">Empresa</span><span class="iv">'+c.emp+'</span></div>':'')+'<div class="irow"><span class="il">Produtos</span><span class="iv">'+(prods||'—')+'</span></div>'+(c.tel?'<div class="irow"><span class="il">WhatsApp</span><span class="iv">'+c.tel+'</span></div>':'')+'<div class="irow"><span class="il">Última interação</span><span class="iv">'+fpt(c.last)+'</span></div></div><div class="nxtcard"><div class="ictit">Próximo follow-up</div><div class="nxtdate">'+fpt(c.next)+'</div><div class="nxtsub">'+stt+'</div></div>'+(c.obs?'<div class="obscard"><div class="ictit">Observações</div><div class="obsbub">'+c.obs+'</div></div>':'');document.getElementById('dcont').style.display='flex';document.getElementById('dcont').style.flexDirection='column';document.getElementById('dcont').style.height='100%';document.getElementById('demp').style.display='none';document.getElementById('detail').classList.add('mopen');}
+function closeDetail(){document.getElementById('detail').classList.remove('mopen');}
+function wppActive(){const c=clients.find(x=>x.id===actId);if(!c)return;const m=encodeURIComponent('Oi '+c.name.split(' ')[0]+'! Tudo bem? Aqui é o representante da D7 — sal, azeite e produtos naturais no atacado. Passando pra dar um alô! Tem um minutinho?');const t=(c.tel||'').replace(/\D/g,'');window.open(t?'https://wa.me/55'+t+'?text='+m:'https://wa.me/?text='+m,'_blank');}
+function doneActive(){const c=clients.find(x=>x.id===actId);if(!c)return;c.last=fmt(TODAY);c.next=fmt(nv(TODAY,14));sv(clients);sel(actId);render();}
+function delActive(){if(!confirm('Apagar?'))return;clients=clients.filter(x=>x.id!==actId);actId=null;sv(clients);document.getElementById('demp').style.display='flex';document.getElementById('dcont').style.display='none';closeDetail();render();}
+function editActive(){const c=clients.find(x=>x.id===actId);if(!c)return;editId=c.id;document.getElementById('mtit').textContent='✏️ Editar cliente';document.getElementById('fn').value=c.name||'';document.getElementById('fe').value=c.emp||'';document.getElementById('ft').value=c.tel||'';document.getElementById('fl').value=c.last||fmt(TODAY);document.getElementById('fnx').value=c.next||'';document.getElementById('fo').value=c.obs||'';document.getElementById('fi').value='14';setChips(c.prod||[]);updatePrev();document.getElementById('ov').classList.add('show');setTimeout(()=>document.getElementById('fn').focus(),200);}
+function openForm(){editId=null;document.getElementById('mtit').textContent='👤 Novo cliente';['fn','fe','ft','fo'].forEach(id=>document.getElementById(id).value='');document.getElementById('fl').value=fmt(TODAY);document.getElementById('fnx').value='';document.getElementById('fi').value='14';setChips([]);cp();document.getElementById('ov').classList.add('show');setTimeout(()=>document.getElementById('fn').focus(),200);}
+function closeForm(){document.getElementById('ov').classList.remove('show');}
+function handleOv(e){if(e.target===document.getElementById('ov'))closeForm();}
+function save(){const name=document.getElementById('fn').value.trim();if(!name){document.getElementById('fn').focus();return;}const lv=document.getElementById('fl').value||fmt(TODAY);const mnx=document.getElementById('fnx').value;const iv=parseInt(document.getElementById('fi').value)||14;const nx=mnx?new Date(mnx+'T00:00:00'):nv(new Date(lv+'T00:00:00'),iv);const prods=getChips();if(editId){const c=clients.find(x=>x.id===editId);if(c){c.name=name;c.emp=document.getElementById('fe').value.trim();c.tel=document.getElementById('ft').value.trim().replace(/\D/g,'');c.prod=prods;c.last=lv;c.next=fmt(nx);c.obs=document.getElementById('fo').value.trim();}sv(clients);closeForm();render();setTimeout(()=>sel(editId),100);}else{const c={id:Date.now(),name,emp:document.getElementById('fe').value.trim(),tel:document.getElementById('ft').value.trim().replace(/\D/g,''),prod:prods,last:lv,next:fmt(nx),obs:document.getElementById('fo').value.trim()};clients.unshift(c);sv(clients);closeForm();render();setTimeout(()=>sel(c.id),100);}}
+function cardH(c){const s=st(c.next);const isS=actId===c.id;return'<div class="crow'+(isS?' sel':'')+'" id="r'+c.id+'" onclick="sel('+c.id+')">'+'<div class="av '+avCl(s)+'">'+ini(c.name)+'</div>'+'<div class="cbody"><div class="cname">'+c.name+'</div><div class="cpre">'+(c.emp||'')+(c.prod&&c.prod.length?' · '+(Array.isArray(c.prod)?c.prod.join(', '):c.prod):'')+'</div></div>'+'<div class="cright"><div class="ct">'+dl(c.next)+'</div>'+(s==='urg'?'<div class="bdg bdr">!</div>':s==='wk'?'<div class="bdg bda">!</div>':'<div class="bdg bdg2">✓</div>')+'</div></div>';}
+function render(){document.getElementById('dtlbl').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});const all=clients;document.getElementById('su').textContent=all.filter(c=>st(c.next)==='urg').length;document.getElementById('sw').textContent=all.filter(c=>st(c.next)==='wk').length;document.getElementById('so').textContent=all.filter(c=>st(c.next)==='ok').length;const q=(document.getElementById('sq').value||'').toLowerCase();const fl=q?clients.filter(c=>(c.name+(c.emp||'')).toLowerCase().includes(q)):clients;document.getElementById('emp').style.display=clients.length===0?'block':'none';const urg=fl.filter(c=>st(c.next)==='urg');const wk=fl.filter(c=>st(c.next)==='wk');const ok=fl.filter(c=>st(c.next)==='ok');let h='';if(urg.length)h+='<div class="sechdr">⚠️ Contatar agora</div>'+urg.map(cardH).join('');if(wk.length)h+='<div class="sechdr">📅 Esta semana</div>'+wk.map(cardH).join('');if(ok.length)h+='<div class="sechdr">✓ Próximos</div>'+ok.map(cardH).join('');document.getElementById('clist').innerHTML=document.getElementById('emp').outerHTML+h;}
+render();
+// CNPJ mask
+function maskCNPJ(el){let v=el.value.replace(/\D/g,'');if(v.length>14)v=v.slice(0,14);v=v.replace(/^(\d{2})(\d)/,'$1.$2');v=v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');v=v.replace(/\.(\d{3})(\d)/,'.$1/$2');v=v.replace(/(\d{4})(\d)/,'$1-$2');el.value=v;}
+function maskCEP(el){let v=el.value.replace(/\D/g,'');if(v.length>8)v=v.slice(0,8);if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5);el.value=v;}
+async function buscaCNPJ(){
+  const cnpj=document.getElementById('fcnpj').value.replace(/\D/g,'');
+  if(cnpj.length!==14){alert('Digite um CNPJ válido com 14 dígitos');return;}
+  try{
+    const r=await fetch('https://brasilapi.com.br/api/cnpj/v1/'+cnpj);
+    if(!r.ok){alert('CNPJ não encontrado');return;}
+    const d=await r.json();
+    document.getElementById('fn').value=d.nome_fantasia||d.razao_social||'';
+    document.getElementById('fe').value=d.razao_social||'';
+    if(d.cep){document.getElementById('fcep').value=d.cep.replace(/(\d{5})(\d{3})/,'$1-$2');buscaCEP();}
+  }catch(e){alert('Erro ao buscar CNPJ. Tente novamente.');}
+}
+async function buscaCEP(){
+  const cep=document.getElementById('fcep').value.replace(/\D/g,'');
+  if(cep.length!==8)return;
+  try{
+    const r=await fetch('https://brasilapi.com.br/api/cep/v1/'+cep);
+    if(!r.ok)return;
+    const d=await r.json();
+    document.getElementById('fcidade').value=d.city||'';
+    document.getElementById('fest').value=d.state||'';
+  }catch(e){}
+}
+// TAB SWITCH
+let curTab='cli';
+function tab(t){curTab=t;document.getElementById('t-cli').classList.toggle('on',t==='cli');document.getElementById('t-cat').classList.toggle('on',t==='cat');document.getElementById('clist').style.display=t==='cli'?'':'none';document.getElementById('sbar').style.display=t==='cli'?'':'none';document.getElementById('catlog').style.display=t==='cat'?'block':'none';if(t==='cat')renderCat();}
+// CATALOG
+const CATALOG=[
+{cat:'🧂 Sal Nota 10',name:'Sal de Parrila',emb:'400g — Frasco',desc:'Ideal para todos os tipos de carne',emoji:'🥩'},
+{cat:'🧂 Sal Nota 10',name:'Sal Marinho Refinado',emb:'Sachê 0,8g',desc:'Sal na medida certa — 100% Natural',emoji:'🌊'},
+{cat:'🧂 Sal Nota 10',name:'Sal Delícia Refinado Iodado',emb:'1 kg',desc:'Uma delícia sem igual',emoji:'🧂'},
+{cat:'🧂 Sal Nota 10',name:'Sal Grosso Churrasco',emb:'1 kg',desc:'Especial para churrasco',emoji:'🔥'},
+{cat:'🧂 Sal Nota 10',name:'Sal Moído Iodado',emb:'1 kg',desc:'Amor em cada pitada',emoji:'❤️'},
+{cat:'🧂 Sal Nota 10',name:'Sal Boi Gordo Mix',emb:'25 kg',desc:'Sal moído especial para animais',emoji:'🐄'},
+{cat:'🫒 Azeite',name:'Azeite Olivê Extra Virgem',emb:'500 ml',desc:'Azeite de oliva extra virgem premium',emoji:'🫒'},
+{cat:'🟫 Açúcar Granelli',name:'Açúcar Mascavo',emb:'500g | 1kg | 20kg',desc:'1º açúcar rastreado do Brasil — Embrapa',emoji:'🟫'},
+{cat:'🟫 Açúcar Granelli',name:'Açúcar Demerara',emb:'1kg | 20kg',desc:'Alto valor nutricional — sabor caramelo',emoji:'🟡'},
+{cat:'🟫 Açúcar Granelli',name:'Açúcar VHP',emb:'Big bag 1000kg',desc:'Açúcar bruto para industrialização',emoji:'🏭'},
+{cat:'🍇 Colheita do Sul',name:'Suco Integral',emb:'1,5L PET',desc:'100% natural',emoji:'🍇'},
+{cat:'🍇 Colheita do Sul',name:'Suco Integral',emb:'1L PET',desc:'100% natural',emoji:'🍇'},
+{cat:'🍇 Colheita do Sul',name:'Suco Integral',emb:'1L Vidro',desc:'Premium em vidro',emoji:'🍷'},
+{cat:'🍇 Colheita do Sul',name:'Vinho',emb:'Linha completa',desc:'Vinhos selecionados',emoji:'🍷'},
+];
+function renderCat(){const wrap=document.getElementById('catlog');const cats=[...new Set(CATALOG.map(p=>p.cat))];wrap.innerHTML=cats.map(cat=>{const prods=CATALOG.filter(p=>p.cat===cat);return'<div class="catsec"><div class="cattit">'+cat+'</div><div class="pgrid">'+prods.map(p=>'<div class="pcard"><div class="pimg" style="display:flex;align-items:center;justify-content:center;font-size:42px;background:#f9f9f9;height:100px;width:100%;">'+p.emoji+'</div><div class="pinfo"><div class="pname">'+p.name+'</div><div class="pemb">📦 '+p.emb+'</div><div class="pdesc">'+p.desc+'</div></div></div>').join('')+'</div></div>';}).join('');}
+// CLIENTS
+function sel(id){actId=id;const c=clients.find(x=>x.id===id);if(!c)return;document.querySelectorAll('.crow').forEach(r=>r.classList.remove('sel'));const row=document.getElementById('r'+id);if(row)row.classList.add('sel');const s=st(c.next);const av=document.getElementById('dhav');av.textContent=ini(c.name);av.className='dhav '+avCl(s);document.getElementById('dhn').textContent=c.name;const prods=Array.isArray(c.prod)?c.prod.join(', '):(c.prod||'');document.getElementById('dhs').textContent=(c.emp||'')+(prods?' · '+prods:'');const stt=s==='urg'?'⚠️ Atrasado!':s==='wk'?'📅 Esta semana':'✓ Em dia';document.getElementById('dbody').innerHTML='<div class="icard"><div class="ictit">Informações</div>'+(c.emp?'<div class="irow"><span class="il">Empresa</span><span class="iv">'+c.emp+'</span></div>':'')+(c.cnpj?'<div class="irow"><span class="il">CNPJ</span><span class="iv">'+c.cnpj+'</span></div>':'')+(c.gestor?'<div class="irow"><span class="il">Gestor</span><span class="iv">'+c.gestor+'</span></div>':'')+(c.cidade?'<div class="irow"><span class="il">Cidade</span><span class="iv">'+c.cidade+(c.estado?' / '+c.estado:'')+'</span></div>':'')+'<div class="irow"><span class="il">Produtos</span><span class="iv">'+(prods||'—')+'</span></div>'+(c.tel?'<div class="irow"><span class="il">WhatsApp</span><span class="iv">'+c.tel+'</span></div>':'')+'<div class="irow"><span class="il">Última interação</span><span class="iv">'+fpt(c.last)+'</span></div></div><div class="nxtcard"><div class="ictit">Próximo follow-up</div><div class="nxtdate">'+fpt(c.next)+'</div><div class="nxtsub">'+stt+'</div></div>'+(c.obs?'<div class="obscard"><div class="ictit">Observações</div><div class="obsbub">'+c.obs+'</div></div>':'');document.getElementById('dcont').style.display='flex';document.getElementById('dcont').style.flexDirection='column';document.getElementById('dcont').style.height='100%';document.getElementById('demp').style.display='none';document.getElementById('detail').classList.add('mopen');}
+function closeDetail(){document.getElementById('detail').classList.remove('mopen');}
+function wppActive(){const c=clients.find(x=>x.id===actId);if(!c)return;const m=encodeURIComponent('Oi '+c.name.split(' ')[0]+'! Tudo bem? Aqui é o representante da D7 — sal, azeite e produtos naturais no atacado. Passando pra dar um alô! Tem um minutinho?');const t=(c.tel||'').replace(/\D/g,'');window.open(t?'https://wa.me/55'+t+'?text='+m:'https://wa.me/?text='+m,'_blank');}
+function doneActive(){const c=clients.find(x=>x.id===actId);if(!c)return;c.last=fmt(TODAY);c.next=fmt(nv(TODAY,14));sv(clients);sel(actId);render();}
+function delActive(){if(!confirm('Apagar?'))return;clients=clients.filter(x=>x.id!==actId);actId=null;sv(clients);document.getElementById('demp').style.display='flex';document.getElementById('dcont').style.display='none';closeDetail();render();}
+function editActive(){const c=clients.find(x=>x.id===actId);if(!c)return;editId=c.id;document.getElementById('mtit').textContent='✏️ Editar cliente';document.getElementById('fn').value=c.name||'';document.getElementById('fe').value=c.emp||'';document.getElementById('ft').value=c.tel||'';document.getElementById('fl').value=c.last||fmt(TODAY);document.getElementById('fnx').value=c.next||'';document.getElementById('fo').value=c.obs||'';document.getElementById('fi').value='14';document.getElementById('fcnpj').value=c.cnpj||'';document.getElementById('fcep').value=c.cep||'';document.getElementById('fcidade').value=c.cidade||'';document.getElementById('fest').value=c.estado||'';document.getElementById('fgestor').value=c.gestor||'';setChips(c.prod||[]);updatePrev();document.getElementById('ov').classList.add('show');setTimeout(()=>document.getElementById('fn').focus(),200);}
+function openForm(){editId=null;document.getElementById('mtit').textContent='👤 Novo cliente';['fn','fe','ft','fo','fcnpj','fcep','fcidade','fest','fgestor'].forEach(id=>document.getElementById(id).value='');document.getElementById('fl').value=fmt(TODAY);document.getElementById('fnx').value='';document.getElementById('fi').value='14';setChips([]);cp();document.getElementById('ov').classList.add('show');setTimeout(()=>document.getElementById('fn').focus(),200);}
+function closeForm(){document.getElementById('ov').classList.remove('show');}
+function handleOv(e){if(e.target===document.getElementById('ov'))closeForm();}
+function save(){const name=document.getElementById('fn').value.trim();if(!name){document.getElementById('fn').focus();return;}const lv=document.getElementById('fl').value||fmt(TODAY);const mnx=document.getElementById('fnx').value;const iv=parseInt(document.getElementById('fi').value)||14;const nx=mnx?new Date(mnx+'T00:00:00'):nv(new Date(lv+'T00:00:00'),iv);const prods=getChips();const extra={cnpj:document.getElementById('fcnpj').value.trim(),cep:document.getElementById('fcep').value.trim(),cidade:document.getElementById('fcidade').value.trim(),estado:document.getElementById('fest').value.trim(),gestor:document.getElementById('fgestor').value.trim()};if(editId){const c=clients.find(x=>x.id===editId);if(c){c.name=name;c.emp=document.getElementById('fe').value.trim();c.tel=document.getElementById('ft').value.trim().replace(/\D/g,'');c.prod=prods;c.last=lv;c.next=fmt(nx);c.obs=document.getElementById('fo').value.trim();Object.assign(c,extra);}sv(clients);closeForm();render();setTimeout(()=>sel(editId),100);}else{const c={id:Date.now(),name,emp:document.getElementById('fe').value.trim(),tel:document.getElementById('ft').value.trim().replace(/\D/g,''),prod:prods,last:lv,next:fmt(nx),obs:document.getElementById('fo').value.trim(),...extra};clients.unshift(c);sv(clients);closeForm();render();setTimeout(()=>sel(c.id),100);}}
+function cardH(c){const s=st(c.next);const isS=actId===c.id;return'<div class="crow'+(isS?' sel':'')+'" id="r'+c.id+'" onclick="sel('+c.id+')">'+'<div class="av '+avCl(s)+'">'+ini(c.name)+'</div>'+'<div class="cbody"><div class="cname">'+c.name+'</div><div class="cpre">'+(c.emp||'')+(c.prod&&c.prod.length?' · '+(Array.isArray(c.prod)?c.prod.join(', '):c.prod):'')+'</div></div>'+'<div class="cright"><div class="ct">'+dl(c.next)+'</div>'+(s==='urg'?'<div class="bdg bdr">!</div>':s==='wk'?'<div class="bdg bda">!</div>':'<div class="bdg bdg2">✓</div>')+'</div></div>';}
+function render(){document.getElementById('dtlbl').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});const all=clients;document.getElementById('su').textContent=all.filter(c=>st(c.next)==='urg').length;document.getElementById('sw').textContent=all.filter(c=>st(c.next)==='wk').length;document.getElementById('so').textContent=all.filter(c=>st(c.next)==='ok').length;const q=(document.getElementById('sq').value||'').toLowerCase();const fl=q?clients.filter(c=>(c.name+(c.emp||'')).toLowerCase().includes(q)):clients;document.getElementById('emp').style.display=clients.length===0?'block':'none';const urg=fl.filter(c=>st(c.next)==='urg');const wk=fl.filter(c=>st(c.next)==='wk');const ok=fl.filter(c=>st(c.next)==='ok');let h='';if(urg.length)h+='<div class="sechdr">⚠️ Contatar agora</div>'+urg.map(cardH).join('');if(wk.length)h+='<div class="sechdr">📅 Esta semana</div>'+wk.map(cardH).join('');if(ok.length)h+='<div class="sechdr">✓ Próximos</div>'+ok.map(cardH).join('');document.getElementById('clist').innerHTML=document.getElementById('emp').outerHTML+h;}
+render();
+</script>
+
+<button class="chat-fab" onclick="toggleChat()" title="D7X">🤖<span class="chat-badge">IA</span></button>
+<div class="chat-panel" id="chat-panel">
+  <div class="chat-hdr">
+    <div class="chat-hdr-av">🤖</div>
+    <div class="chat-hdr-info"><div class="chat-hdr-name">D7X</div><div class="chat-hdr-sub">Seu assistente digital de vendas</div></div>
+    <button class="chat-close" onclick="toggleChat()">×</button>
+  </div>
+  <div class="chat-msgs" id="chat-msgs">
+    <div class="msg-ai">Olá! Sou o D7X. Pergunte sobre produtos, preços ou peça uma mensagem pronta pra WhatsApp! 💪</div>
+  </div>
+  <div class="chat-sugs" id="chat-sugs">
+    <button class="sug" onclick="askSug(this)">📝 Mensagem pra cliente novo</button>
+    <button class="sug" onclick="askSug(this)">💰 Como fechar pedido grande</button>
+    <button class="sug" onclick="askSug(this)">🔁 Reativar cliente parado</button>
+    <button class="sug" onclick="askSug(this)">📦 Diferença Mascavo x Demerara</button>
+  </div>
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chat-input" rows="1" placeholder="Pergunte algo..." onkeydown="chatKey(event)"></textarea>
+    <button class="btn-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
+<script>
+let chatHistory=[];
+function toggleChat(){const p=document.getElementById('chat-panel');p.classList.toggle('open');if(p.classList.contains('open'))document.getElementById('chat-input').focus();}
+function askSug(el){document.getElementById('chat-input').value=el.textContent.trim().replace(/^[^\w]+/,'');document.getElementById('chat-sugs').style.display='none';sendChat();}
+function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+function addMsg(text,type){const d=document.createElement('div');d.className='msg-'+type;d.textContent=text;const m=document.getElementById('chat-msgs');m.appendChild(d);m.scrollTop=m.scrollHeight;return d;}
+async function sendChat(){
+  const inp=document.getElementById('chat-input');
+  const msg=inp.value.trim();if(!msg)return;
+  inp.value='';
+  addMsg(msg,'user');
+  chatHistory.push({role:'user',content:msg});
+  const loading=addMsg('Pensando...','loading');
+  try{
+    const res=await fetch('https://d7-chat.d7representacao.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,history:chatHistory.slice(-10)})});
+    const data=await res.json();
+    loading.remove();
+    const reply=data.reply||'Desculpe, não consegui responder agora.';
+    chatHistory.push({role:'assistant',content:reply});
+    addMsg(reply,'ai');
+  }catch(e){loading.remove();addMsg('Erro ao conectar. Tente novamente.','ai');}
+}
+</script>
+</body>
+</html>
+
 </script>
 </body>
 </html>
