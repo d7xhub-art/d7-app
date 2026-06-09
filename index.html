@@ -2746,6 +2746,7 @@ function restaurarJSON(input){
   };
   reader.readAsText(file);
 }
+  window.importarJSON = restaurarJSON;
 function limparDados(){
   if(!confirm('⚠️ ATENÇÃO: Isso apagará TODOS os dados. Tem certeza?'))return;
   if(!confirm('Confirmar exclusão total?'))return;
