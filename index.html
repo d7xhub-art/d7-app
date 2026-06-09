@@ -2758,4 +2758,97 @@ function processarCSV(input){
   var file=input.files[0];if(!file)return;
   var reader=new FileReader();
   reader.onload=function(e){
-    var lines=e.target.result.split('\n'
+    var lines=e.target.result.split('\n').filter(function(l){return l.trim();});
+    if(lines.length<2){toast('CSV vazio','error');return;}
+    var headers=lines[0].split(',').map(function(h){return h.trim().toLowerCase();});
+    var preview=lines.slice(1,6).map(function(line){
+      var vals=line.split(',');var obj={};
+      headers.forEach(function(h,i){obj[h]=(vals[i]||'').trim().replace(/^"|"$/g,'');});
+      return obj;
+    });
+    var html='<div style="font-size:12px;margin-bottom:10px">'+preview.length+' registros encontrados</div>';
+    html+='<table style="width:100%;font-size:12px;border-collapse:collapse"><tr>'+headers.map(function(h){return '<th style="padding:4px;background:var(--surface2)">'+h+'</th>';}).join('')+'</tr>';
+    preview.forEach(function(r){html+='<tr>'+headers.map(function(h){return '<td style="padding:4px;border-bottom:1px solid var(--border)">'+esc(r[h]||'')+'</td>';}).join('')+'</tr>';});
+    html+='</table>';
+    document.getElementById('csv-preview').innerHTML=html;
+    document.getElementById('csv-footer').style.display='';
+    document.getElementById('csv-file').dataset.content=e.target.result;
+  };
+  reader.readAsText(file);
+}
+function confirmarImportCSV(){
+  var content=document.getElementById('csv-file').dataset.content;
+  if(!content)return;
+  var lines=content.split('\n').filter(function(l){return l.trim();});
+  var headers=lines[0].split(',').map(function(h){return h.trim().toLowerCase();});
+  var novos=lines.slice(1).map(function(line){
+    var vals=line.split(',');var obj={id:uid()};
+    headers.forEach(function(h,i){obj[h]=(vals[i]||'').trim().replace(/^"|"$/g,'');});
+    obj.status=obj.status||'ativo';obj.criadoEm=new Date().toISOString();return obj;
+  });
+  clientes=clientes.concat(novos);saveC();
+  fecharModal('modal-import-csv');renderClientes();renderDashboard();
+  toast(novos.length+' clientes importados!','success');
+}
+function importarCSVClientes(){document.getElementById('modal-import-csv').classList.add('open');}
+function importarCSVFornecedores(){toast('Use CSV com colunas: nome,cnpj,contato,tel,email','info');}
+function importarCSVProdutos(){toast('Use CSV com colunas: nome,fornecedor,preco,custo,margem,categoria','info');}
+function baixarModeloFornecedor(){dlCSV([['nome','cnpj','contato','tel','email','obs']],'modelo-fornecedores');}
+function baixarModeloProduto(){dlCSV([['nome','fornecedor_nome','codigo','categoria','unidade','custo','preco','margem','ean','ncm']],'modelo-produtos');}
+function renderMetas(){
+  var metas=JSON.parse(localStorage.getItem('d7_metas')||'{}');
+  var el=document.getElementById('metas-dashboard');
+  if(!el)return;
+  var now=new Date();
+  function mesAtual(d){var dt=new Date(d||'');return dt.getMonth()===now.getMonth()&&dt.getFullYear()===now.getFullYear();}
+  var pedidosMes=pedidos.filter(function(p){return mesAtual(p.data||p.criadoEm);}).length;
+  var fatMes=pedidos.filter(function(p){return mesAtual(p.data||p.criadoEm);}).reduce(function(s,p){return s+(parseFloat(p.total||p.valor||0));},0);
+  var clientesMes=clientes.filter(function(c){return mesAtual(c.criadoEm);}).length;
+  function barra(atual,meta,label,cor){
+    if(!meta)return '';
+    var pct=Math.min(100,Math.round(atual/meta*100));
+    return '<div style="margin-bottom:10px;">'
+      +'<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">'
+      +'<span>'+label+'</span><span style="color:var(--muted)">'+atual+' / '+meta+' ('+pct+'%)</span></div>'
+      +'<div style="background:var(--surface2);border-radius:4px;height:8px;">'
+      +'<div style="width:'+pct+'%;background:'+cor+';height:8px;border-radius:4px;"></div></div></div>';
+  }
+  var html=barra(pedidosMes,metas.pedidos||0,'Pedidos','var(--primary)')
+    +barra(fatMes,metas.faturamento||0,'Faturamento R$','var(--success)')
+    +barra(clientesMes,metas.clientes||0,'Novos Clientes','var(--warning)');
+  el.innerHTML=html||'<div style="font-size:12px;color:var(--muted)">Configure metas em ⚙️</div>';
+}
+function abrirModalMetas(){
+  var metas=JSON.parse(localStorage.getItem('d7_metas')||'{}');
+  document.getElementById('meta-pedidos').value=metas.pedidos||'';
+  document.getElementById('meta-faturamento').value=metas.faturamento||'';
+  document.getElementById('meta-clientes').value=metas.clientes||'';
+  document.getElementById('modal-metas').classList.add('open');
+}
+function salvarMetas(){
+  localStorage.setItem('d7_metas',JSON.stringify({
+    pedidos:parseInt(document.getElementById('meta-pedidos').value)||0,
+    faturamento:parseFloat(document.getElementById('meta-faturamento').value)||0,
+    clientes:parseInt(document.getElementById('meta-clientes').value)||0
+  }));
+  fecharModal('modal-metas');
+  renderMetas();
+  toast('Metas salvas!','success');
+}
+function initApp(){
+  navigate('dashboard');
+  loadConfig();
+  renderDashboard();
+  renderClientes();
+  renderFornecedores();
+  renderCatalogo();
+  renderPedidos();
+  renderFunil();
+  renderAgenda();
+  renderOrigens();
+  if(typeof renderMetas==='function')renderMetas();
+}
+document.addEventListener('DOMContentLoaded',initApp);
+</script>
+</body>
+</html>
