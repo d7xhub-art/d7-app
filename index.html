@@ -1440,7 +1440,7 @@ WhatsApp: [Seu Telefone]</textarea>
       <div class="card" style="margin:0;padding:14px;">
         <div style="font-size:13px;font-weight:600;margin-bottom:6px;">📤 Restaurar</div>
         <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Restaura dados de um backup salvo anteriormente.</p>
-        <input type="file" id="import-json-file" accept=".json" style="display:none;" onchange="importarJSON(this)">
+        <input type="file" id="import-json-file" accept=".json" style="display:none;" onchange="restaurarJSON(this)">
         <button class="btn btn-outline" style="width:100%;" onclick="document.getElementById('import-json-file').click()">📂 Carregar arquivo JSON</button>
       </div>
       <div class="card" style="margin:0;padding:14px;">
@@ -2757,4 +2757,4 @@ function processarCSV(input){
   var file=input.files[0];if(!file)return;
   var reader=new FileReader();
   reader.onload=function(e){
-    var lines=e.target.result.split('\n')
+    var lines=e.target.result.split('\n'
