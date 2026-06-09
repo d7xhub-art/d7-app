@@ -2311,8 +2311,8 @@ function renderCatalogo(){
       +'<span style="font-weight:700;font-size:14px;">🏭 '+esc(f.nome)+'</span>'
       +'<div style="display:flex;gap:6px;align-items:center;">'
       +'<span style="font-size:12px;color:var(--text2);">'+prods.length+' prod.</span>'
-      +'<button class="btn btn-ghost btn-sm" onclick="editarFornecedor(''+f.id+'')" title="Editar">✏️</button>'
-      +'<button class="btn btn-ghost btn-sm" onclick="excluirFornecedor(''+f.id+'')" title="Excluir" style="color:var(--danger)">🗑</button>'
+      +'<button class="btn btn-ghost btn-sm" onclick="editarFornecedor(\''+f.id+'\')" title="Editar">✏️</button>'
+      +'<button class="btn btn-ghost btn-sm" onclick="excluirFornecedor(\''+f.id+'\')" title="Excluir" style="color:var(--danger)">🗑</button>'
       +'</div></div>';
     if(!prods.length){
       gruposHtml+='<div style="padding:12px;color:var(--muted);font-size:13px;">Nenhum produto</div>';
@@ -2324,8 +2324,8 @@ function renderCatalogo(){
           +'<td style="padding:8px 12px;text-align:right;">'+fmtMoeda(p.custo||0)+'</td>'
           +'<td style="padding:8px 12px;text-align:right;color:var(--accent);font-weight:600;">'+fmtMoeda(p.preco||0)+'</td>'
           +'<td style="padding:8px 12px;text-align:center;white-space:nowrap;">'
-          +'<button class="btn btn-ghost btn-sm" onclick="editarProduto(''+p.id+'')" title="Editar">✏️</button>'
-          +'<button class="btn btn-ghost btn-sm" onclick="excluirProduto(''+p.id+'')" title="Excluir" style="color:var(--danger)">🗑</button>'
+          +'<button class="btn btn-ghost btn-sm" onclick="editarProduto(\''+p.id+'\')" title="Editar">✏️</button>'
+          +'<button class="btn btn-ghost btn-sm" onclick="excluirProduto(\''+p.id+'\')" title="Excluir" style="color:var(--danger)">🗑</button>'
           +'</td></tr>';
       });
       gruposHtml+='</tbody></table></div>';
