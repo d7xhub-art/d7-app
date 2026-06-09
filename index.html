@@ -2289,37 +2289,56 @@ function deletarFunil(id){
 
 // ── CATÁLOGO ──
 function renderCatalogo(){
-  if(!document.getElementById('catalogo-lista'))return;
+  var lista=document.getElementById('catalogo-lista');
+  if(!lista)return;
   var q=((document.getElementById('search-catalogo')||{value:''}).value||'').toLowerCase();
-  var forn=(document.getElementById('filter-forn-catalogo')||{value:''}).value;
-  var el=document.getElementById('sel-forn-pedido');// populate for tabelas
-  var selForn=document.getElementById('filter-forn-catalogo');
-  selForn.innerHTML='<option value="">Todos os fornecedores</option>';
-  fornecedores.forEach(function(f){selForn.innerHTML+='<option value="'+f.id+'">'+esc(f.nome)+'</option>';});
-  selForn.value=forn;
-  document.getElementById('badge-catalogo').textContent=produtos.length;
-  var prods=produtos.filter(function(p){
-    var match=(p.nome||'').toLowerCase().includes(q)||(p.codigo||'').toLowerCase().includes(q)||(p.categoria||'').toLowerCase().includes(q);
-    var fornMatch=!forn||p.fornecedorId===forn;
-    return match&&fornMatch;
+  var filtForn=((document.getElementById('filter-forn-catalogo')||{value:''}).value||'');
+  var filterOpts='<option value="">Todos os fornecedores</option>';
+  fornecedores.forEach(function(f){filterOpts+='<option value="'+f.id+'"'+(filtForn===f.id?' selected':'')+'>'+esc(f.nome)+'</option>';});
+  var gruposHtml='';
+  var total=0;
+  var fornsFiltrados=filtForn?fornecedores.filter(function(f){return f.id===filtForn;}):fornecedores;
+  fornsFiltrados.forEach(function(f){
+    var prods=produtos.filter(function(p){
+      if(p.fornecedorId!==f.id)return false;
+      if(q)return (p.nome||'').toLowerCase().includes(q)||(p.codigo||'').toLowerCase().includes(q)||(f.nome||'').toLowerCase().includes(q);
+      return true;
+    });
+    if(q&&!prods.length)return;
+    total+=prods.length;
+    gruposHtml+='<div class="fornecedor-block" style="margin-bottom:16px;">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);">'
+      +'<span style="font-weight:700;font-size:14px;">🏭 '+esc(f.nome)+'</span>'
+      +'<div style="display:flex;gap:6px;align-items:center;">'
+      +'<span style="font-size:12px;color:var(--text2);">'+prods.length+' prod.</span>'
+      +'<button class="btn btn-ghost btn-sm" onclick="editarFornecedor(''+f.id+'')" title="Editar">✏️</button>'
+      +'<button class="btn btn-ghost btn-sm" onclick="excluirFornecedor(''+f.id+'')" title="Excluir" style="color:var(--danger)">🗑</button>'
+      +'</div></div>';
+    if(!prods.length){
+      gruposHtml+='<div style="padding:12px;color:var(--muted);font-size:13px;">Nenhum produto</div>';
+    }else{
+      gruposHtml+='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;"><tbody>';
+      prods.forEach(function(p){
+        gruposHtml+='<tr style="border-bottom:1px solid var(--border);">'
+          +'<td style="padding:8px 12px;"><strong>'+esc(p.nome)+'</strong>'+(p.unidade?'<small style="color:var(--text2);margin-left:6px;">'+esc(p.unidade)+'</small>':'')+'<div style="font-size:11px;color:var(--text2)">'+(p.codigo||'')+'</div></td>'
+          +'<td style="padding:8px 12px;text-align:right;">'+fmtMoeda(p.custo||0)+'</td>'
+          +'<td style="padding:8px 12px;text-align:right;color:var(--accent);font-weight:600;">'+fmtMoeda(p.preco||0)+'</td>'
+          +'<td style="padding:8px 12px;text-align:center;white-space:nowrap;">'
+          +'<button class="btn btn-ghost btn-sm" onclick="editarProduto(''+p.id+'')" title="Editar">✏️</button>'
+          +'<button class="btn btn-ghost btn-sm" onclick="excluirProduto(''+p.id+'')" title="Excluir" style="color:var(--danger)">🗑</button>'
+          +'</td></tr>';
+      });
+      gruposHtml+='</tbody></table></div>';
+    }
+    gruposHtml+='</div>';
   });
-  var tbody=document.getElementById('catalogo-tbody');
-  if(!prods.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty"><div class="empty-icon">📦</div><div class="empty-text">Nenhum produto</div></div></td></tr>';return;}
-  tbody.innerHTML=prods.map(function(p){
-    var f=fornecedores.find(function(x){return x.id===p.fornecedorId;});
-    return '<tr><td><strong>'+esc(p.nome)+'</strong>'+(p.codigo?'<br><small style="color:var(--muted)">'+esc(p.codigo)+'</small>':'')+'</td>'
-      +'<td>'+(f?esc(f.nome):'—')+'</td>'
-      +'<td>'+(p.categoria||'—')+'</td>'
-      +'<td>'+fmtMoeda(p.custo||0)+'</td>'
-      +'<td style="color:var(--accent);font-weight:600;">'+fmtMoeda(p.preco||0)+'</td>'
-      +'<td>'+(p.margem?p.margem+'%':'—')+'</td>'
-      +'<td><button class="btn btn-ghost btn-sm" onclick="editarProduto(\''+p.id+'\')">✏️</button>'
-      +'<button class="btn btn-ghost btn-sm" onclick="deletarProduto(\''+p.id+'\')" style="color:var(--danger)">🗑</button></td></tr>';
-  }).join('');
+  if(!total){
+    gruposHtml=q?'<div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">Nenhum resultado</div></div>':'<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">Nenhum produto cadastrado</div></div>';
+  }
+  lista.innerHTML='<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">'
+    +'<select id="filter-forn-catalogo" onchange="renderCatalogo()" style="padding:6px 10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:6px;font-size:13px;">'+filterOpts+'</select>'
+    +'</div>'+gruposHtml;
 }
-
-// ── FORNECEDORES ──
-var editFornId=null;
 function abrirModalFornecedor(id){
   editFornId=id||null;
   var f=id?fornecedores.find(function(x){return x.id===id;}):{};
@@ -2339,6 +2358,17 @@ function salvarFornecedor(){
   saveF();fecharModal('modal-fornecedor');renderCatalogo();agendarAutoSave();toast('Fornecedor salvo!','success');
 }
 function editarFornecedor(id){abrirModalFornecedor(id);}
+function excluirFornecedor(id){
+  var f=fornecedores.find(function(x){return x.id===id;});
+  if(!f)return;
+  var nProd=produtos.filter(function(p){return p.fornecedorId===id;}).length;
+  var msg='Excluir fornecedor "'+f.nome+'"?'+(nProd?' Este fornecedor tem '+nProd+' produto(s).':'');
+  if(!confirm(msg))return;
+  fornecedores=fornecedores.filter(function(x){return x.id!==id;});
+  saveF();renderCatalogo();renderDashboard();
+  toast('Fornecedor excluído','success');
+}
+function excluirCliente(id){deletarCliente(id);}
 function deletarFornecedor(id){
   if(!confirm('Excluir fornecedor?'))return;
   fornecedores=fornecedores.filter(function(f){return f.id!==id;});
@@ -2370,6 +2400,14 @@ function salvarProduto(){
   saveP();fecharModal('modal-produto');renderCatalogo();agendarAutoSave();toast('Produto salvo!','success');
 }
 function editarProduto(id){abrirModalProduto(id);}
+function excluirProduto(id){
+  var p=produtos.find(function(x){return x.id===id;});
+  if(!p)return;
+  if(!confirm('Excluir produto "'+p.nome+'"?'))return;
+  produtos=produtos.filter(function(x){return x.id!==id;});
+  saveP();renderCatalogo();renderDashboard();
+  toast('Produto excluído','success');
+}
 function deletarProduto(id){if(!confirm('Excluir produto?'))return;produtos=produtos.filter(function(p){return p.id!==id;});saveP();renderCatalogo();toast('Removido','success');}
 
 // ── TABELAS DE PREÇO ──
