@@ -629,6 +629,181 @@ input:checked+.toggle-slider:before{transform:translateX(18px);}
           </div>
         </div>
       </div>
+        <!-- META 80 DISTRIBUIDORES -->
+        <div class="card" style="margin-bottom:16px;border:1px solid var(--accent);">
+          <div class="card-header" style="justify-content:space-between;">
+            <span class="card-title">🏆 Meta: 80 Novos Distribuidores</span>
+            <span style="font-size:12px;color:var(--muted);" id="prosp-meta-label">0 / 80</span>
+          </div>
+          <div style="background:var(--surface2);border-radius:8px;height:12px;overflow:hidden;margin-bottom:8px;">
+            <div id="prosp-meta-bar" style="height:100%;background:linear-gradient(90deg,var(--accent),#10b981);border-radius:8px;transition:width .5s;width:0%"></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:12px;" id="prosp-count-mapeado">📋 0 Mapeados</span>
+            <span style="font-size:12px;" id="prosp-count-abordado">📞 0 Abordados</span>
+            <span style="font-size:12px;" id="prosp-count-proposta">📄 0 Propostas</span>
+            <span style="font-size:12px;color:var(--success);" id="prosp-count-fechado">✅ 0 Fechados</span>
+          </div>
+        </div>
+
+        <!-- IMPORTAR EM MASSA -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header"><span class="card-title">📥 Importar Prospects em Massa (CSV)</span></div>
+          <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Colunas: <strong>empresa, cnpj, cidade, estado, contato, tel, email, segmento</strong></p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input type="file" id="prosp-csv-file" accept=".csv" style="display:none;" onchange="importarProspectosCSV(this)">
+            <button class="btn btn-outline" onclick="document.getElementById('prosp-csv-file').click()">📂 Importar CSV</button>
+            <button class="btn btn-outline" onclick="baixarModeloProspecto()">⬇ Baixar Modelo CSV</button>
+            <button class="btn btn-outline" onclick="exportarProspectosCSV()">📤 Exportar Prospects</button>
+          </div>
+          <div id="prosp-import-preview" style="margin-top:10px;font-size:12px;color:var(--accent);"></div>
+        </div>
+
+        <!-- TEMPLATES WHATSAPP -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header"><span class="card-title">💬 Templates WhatsApp — Açúcar & Sal</span></div>
+          <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Clique no template para copiar ou abrir direto no WhatsApp.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="card" style="margin:0;padding:12px;border-left:3px solid #25D366;">
+              <div style="font-size:12px;font-weight:600;color:#25D366;margin-bottom:6px;">📩 Template 1 — Primeiro Contato (Distribuidor)</div>
+              <div id="wpp-t1" style="font-size:12px;color:var(--text2);background:var(--surface2);padding:10px;border-radius:6px;white-space:pre-line;line-height:1.6;">Olá [Nome], tudo bem?
+
+Sou [Seu Nome] da D7 Representação Comercial. Trabalhamos com açúcar mascavo e demerara de qualidade premium, além de linha completa de sal (parrilla, sachê e mais).
+
+Nossos produtos são ideais para distribuidoras do setor alimentício que buscam produtos diferenciados com boa margem.
+
+Posso enviar nosso catálogo e tabela de preços? 🙏</div>
+              <div style="display:flex;gap:8px;margin-top:8px;">
+                <button class="btn btn-outline" style="font-size:11px;padding:4px 10px;" onclick="copiarTemplate('wpp-t1')">📋 Copiar</button>
+                <button class="btn" style="background:#25D366;color:#fff;font-size:11px;padding:4px 10px;" onclick="abrirWhatsApp('wpp-t1')">📱 Abrir WhatsApp</button>
+              </div>
+            </div>
+            <div class="card" style="margin:0;padding:12px;border-left:3px solid #25D366;">
+              <div style="font-size:12px;font-weight:600;color:#25D366;margin-bottom:6px;">🔄 Template 2 — Follow-up (3 dias)</div>
+              <div id="wpp-t2" style="font-size:12px;color:var(--text2);background:var(--surface2);padding:10px;border-radius:6px;white-space:pre-line;line-height:1.6;">Olá [Nome]! 👋
+
+Passando para retomar contato sobre nossa linha de açúcares especiais e sal.
+
+✅ Açúcar Mascavo — natural, sem refino
+✅ Açúcar Demerara — levemente refinado, sabor marcante
+✅ Sal Parrilla, Sachê e linha completa
+
+Trabalhamos com pronta entrega e condições especiais para distribuidoras.
+
+Tem 5 minutinhos para eu apresentar? 📲</div>
+              <div style="display:flex;gap:8px;margin-top:8px;">
+                <button class="btn btn-outline" style="font-size:11px;padding:4px 10px;" onclick="copiarTemplate('wpp-t2')">📋 Copiar</button>
+                <button class="btn" style="background:#25D366;color:#fff;font-size:11px;padding:4px 10px;" onclick="abrirWhatsApp('wpp-t2')">📱 Abrir WhatsApp</button>
+              </div>
+            </div>
+            <div class="card" style="margin:0;padding:12px;border-left:3px solid #25D366;">
+              <div style="font-size:12px;font-weight:600;color:#25D366;margin-bottom:6px;">📄 Template 3 — Envio de Proposta</div>
+              <div id="wpp-t3" style="font-size:12px;color:var(--text2);background:var(--surface2);padding:10px;border-radius:6px;white-space:pre-line;line-height:1.6;">Olá [Nome]!
+
+Conforme conversamos, segue nossa proposta comercial para sua distribuidora. 👇
+
+Nossos diferenciais:
+🔹 Açúcar Mascavo e Demerara — origem controlada
+🔹 Sal Parrilla e Sachê — linha completa
+🔹 Entrega pontual e suporte técnico
+🔹 Condições especiais para primeiros pedidos
+
+Qualquer dúvida, estou à disposição! Aguardo seu retorno 🤝</div>
+              <div style="display:flex;gap:8px;margin-top:8px;">
+                <button class="btn btn-outline" style="font-size:11px;padding:4px 10px;" onclick="copiarTemplate('wpp-t3')">📋 Copiar</button>
+                <button class="btn" style="background:#25D366;color:#fff;font-size:11px;padding:4px 10px;" onclick="abrirWhatsApp('wpp-t3')">📱 Abrir WhatsApp</button>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:10px;padding:10px;background:var(--surface2);border-radius:6px;">
+            <div style="font-size:12px;font-weight:600;margin-bottom:6px;">📱 Enviar para número específico</div>
+            <div style="display:flex;gap:8px;">
+              <input class="form-input" id="wpp-numero-direto" placeholder="(62) 99999-9999" style="flex:1;font-size:12px;" maxlength="15" oninput="maskTel(this)">
+              <select class="form-select" id="wpp-template-sel" style="font-size:12px;">
+                <option value="wpp-t1">Template 1 — Primeiro Contato</option>
+                <option value="wpp-t2">Template 2 — Follow-up</option>
+                <option value="wpp-t3">Template 3 — Proposta</option>
+              </select>
+              <button class="btn" style="background:#25D366;color:#fff;font-size:12px;" onclick="enviarWhatsAppDireto()">📲 Enviar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- EMAIL EM MASSA BREVO -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header"><span class="card-title">📧 Email em Massa — Brevo</span></div>
+          <div id="brevo-status-msg" style="font-size:12px;margin-bottom:10px;padding:8px;background:var(--surface2);border-radius:6px;">
+            ⚙️ Configure a chave API Brevo em <strong>⚙️ Config IA</strong> para ativar envio de emails.
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Assunto do Email</label>
+              <input class="form-input" id="brevo-assunto" value="Proposta Comercial — Açúcar Mascavo, Demerara e Sal | D7 Representação">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Corpo do Email (HTML ou texto)</label>
+              <textarea class="form-input" id="brevo-corpo" rows="6" style="resize:vertical;">Prezado(a) [Nome],
+
+Somos a D7 Representação Comercial, especializada na distribuição de alimentos de qualidade.
+
+Temos disponíveis:
+• Açúcar Mascavo — produto natural, sem aditivos, ideal para varejo saudável
+• Açúcar Demerara — sabor diferenciado, alta procura no mercado
+• Sal Parrilla, Sal Sachê e linha completa de sal de cozinha
+
+Trabalhamos com condições especiais para distribuidoras e indústrias de alimentos.
+
+Solicito 15 minutos para apresentação. Podemos agendar?
+
+Atenciosamente,
+D7 Representação Comercial
+WhatsApp: [Seu Telefone]</textarea>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-primary" onclick="enviarEmailBrevoMassa()">📧 Enviar para Todos os Prospects</button>
+              <button class="btn btn-outline" onclick="testarEmailBrevo()">🧪 Testar (apenas você)</button>
+            </div>
+            <div id="brevo-progresso" style="display:none;font-size:12px;color:var(--accent);"></div>
+          </div>
+        </div>
+
+        <!-- GERADOR DE PROPOSTA -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header"><span class="card-title">📄 Gerar Proposta Comercial</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Empresa Destino</label>
+              <input class="form-input" id="prop-empresa" placeholder="Nome da distribuidora">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Contato</label>
+              <input class="form-input" id="prop-contato" placeholder="Nome do responsável">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">CNPJ</label>
+              <input class="form-input" id="prop-cnpj" placeholder="00.000.000/0001-00">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Cidade / UF</label>
+              <input class="form-input" id="prop-cidade" placeholder="ex: Goiânia / GO">
+            </div>
+          </div>
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px;">Produtos a incluir na proposta:</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;" id="prop-produtos-lista">
+            <label style="font-size:12px;display:flex;gap:8px;align-items:center;"><input type="checkbox" checked value="Açúcar Mascavo"> Açúcar Mascavo (kg / fardo)</label>
+            <label style="font-size:12px;display:flex;gap:8px;align-items:center;"><input type="checkbox" checked value="Açúcar Demerara"> Açúcar Demerara (kg / fardo)</label>
+            <label style="font-size:12px;display:flex;gap:8px;align-items:center;"><input type="checkbox" checked value="Sal Parrilla"> Sal Parrilla (kg / caixa)</label>
+            <label style="font-size:12px;display:flex;gap:8px;align-items:center;"><input type="checkbox" checked value="Sal Sachê"> Sal Sachê (caixa c/ 1000 unid.)</label>
+            <label style="font-size:12px;display:flex;gap:8px;align-items:center;"><input type="checkbox" value="Sal Refinado"> Sal Refinado (kg / fardo)</label>
+            <label style="font-size:12px;display:flex;gap:8px;align-items:center;"><input type="checkbox" value="Sal Grosso"> Sal Grosso (kg / saco)</label>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="gerarPropostaHTML()">📄 Gerar Proposta (PDF)</button>
+            <button class="btn btn-outline" onclick="gerarPropostaWhatsApp()">💬 Resumo p/ WhatsApp</button>
+          </div>
+        </div>
+
+      </div>
       <!-- /PROSPECÇÃO -->
 
       <div class="panel" id="panel-funil">
@@ -749,6 +924,24 @@ input:checked+.toggle-slider:before{transform:translateX(18px);}
             <div style="display:flex;gap:8px;">
               <input class="form-input" id="nova-resposta" placeholder="Ex: Qual o prazo de entrega?">
               <button class="btn btn-primary" onclick="adicionarResposta()">+ Adicionar</button>
+            </div>
+          </div>
+          <div class="config-section">
+            <div class="config-section-title">📧 Email em Massa — Brevo (grátis 300/dia)</div>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label class="form-label">Brevo API Key</label>
+                <input class="form-input" id="cfg-brevo-key" placeholder="xkeysib-...">
+                <span class="form-hint">Acesse <a href="https://app.brevo.com/settings/keys/api" target="_blank" style="color:var(--primary);">app.brevo.com</a> → Configurações → Chaves API → Criar chave. Grátis: 300 emails/dia.</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Remetente</label>
+                <input class="form-input" id="cfg-brevo-email" placeholder="seuemail@gmail.com" value="d7representacao@gmail.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nome Remetente</label>
+                <input class="form-input" id="cfg-brevo-nome" placeholder="Seu Nome / Empresa" value="D7 Representação Comercial">
+              </div>
             </div>
           </div>
           <div class="modal-footer" style="margin-top:10px;">
@@ -2005,6 +2198,247 @@ function buscarLinkedIn(){window.open('https://www.linkedin.com/search/results/c
 function buscarGoogle(){window.open('https://www.google.com/search?q='+encodeURIComponent(document.getElementById('search-prospeccao').value||''),'_blank');}
 function buscarInstagram(){window.open('https://www.instagram.com/explore/search/keyword/?q='+encodeURIComponent(document.getElementById('search-prospeccao').value||''),'_blank');}
 
+// ── PROSPECÇÃO PROFISSIONAL ──
+var KEY_PROSP='d7_prospectos';
+var prospectos=JSON.parse(localStorage.getItem(KEY_PROSP)||'[]');
+function saveProspectos(){localStorage.setItem(KEY_PROSP,JSON.stringify(prospectos));}
+
+function atualizarMetaDistribuidores(){
+  var meta=80;
+  var fechados=prospectos.filter(function(p){return p.status==='distribuidor';}).length;
+  // também conta clients com origem prospecção
+  var clientesFechados=clientes.filter(function(c){return c.status==='ativo'&&c.origem_prosp;}).length;
+  var total=fechados+clientesFechados;
+  var pct=Math.min(100,Math.round(total/meta*100));
+  var bar=document.getElementById('prosp-meta-bar');
+  var lbl=document.getElementById('prosp-meta-label');
+  if(bar){bar.style.width=pct+'%';}
+  if(lbl){lbl.textContent=total+' / '+meta+' ('+pct+'%)';}
+  var mapeados=prospectos.filter(function(p){return p.status==='mapeado';}).length;
+  var abordados=prospectos.filter(function(p){return p.status==='abordado';}).length;
+  var propostas=prospectos.filter(function(p){return p.status==='proposta';}).length;
+  var el;
+  el=document.getElementById('prosp-count-mapeado');if(el)el.textContent='📋 '+mapeados+' Mapeados';
+  el=document.getElementById('prosp-count-abordado');if(el)el.textContent='📞 '+abordados+' Abordados';
+  el=document.getElementById('prosp-count-proposta');if(el)el.textContent='📄 '+propostas+' Propostas';
+  el=document.getElementById('prosp-count-fechado');if(el)el.textContent='✅ '+total+' Fechados';
+}
+
+function copiarTemplate(id){
+  var el=document.getElementById(id);
+  if(!el){toast('Template não encontrado','error');return;}
+  navigator.clipboard.writeText(el.textContent||el.innerText).then(function(){
+    toast('✅ Template copiado!','success');
+  }).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=el.textContent||el.innerText;
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    toast('✅ Template copiado!','success');
+  });
+}
+
+function abrirWhatsApp(templateId){
+  var el=document.getElementById(templateId);
+  if(!el){toast('Template não encontrado','error');return;}
+  var txt=encodeURIComponent(el.textContent||el.innerText);
+  window.open('https://wa.me/?text='+txt,'_blank');
+}
+
+function enviarWhatsAppDireto(){
+  var num=document.getElementById('wpp-numero-direto').value.replace(/\D/g,'');
+  var tid=document.getElementById('wpp-template-sel').value;
+  if(!num){toast('Digite o número primeiro','error');return;}
+  if(num.length<10){toast('Número inválido','error');return;}
+  var el=document.getElementById(tid);
+  var txt=encodeURIComponent(el?el.textContent||el.innerText:'');
+  // adicionar código Brasil se necessário
+  if(!num.startsWith('55'))num='55'+num;
+  window.open('https://wa.me/'+num+'?text='+txt,'_blank');
+  toast('Abrindo WhatsApp...','info');
+}
+
+// ── IMPORTAR PROSPECTS CSV ──
+function baixarModeloProspecto(){
+  dlCSV([['empresa','cnpj','cidade','estado','contato','tel','email','segmento']],'modelo-prospectos');
+}
+
+function exportarProspectosCSV(){
+  if(!prospectos.length){toast('Nenhum prospecto para exportar','error');return;}
+  var rows=[['empresa','cnpj','cidade','estado','contato','tel','email','segmento','status','dataCriacao']];
+  prospectos.forEach(function(p){
+    rows.push([p.empresa||'',p.cnpj||'',p.cidade||'',p.estado||'',p.contato||'',p.tel||'',p.email||'',p.segmento||'',p.status||'mapeado',p.dataCriacao||'']);
+  });
+  dlCSV(rows,'prospectos-d7hub');
+}
+
+function importarProspectosCSV(input){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var lines=e.target.result.split('\n').filter(function(l){return l.trim();});
+    if(lines.length<2){toast('CSV vazio ou sem dados','error');return;}
+    var headers=lines[0].toLowerCase().split(',').map(function(h){return h.trim().replace(/"/g,'');});
+    var idx={empresa:headers.indexOf('empresa'),cnpj:headers.indexOf('cnpj'),cidade:headers.indexOf('cidade'),estado:headers.indexOf('estado'),contato:headers.indexOf('contato'),tel:headers.indexOf('tel'),email:headers.indexOf('email'),segmento:headers.indexOf('segmento')};
+    var novos=0;var duplicados=0;
+    for(var i=1;i<lines.length;i++){
+      var cols=lines[i].split(',').map(function(c){return c.trim().replace(/"/g,'');});
+      if(!cols[idx.empresa>-1?idx.empresa:0])continue;
+      var empresa=idx.empresa>-1?cols[idx.empresa]:'';
+      var cnpj=idx.cnpj>-1?cols[idx.cnpj]:'';
+      // verificar duplicata
+      var existe=prospectos.some(function(p){return p.empresa.toLowerCase()===empresa.toLowerCase()||(cnpj&&p.cnpj===cnpj);});
+      if(existe){duplicados++;continue;}
+      prospectos.push({
+        id:'prosp_'+Date.now()+'_'+i,
+        empresa:empresa,
+        cnpj:cnpj,
+        cidade:idx.cidade>-1?cols[idx.cidade]:'',
+        estado:idx.estado>-1?cols[idx.estado]:'',
+        contato:idx.contato>-1?cols[idx.contato]:'',
+        tel:idx.tel>-1?cols[idx.tel]:'',
+        email:idx.email>-1?cols[idx.email]:'',
+        segmento:idx.segmento>-1?cols[idx.segmento]:'alimentos',
+        status:'mapeado',
+        dataCriacao:new Date().toISOString(),
+        ultimoContato:null
+      });
+      novos++;
+    }
+    saveProspectos();
+    atualizarMetaDistribuidores();
+    var prev=document.getElementById('prosp-import-preview');
+    if(prev)prev.textContent='✅ '+novos+' prospects importados! '+(duplicados?'('+duplicados+' duplicados ignorados)':'');
+    toast(''+novos+' prospects importados!','success');
+    input.value='';
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+// ── EMAIL BREVO ──
+function getBrevoKey(){
+  var cfg=JSON.parse(localStorage.getItem('d7_cfg')||'{}');
+  return cfg.brevo_key||'';
+}
+
+function atualizarStatusBrevo(){
+  var el=document.getElementById('brevo-status-msg');
+  if(!el)return;
+  var key=getBrevoKey();
+  if(key){
+    el.innerHTML='✅ Brevo configurado. Limite: <strong>300 emails/dia grátis</strong>. Prospects com email: <strong>'+prospectos.filter(function(p){return p.email;}).length+'</strong>';
+    el.style.color='var(--success)';
+  } else {
+    el.innerHTML='⚙️ Configure a chave API Brevo em <strong>⚙️ Config IA</strong> para ativar envio de emails.';
+    el.style.color='var(--muted)';
+  }
+}
+
+function testarEmailBrevo(){
+  var key=getBrevoKey();
+  if(!key){toast('Configure a API Key Brevo em ⚙️ Config IA','error');return;}
+  var cfg=JSON.parse(localStorage.getItem('d7_cfg')||'{}');
+  var toEmail=cfg.brevo_email||'d7representacao@gmail.com';
+  var assunto=document.getElementById('brevo-assunto').value||'Teste D7 HUB';
+  var corpo=document.getElementById('brevo-corpo').value||'Teste de envio.';
+  _enviarEmailBrevo(key,toEmail,'Você (teste)',assunto,corpo,function(ok){
+    if(ok)toast('✅ Email de teste enviado para '+toEmail+'!','success');
+    else toast('Erro ao enviar. Verifique a API Key Brevo.','error');
+  });
+}
+
+function enviarEmailBrevoMassa(){
+  var key=getBrevoKey();
+  if(!key){toast('Configure a API Key Brevo em ⚙️ Config IA primeiro','error');return;}
+  var comEmail=prospectos.filter(function(p){return p.email&&p.status!=='distribuidor';});
+  if(!comEmail.length){toast('Nenhum prospect com email cadastrado','error');return;}
+  var assunto=document.getElementById('brevo-assunto').value;
+  var corpo=document.getElementById('brevo-corpo').value;
+  var prog=document.getElementById('brevo-progresso');
+  if(prog){prog.style.display='block';prog.textContent='Enviando 0 / '+comEmail.length+'...';}
+  var enviados=0;var erros=0;
+  function enviarProximo(idx){
+    if(idx>=comEmail.length){
+      if(prog)prog.textContent='✅ Concluído: '+enviados+' enviados, '+erros+' erros.';
+      toast('Campanha enviada: '+enviados+' emails','success');
+      return;
+    }
+    var p=comEmail[idx];
+    var corpoPersonalizado=corpo.replace('[Nome]',p.contato||p.empresa);
+    _enviarEmailBrevo(key,p.email,p.contato||p.empresa,assunto,corpoPersonalizado,function(ok){
+      if(ok){enviados++;p.ultimoContato=new Date().toISOString();if(p.status==='mapeado')p.status='abordado';}
+      else erros++;
+      saveProspectos();
+      if(prog)prog.textContent='Enviando '+enviados+' / '+comEmail.length+'...';
+      // Brevo limita envios — delay de 200ms entre cada
+      setTimeout(function(){enviarProximo(idx+1);},200);
+    });
+  }
+  enviarProximo(0);
+}
+
+function _enviarEmailBrevo(key,toEmail,toName,assunto,corpo,callback){
+  var cfg=JSON.parse(localStorage.getItem('d7_cfg')||'{}');
+  var fromEmail=cfg.brevo_email||'d7representacao@gmail.com';
+  var fromName=cfg.brevo_nome||'D7 Representação Comercial';
+  // Converter texto simples para HTML básico
+  var corpoHtml=corpo.replace(/\n/g,'<br>');
+  fetch('https://api.brevo.com/v3/smtp/email',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','api-key':key},
+    body:JSON.stringify({
+      sender:{name:fromName,email:fromEmail},
+      to:[{email:toEmail,name:toName}],
+      subject:assunto,
+      htmlContent:'<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;">'+corpoHtml+'</div>'
+    })
+  }).then(function(r){callback(r.ok);}).catch(function(){callback(false);});
+}
+
+// ── GERADOR DE PROPOSTA ──
+function gerarPropostaHTML(){
+  var empresa=document.getElementById('prop-empresa').value||'Prezado Cliente';
+  var contato=document.getElementById('prop-contato').value||'';
+  var cnpj=document.getElementById('prop-cnpj').value||'';
+  var cidade=document.getElementById('prop-cidade').value||'';
+  var checkboxes=document.querySelectorAll('#prop-produtos-lista input[type=checkbox]:checked');
+  var produtos=[];
+  checkboxes.forEach(function(cb){produtos.push(cb.value);});
+  if(!produtos.length){toast('Selecione pelo menos um produto','error');return;}
+  var hoje=new Date().toLocaleDateString('pt-BR');
+  var validade=new Date(Date.now()+30*24*3600*1000).toLocaleDateString('pt-BR');
+  var linhasProd=produtos.map(function(p,i){
+    return '<tr style="border-bottom:1px solid #eee;"><td style="padding:10px;">'+(i+1)+'</td><td style="padding:10px;">'+p+'</td><td style="padding:10px;color:#666;">Consultar</td><td style="padding:10px;color:#666;">Consultar</td><td style="padding:10px;color:#666;">A combinar</td></tr>';
+  }).join('');
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Proposta Comercial — D7</title><style>body{font-family:Arial,sans-serif;margin:40px;color:#222;}h1{color:#1e293b;}table{width:100%;border-collapse:collapse;}th{background:#1e293b;color:#fff;padding:10px;}td{padding:10px;}tr:nth-child(even){background:#f8fafc;}.logo{font-size:22px;font-weight:700;color:#7c3aed;}.footer{margin-top:40px;font-size:12px;color:#888;border-top:1px solid #eee;padding-top:10px;}.destaque{background:#f0fdf4;border-left:4px solid #10b981;padding:12px;margin:20px 0;border-radius:4px;}</style></head><body>';
+  html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px;">';
+  html+='<div><div class="logo">🏢 D7 Representação Comercial</div><div style="font-size:12px;color:#666;margin-top:4px;">d7representacao@gmail.com</div></div>';
+  html+='<div style="text-align:right;font-size:13px;"><div><strong>Proposta Comercial</strong></div><div>Data: '+hoje+'</div><div>Validade: '+validade+'</div></div></div>';
+  html+='<hr style="border:none;border-top:2px solid #7c3aed;margin-bottom:24px;">';
+  html+='<h2 style="font-size:16px;">Destinatário</h2>';
+  html+='<table style="width:auto;"><tr><td style="padding:4px 12px 4px 0;color:#666;">Empresa:</td><td><strong>'+empresa+'</strong></td></tr>';
+  if(contato)html+='<tr><td style="padding:4px 12px 4px 0;color:#666;">Contato:</td><td>'+contato+'</td></tr>';
+  if(cnpj)html+='<tr><td style="padding:4px 12px 4px 0;color:#666;">CNPJ:</td><td>'+cnpj+'</td></tr>';
+  if(cidade)html+='<tr><td style="padding:4px 12px 4px 0;color:#666;">Cidade:</td><td>'+cidade+'</td></tr>';
+  html+='</table>';
+  html+='<h2 style="font-size:16px;margin-top:24px;">Produtos Ofertados</h2>';
+  html+='<table><thead><tr><th>#</th><th>Produto</th><th>Unidade</th><th>Preço Unit.</th><th>Condição</th></tr></thead><tbody>'+linhasProd+'</tbody></table>';
+  html+='<div class="destaque"><strong>✅ Diferenciais D7:</strong><br>• Entrega pontual em todo o Brasil<br>• Produtos com certificação de qualidade<br>• Suporte técnico e comercial dedicado<br>• Condições especiais para primeiros pedidos<br>• Tabela progressiva por volume</div>';
+  html+='<h2 style="font-size:15px;">Condições Comerciais</h2><ul style="font-size:13px;color:#444;"><li>Pedido mínimo: a combinar conforme produto</li><li>Prazo de entrega: a combinar por região</li><li>Formas de pagamento: boleto, PIX, transferência</li><li>Validade da proposta: 30 dias</li></ul>';
+  html+='<div class="footer">D7 Representação Comercial — Proposta gerada pelo D7 HUB em '+hoje+'</div>';
+  html+='<script>window.onload=function(){window.print()}<\/script></body></html>';
+  var w=window.open('','_blank');
+  if(w){w.document.write(html);w.document.close();}
+  else{toast('Permita pop-ups para abrir a proposta','error');}
+}
+
+function gerarPropostaWhatsApp(){
+  var empresa=document.getElementById('prop-empresa').value||'cliente';
+  var checkboxes=document.querySelectorAll('#prop-produtos-lista input[type=checkbox]:checked');
+  var produtos=[];checkboxes.forEach(function(cb){produtos.push('✅ '+cb.value);});
+  var txt='📄 *Proposta Comercial — D7 Representação*\n\nOlá! Segue resumo da nossa proposta para *'+empresa+'*:\n\n'+produtos.join('\n')+'\n\n📦 Entrega em todo Brasil\n💰 Condições especiais p/ distribuidoras\n📋 Proposta completa disponível sob solicitação\n\n_Aguardo seu retorno! 🤝_';
+  navigator.clipboard.writeText(txt).then(function(){toast('Resumo copiado para WhatsApp!','success');}).catch(function(){toast('Copie o texto acima','info');});
+}
+
 // ── AGENDAMENTOS ──
 var KEY_AG='d7_agenda';
 var agenda=JSON.parse(localStorage.getItem(KEY_AG)||'[]');
@@ -2100,7 +2534,18 @@ function deletarOrigem(i){origens.splice(i,1);saveOrigens();renderOrigens();}
 
 // ── CONFIG / IA ──
 function salvarConfig(){
-  localStorage.setItem('d7_cfg',JSON.stringify({nomeAI:document.getElementById('cfg-nome-ai').value,empresa:document.getElementById('cfg-empresa').value,prompt:document.getElementById('cfg-prompt').value,worker:document.getElementById('cfg-worker').value,gclient:document.getElementById('cfg-gclient').value}));
+  function gv(id){var el=document.getElementById(id);return el?el.value:'';}
+  localStorage.setItem('d7_cfg',JSON.stringify({
+    nomeAI:gv('cfg-nome')||gv('cfg-nome-ai'),
+    empresa:gv('cfg-empresa'),
+    prompt:gv('cfg-prompt'),
+    worker:gv('cfg-url')||gv('cfg-worker'),
+    gclient:gv('cfg-gdrive-clientid')||gv('cfg-gclient'),
+    brevo_key:gv('cfg-brevo-key'),
+    brevo_email:gv('cfg-brevo-email'),
+    brevo_nome:gv('cfg-brevo-nome')
+  }));
+  atualizarStatusBrevo();
   toast('Configurações salvas!','success');
 }
 function loadConfig(){
@@ -2110,6 +2555,10 @@ function loadConfig(){
   if(document.getElementById('cfg-prompt'))document.getElementById('cfg-prompt').value=cfg.prompt||'Você é D7X, assistente da D7 Representação Comercial.';
   if(document.getElementById('cfg-worker'))document.getElementById('cfg-worker').value=cfg.worker||'';
   if(document.getElementById('cfg-gclient'))document.getElementById('cfg-gclient').value=cfg.gclient||'283973846228-d25qk8gglbh8ckc5ba66oq6b592qss60.apps.googleusercontent.com';
+  if(document.getElementById('cfg-brevo-key'))document.getElementById('cfg-brevo-key').value=cfg.brevo_key||'';
+  if(document.getElementById('cfg-brevo-email'))document.getElementById('cfg-brevo-email').value=cfg.brevo_email||'d7representacao@gmail.com';
+  if(document.getElementById('cfg-brevo-nome'))document.getElementById('cfg-brevo-nome').value=cfg.brevo_nome||'D7 Representação Comercial';
+  atualizarStatusBrevo();
 }
 
 // ── BACKUP ──
@@ -2334,16 +2783,28 @@ function toggleAI(){
 }
 
 // ── RENDERIZAR METAS ──
-function renderMetas(){
+nRenderMetas(){
   var metas=JSON.parse(localStorage.getItem('d7_metas')||'{}');
-  var els=['meta-pedidos-prog','meta-fat-prog','meta-cli-prog'];
-  var vals=[pedidos.filter(function(p){return p.status!=='cancelado';}).length,pedidos.reduce(function(s,p){return s+p.total;},0),clientes.filter(function(c){return c.status!=='inativo';}).length];
-  var tgts=[parseInt(metas.pedidos)||0,parseFloat(metas.faturamento)||0,parseInt(metas.clientes)||0];
-  ['meta-pedidos-prog','meta-fat-prog','meta-cli-prog'].forEach(function(id,i){
-    var el=document.getElementById(id);if(!el)return;
-    var pct=tgts[i]?Math.min(100,Math.round(vals[i]/tgts[i]*100)):0;
-    el.style.width=pct+'%';el.parentElement.previousElementSibling&&(el.parentElement.previousElementSibling.textContent=pct+'%');
-  });
+  var el=document.getElementById('metas-dashboard');
+  if(!el)return;
+  var now=new Date();
+  function mesAtual(d){var dt=new Date(d||'');return dt.getMonth()===now.getMonth()&&dt.getFullYear()===now.getFullYear();}
+  var pedidosMes=pedidos.filter(function(p){return mesAtual(p.data||p.criadoEm);}).length;
+  var fatMes=pedidos.filter(function(p){return mesAtual(p.data||p.criadoEm);}).reduce(function(s,p){return s+(parseFloat(p.total||p.valor||0));},0);
+  var clientesMes=clientes.filter(function(c){return mesAtual(c.criadoEm);}).length;
+  function barra(atual,meta,label,cor){
+    if(!meta)return '';
+    var pct=Math.min(100,Math.round(atual/meta*100));
+    return '<div style="margin-bottom:10px;">'
+      +'<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">'
+      +'<span>'+label+'</span><span style="color:var(--muted)">'+atual+' / '+meta+' ('+pct+'%)</span></div>'
+      +'<div style="background:var(--surface2);border-radius:4px;height:8px;">'
+      +'<div style="width:'+pct+'%;background:'+cor+';height:8px;border-radius:4px;"></div></div></div>';
+  }
+  var html=barra(pedidosMes,metas.pedidos||0,'Pedidos','var(--primary)')
+    +barra(fatMes,metas.faturamento||0,'Faturamento R$','var(--success)')
+    +barra(clientesMes,metas.clientes||0,'Novos Clientes','var(--warning)');
+  el.innerHTML=html||'<div style="font-size:12px;color:var(--muted)">Clique em configurar para definir metas do mes</div>';
 }
 function abrirModalMetas(){
   var metas=JSON.parse(localStorage.getItem('d7_metas')||'{}');
@@ -2353,473 +2814,41 @@ function abrirModalMetas(){
   document.getElementById('modal-metas').classList.add('open');
 }
 function salvarMetas(){
-  localStorage.setItem('d7_metas',JSON.stringify({pedidos:document.getElementById('meta-pedidos').value,faturamento:document.getElementById('meta-faturamento').value,clientes:document.getElementById('meta-clientes').value}));
-  fecharModal('modal-metas');renderDashboard();toast('Metas salvas!','success');
+  localStorage.setItem('d7_metas',JSON.stringify({
+    pedidos:parseInt(document.getElementById('meta-pedidos').value)||0,
+    faturamento:parseFloat(document.getElementById('meta-faturamento').value)||0,
+    clientes:parseInt(document.getElementById('meta-clientes').value)||0
+  }));
+  fecharModal('modal-metas');
+  renderMetas();
+  toast('Metas salvas!','success');
 }
-
-// ── RENDERIZAR FEED ──
-function renderFeed(){
-  var el=document.getElementById('activity-feed');if(!el)return;
-  var events=[];
-  clientes.slice(-3).forEach(function(c){events.push({ts:c.criadoEm||0,ico:'🏢',txt:'Cliente cadastrado: '+c.nome});});
-  pedidos.slice(-3).forEach(function(p){var c=clientes.find(function(x){return x.id===p.clienteId;})||{nome:'?'};events.push({ts:p.criadoEm||0,ico:'🛒',txt:'Pedido #'+p.numero+' — '+c.nome+' ('+fmtMoeda(p.total)+')'});});
-  tarefasAuto.slice(-3).forEach(function(t){events.push({ts:t.criadoEm||0,ico:'⚡',txt:'Tarefa: '+t.descricao});});
-  events.sort(function(a,b){return b.ts>a.ts?1:-1;});
-  el.innerHTML=events.slice(0,8).map(function(ev){return '<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>'+ev.ico+'</span><div><div>'+esc(ev.txt)+'</div><div style="font-size:11px;color:var(--muted)">'+new Date(ev.ts).toLocaleString('pt-BR')+'</div></div></div>';}).join('')||'<div style="color:var(--muted);font-size:13px;padding:8px">Sem atividade recente</div>';
-}
-
-// ── BUSCA DE CNPJ E CEP ──
-function buscarCNPJ(){
-  var cnpj=(document.getElementById('f-cnpj').value||'').replace(/\D/g,'');
-  if(cnpj.length!==14){toast('CNPJ inválido','error');return;}
-  toast('Buscando CNPJ...','info');
-  fetch('https://brasilapi.com.br/api/cnpj/v1/'+cnpj)
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d.razao_social)document.getElementById('f-nome').value=d.razao_social;
-      if(d.nome_fantasia)document.getElementById('f-fantasia').value=d.nome_fantasia;
-      if(d.cep){document.getElementById('f-cep').value=d.cep;buscarCEP();}
-      if(d.municipio)document.getElementById('f-cidade').value=d.municipio;
-      if(d.uf)document.getElementById('f-estado').value=d.uf;
-      if(d.email)document.getElementById('f-email').value=d.email;
-      if(d.ddd_telefone_1)document.getElementById('f-tel').value=d.ddd_telefone_1;
-      toast('Dados preenchidos!','success');
-    }).catch(function(){toast('CNPJ não encontrado','error');});
-}
-function buscarCEP(){
-  var cep=(document.getElementById('f-cep').value||'').replace(/\D/g,'');
-  if(cep.length!==8)return;
-  fetch('https://viacep.com.br/ws/'+cep+'/json/')
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d.erro)return;
-      if(d.logradouro)document.getElementById('f-endereco').value=d.logradouro;
-      if(d.localidade)document.getElementById('f-cidade').value=d.localidade;
-      if(d.uf)document.getElementById('f-estado').value=d.uf;
-    });
-}
-
-// ── TEMA ──
-function toggleTheme(){
-  var isDark=document.documentElement.getAttribute('data-theme')!=='light';
-  document.documentElement.setAttribute('data-theme',isDark?'light':'dark');
-  document.getElementById('btn-theme').textContent=isDark?'☀️':'🌙';
-  localStorage.setItem('d7_theme',isDark?'light':'dark');
-}
-function loadTheme(){
-  var t=localStorage.getItem('d7_theme')||'dark';
-  if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.getElementById('btn-theme').textContent='☀️';}
-}
-
-// ── UTILS ──
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
-function esc(s){return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmtMoeda(n){return 'R$ '+(parseFloat(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function fmtNum(n){return (parseFloat(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function toast(msg,type){
-  type=type||'success';
-  var c=document.getElementById('toast-container');
-  var d=document.createElement('div');
-  d.className='toast toast-'+type;d.textContent=msg;
-  c.appendChild(d);setTimeout(function(){d.remove();},3200);
-}
-function fecharModal(id){document.getElementById(id).classList.remove('open');}
-function maskTel(input){
-  var v=input.value.replace(/\D/g,'').slice(0,11);
-  if(v.length>10)v=v.replace(/^(\d{2})(\d{5})(\d{4}).*/,'($1) $2-$3');
-  else if(v.length>6)v=v.replace(/^(\d{2})(\d{4})(\d*)/,'($1) $2-$3');
-  else if(v.length>2)v=v.replace(/^(\d{2})(\d*)/,'($1) $2');
-  input.value=v;
-}
-function dlCSV(rows,filename){
-  var content=rows.map(function(r){return r.map(function(c){return '"'+(c||'').toString().replace(/"/g,'""')+'"';}).join(',');}).join('\n');
-  var blob=new Blob(['﻿'+content],{type:'text/csv;charset=utf-8;'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(filename||'export')+'.csv';a.click();
-}
-function dlJSON(data,filename){
-  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(filename||'export')+'.json';a.click();
-}
-
-// ════════════════════════════════════════════════════════════
-// MÓDULO: CENTRAL DE AUTOMAÇÃO E INTELIGÊNCIA — D7 HUB v6.2
-// ════════════════════════════════════════════════════════════
-
-var KEY_TAREFAS_AUTO='d7_tarefas_auto';
-var KEY_AUTOMACOES='d7_automacoes';
-
-var tarefasAuto=JSON.parse(localStorage.getItem(KEY_TAREFAS_AUTO)||'[]');
-var automacoes=JSON.parse(localStorage.getItem(KEY_AUTOMACOES)||'null')||defaultAutomacoes();
-
-function saveTarefasAuto(){localStorage.setItem(KEY_TAREFAS_AUTO,JSON.stringify(tarefasAuto));}
-function saveAutomacoes(){localStorage.setItem(KEY_AUTOMACOES,JSON.stringify(automacoes));}
-
-function defaultAutomacoes(){
-  return [
-    {id:'a1',ativo:true,de:'',para:'contato',tarefa:'Registrar primeiro contato e qualificar interesse',prazo:2,prio:'normal',nota:'Prospect avançou para Contato Feito'},
-    {id:'a2',ativo:true,de:'contato',para:'apresentacao',tarefa:'Preparar apresentação personalizada do portfólio',prazo:24,prio:'alta',nota:'Agendada apresentação de produtos'},
-    {id:'a3',ativo:true,de:'apresentacao',para:'proposta',tarefa:'Enviar proposta comercial em 24h',prazo:24,prio:'urgente',nota:'Prospect entrou na fase de proposta'},
-    {id:'a4',ativo:true,de:'proposta',para:'fechamento',tarefa:'Follow-up de fechamento — ligar e confirmar proposta',prazo:4,prio:'urgente',nota:'Prospect em fase de fechamento'},
-    {id:'a5',ativo:true,de:'',para:'fechamento',tarefa:'Preparar contrato e condições de pagamento',prazo:12,prio:'alta',nota:'Initiar processo de fechamento'},
-  ];
-}
-
-// ── GATILHO: mudança de etapa no funil ──
-function triggerMudancaEtapa(prospect,de,para){
-  var etapaLabel={prospeccao:'Prospecção',contato:'Contato Feito',apresentacao:'Apresentação',proposta:'Proposta',fechamento:'Fechamento',ganho:'Ganho 🏆'};
-  // Registrar evento na timeline
-  logEvento(prospect.id,'etapa','Etapa alterada: '+(etapaLabel[de]||de)+' → '+(etapaLabel[para]||para),{de:de,para:para});
-  // Disparar regras ativas
-  var regrasMatch=automacoes.filter(function(r){return r.ativo&&(r.para===para)&&(!r.de||r.de===de);});
-  regrasMatch.forEach(function(regra){
-    var prazoMs=regra.prazo*3600*1000;
-    var tarefa={
-      id:uid(),
-      prospectId:prospect.id,
-      prospectNome:prospect.nome,
-      descricao:regra.tarefa,
-      prazo:new Date(Date.now()+prazoMs).toISOString(),
-      prioridade:regra.prio,
-      status:'pendente',
-      criadoEm:new Date().toISOString(),
-      regraId:regra.id
-    };
-    tarefasAuto.push(tarefa);
-    saveTarefasAuto();
-    toast('⚡ Tarefa gerada: '+regra.tarefa,'success');
-    if(regra.nota)logEvento(prospect.id,'automacao','[Auto] '+regra.nota,{regraId:regra.id});
-  });
-  // Atualizar valor estimado do pipeline
-  atualizarPipeline();
-}
-
-// ── PIPELINE: calcular e exibir valor estimado ──
-function atualizarPipeline(){
-  var pesos={prospeccao:0.05,contato:0.15,apresentacao:0.30,proposta:0.60,fechamento:0.85,ganho:1};
-  var total=funil.reduce(function(s,p){return s+(p.valorEstimado||0)*(pesos[p.etapa]||0);},0);
-  var el=document.getElementById('pipeline-value');
-  if(el)el.textContent=fmtMoeda(total);
-}
-
-// ── TIMELINE: registrar evento ──
-function logEvento(entityId,tipo,descricao,dados){
-  var h=getHistoricos();
-  if(!h[entityId])h[entityId]=[];
-  h[entityId].push({tipo:tipo,descricao:descricao,dados:dados||{},ts:new Date().toISOString()});
-  saveHistoricos(h);
-}
-
-// ── TIMELINE: renderizar ──
-function renderTimelineEntidade(entityId,container){
-  var h=getHistoricos();var eventos=(h[entityId]||[]).slice().reverse();
-  var icones={criacao:'🌱',etapa:'🔄',pedido:'🛒',edicao:'✏️',automacao:'⚡',nota:'📝',ligacao:'📞',visita:'🚗',email:'📧',whatsapp:'💬'};
-  var cores={criacao:'var(--accent)',etapa:'var(--primary)',pedido:'var(--info)',edicao:'var(--text2)',automacao:'#f59e0b',nota:'var(--text2)'};
-  if(!eventos.length){container.innerHTML='<div class="empty" style="padding:20px;"><div class="empty-icon">📋</div><div class="empty-text">Nenhum evento ainda</div></div>';return;}
-  container.innerHTML='<div class="timeline-wrap">'+eventos.map(function(ev){
-    var icon=icones[ev.tipo]||'📌';var cor=cores[ev.tipo]||'var(--text2)';
-    return '<div class="tl-item">'
-      +'<div class="tl-dot" style="border-color:'+cor+';color:'+cor+'">'+icon+'</div>'
-      +'<div class="tl-body">'
-      +'<div class="tl-title">'+esc(ev.descricao)+'</div>'
-      +'<div class="tl-time">'+new Date(ev.ts).toLocaleString('pt-BR')+'</div>'
-      +(ev.dados&&Object.keys(ev.dados).length?'<div class="tl-extra">'+Object.entries(ev.dados).map(function(e){return esc(e[0])+': '+esc(e[1]);}).join(' · ')+'</div>':'')
-      +'</div></div>';
-  }).join('')+'</div>';
-}
-
-// ── HEALTH SCORE ──
-function calcularHealthScore(entityId){
-  var h=getHistoricos();var eventos=(h[entityId]||[]);
-  var score=50;
-  var ultimoEvento=eventos[eventos.length-1];
-  var diasSemAtividade=ultimoEvento?Math.floor((Date.now()-new Date(ultimoEvento.ts))/(86400000)):999;
-  if(diasSemAtividade<3)score+=30;
-  else if(diasSemAtividade<7)score+=15;
-  else if(diasSemAtividade>30)score-=20;
-  var nPedidos=pedidos.filter(function(p){return p.clienteId===entityId;}).length;
-  score+=Math.min(20,nPedidos*5);
-  var tarefasPendentes=tarefasAuto.filter(function(t){return t.prospectId===entityId&&t.status==='pendente';}).length;
-  score-=tarefasPendentes*5;
-  return Math.max(0,Math.min(100,score));
-}
-
-function renderHealthBadge(score){
-  if(score>=70)return '<span class="health-badge health-verde">🟢 Saudável ('+score+')</span>';
-  if(score>=40)return '<span class="health-badge health-amarelo">🟡 Atenção ('+score+')</span>';
-  return '<span class="health-badge health-vermelho">🔴 Em risco ('+score+')</span>';
-}
-
-// ── PANEL: AUTOMAÇÃO ──
-function renderAutomacao(){
-  renderRegras();renderTarefas();renderTimelinePanel();renderExportPanel();renderHealthDashboard();
-}
-
-function switchAutoTab(tab,btn){
-  document.querySelectorAll('.auto-tab').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.auto-tab-content').forEach(function(c){c.classList.remove('active');});
-  btn.classList.add('active');
-  document.getElementById('auto-'+tab).classList.add('active');
-  if(tab==='tarefas')renderTarefas();
-  if(tab==='timeline')renderTimelinePanel();
-  if(tab==='exportar'){renderExportPanel();renderHealthDashboard();}
-}
-
-function renderRegras(){
-  var el=document.getElementById('regras-list');if(!el)return;
-  if(!automacoes.length){el.innerHTML='<div class="empty"><div class="empty-icon">🤖</div><div class="empty-text">Nenhuma regra configurada</div></div>';return;}
-  var etapaLabel={prospeccao:'Prospecção',contato:'Contato Feito',apresentacao:'Apresentação',proposta:'Proposta',fechamento:'Fechamento',ganho:'Ganho 🏆'};
-  el.innerHTML=automacoes.map(function(r){
-    var gatilho=(r.de?etapaLabel[r.de]:'Qualquer etapa')+' → '+(etapaLabel[r.para]||r.para);
-    var prioCor={normal:'var(--text2)',alta:'var(--warning)',urgente:'var(--danger)'};
-    return '<div class="regra-card">'
-      +'<label class="toggle-switch"><input type="checkbox"'+(r.ativo?' checked':'')+' onchange="toggleRegra(\''+r.id+'\',this.checked)"><span class="toggle-slider"></span></label>'
-      +'<div class="regra-info">'
-      +'<div class="regra-title">'+esc(r.tarefa)+'</div>'
-      +'<div class="regra-desc">'+gatilho+' · Prazo: '+r.prazo+'h · <span style="color:'+prioCor[r.prio]+'">'+r.prio+'</span></div>'
-      +'</div>'
-      +'<button class="btn btn-ghost btn-sm" onclick="deletarRegra(\''+r.id+'\')" style="color:var(--danger)">🗑</button>'
-      +'</div>';
-  }).join('');
-}
-
-function toggleRegra(id,ativo){
-  var r=automacoes.find(function(x){return x.id===id;});if(r)r.ativo=ativo;
-  saveAutomacoes();
-}
-
-function adicionarRegra(){
-  document.getElementById('regra-de').value='';document.getElementById('regra-para').value='contato';
-  document.getElementById('regra-tarefa').value='';document.getElementById('regra-prazo').value='24';
-  document.getElementById('regra-prio').value='normal';document.getElementById('regra-nota').value='';
-  document.getElementById('modal-regra').classList.add('open');
-}
-
-function salvarRegra(){
-  var tarefa=(document.getElementById('regra-tarefa').value||'').trim();
-  if(!tarefa){toast('Descreva a tarefa','error');return;}
-  automacoes.push({id:uid(),ativo:true,de:document.getElementById('regra-de').value,para:document.getElementById('regra-para').value,tarefa:tarefa,prazo:parseInt(document.getElementById('regra-prazo').value)||24,prio:document.getElementById('regra-prio').value,nota:document.getElementById('regra-nota').value});
-  saveAutomacoes();fecharModal('modal-regra');renderRegras();toast('Regra criada!','success');
-}
-
-function deletarRegra(id){
-  automacoes=automacoes.filter(function(r){return r.id!==id;});
-  saveAutomacoes();renderRegras();toast('Regra removida','success');
-}
-
-// ── TAREFAS ──
-function renderTarefas(){
-  var el=document.getElementById('tarefas-list');if(!el)return;
-  var q=(document.getElementById('search-tarefa').value||'').toLowerCase();
-  var filtroStatus=document.getElementById('filter-tarefa-status').value;
-  var agora=new Date();
-  var lista=tarefasAuto.filter(function(t){
-    var statusOk=!filtroStatus||(filtroStatus==='atrasada'?(t.status==='pendente'&&new Date(t.prazo)<agora):(t.status===filtroStatus));
-    var qOk=!q||t.descricao.toLowerCase().includes(q)||(t.prospectNome||'').toLowerCase().includes(q);
-    return statusOk&&qOk;
-  }).sort(function(a,b){return a.prazo>b.prazo?1:-1;});
-  if(!lista.length){el.innerHTML='<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Nenhuma tarefa</div></div>';return;}
-  el.innerHTML=lista.map(function(t){
-    var atrasada=t.status==='pendente'&&new Date(t.prazo)<agora;
-    var prioCor={normal:'var(--text2)',alta:'var(--warning)',urgente:'var(--danger)'};
-    return '<div class="tarefa-item'+(t.status==='concluida'?' done':'')+'" id="ti-'+t.id+'">'
-      +'<input type="checkbox"'+(t.status==='concluida'?' checked':'')+' onchange="concluirTarefa(\''+t.id+'\',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--primary)">'
-      +'<div class="tarefa-txt">'
-      +'<div style="font-size:13px;font-weight:500'+(t.status==='concluida'?';text-decoration:line-through':'')+'">'+esc(t.descricao)+'</div>'
-      +'<div class="tarefa-meta">'+esc(t.prospectNome||'')+(t.prazo?' · '+(atrasada?'<span style="color:var(--danger)">⚠️ Atrasada</span>':new Date(t.prazo).toLocaleString('pt-BR')):'')+'</div>'
-      +'</div>'
-      +'<span style="font-size:11px;color:'+prioCor[t.prioridade||'normal']+'">'+( t.prioridade||'normal')+'</span>'
-      +'<button class="btn btn-ghost btn-sm" onclick="deletarTarefa(\''+t.id+'\')" style="color:var(--danger)">🗑</button>'
-      +'</div>';
-  }).join('');
-}
-
-function concluirTarefa(id,done){
-  var t=tarefasAuto.find(function(x){return x.id===id;});if(!t)return;
-  t.status=done?'concluida':'pendente';
-  if(done)logEvento(t.prospectId,'automacao','Tarefa concluída: '+t.descricao,{});
-  saveTarefasAuto();renderTarefas();
-}
-function deletarTarefa(id){
-  tarefasAuto=tarefasAuto.filter(function(t){return t.id!==id;});
-  saveTarefasAuto();renderTarefas();toast('Tarefa removida','success');
-}
-
-// ── TIMELINE PANEL ──
-function renderTimelinePanel(){
-  var sel=document.getElementById('sel-timeline-cliente');if(!sel)return;
-  sel.innerHTML='<option value="">Selecione uma conta...</option>';
-  clientes.forEach(function(c){sel.innerHTML+='<option value="'+c.id+'">🏢 '+esc(c.nome)+'</option>';});
-  funil.forEach(function(p){sel.innerHTML+='<option value="'+p.id+'">🔻 '+esc(p.nome)+'</option>';});
-  var id=sel.value;
-  var ct=document.getElementById('timeline-panel-content');
-  if(!id){ct.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Selecione uma conta</div></div>';return;}
-  var score=calcularHealthScore(id);
-  ct.innerHTML='<div style="margin-bottom:14px;">'+renderHealthBadge(score)+'</div><div id="tl-inline-content"></div>';
-  renderTimelineEntidade(id,document.getElementById('tl-inline-content'));
-}
-
-function abrirTimelineModal(entityId,nome){
-  document.getElementById('tl-modal-nome').textContent=nome;
-  var score=calcularHealthScore(entityId);
-  document.getElementById('tl-modal-health').innerHTML=renderHealthBadge(score);
-  renderTimelineEntidade(entityId,document.getElementById('tl-modal-content'));
-  document.getElementById('modal-timeline').classList.add('open');
-}
-
-function exportarTimelineCSV(){
-  var sel=document.getElementById('sel-timeline-cliente');
-  var id=sel?sel.value:'';
-  if(!id){toast('Selecione uma conta','error');return;}
-  var h=getHistoricos();var eventos=h[id]||[];
-  var rows=[['Data','Tipo','Descrição','Dados']];
-  eventos.forEach(function(ev){rows.push([new Date(ev.ts).toLocaleString('pt-BR'),ev.tipo,ev.descricao,JSON.stringify(ev.dados||{})]);});
-  dlCSV(rows,'timeline-'+id.slice(0,8));
-  toast('Timeline exportada!','success');
-}
-
-// ── EXPORTAÇÃO INTELIGENTE ──
-function renderExportPanel(){
-  var sel=document.getElementById('sel-export-cliente');if(!sel)return;
-  sel.innerHTML='<option value="">Selecione o cliente...</option>';
-  clientes.forEach(function(c){sel.innerHTML+='<option value="'+c.id+'">'+esc(c.nome)+'</option>';});
-}
-
-function exportarClienteCSV(){
-  var id=document.getElementById('sel-export-cliente').value;
-  if(!id){toast('Selecione um cliente','error');return;}
-  var c=clientes.find(function(x){return x.id===id;});if(!c)return;
-  var ped=pedidos.filter(function(p){return p.clienteId===id;});
-  var rows=[['Campo','Valor'],['Nome',c.nome],['CNPJ',c.cnpj||''],['Cidade',c.cidade||''],['Estado',c.estado||''],['Telefone',c.tel||''],['Email',c.email||''],['Status',c.status],['',''],['# Pedidos',ped.length],['Total Pedidos',fmtMoeda(ped.reduce(function(s,p){return s+p.total;},0))]];
-  var h=getHistoricos();var eventos=h[id]||[];
-  rows.push(['',''],['=== TIMELINE ===','']);
-  eventos.forEach(function(ev){rows.push([new Date(ev.ts).toLocaleDateString('pt-BR'),ev.tipo+': '+ev.descricao]);});
-  dlCSV(rows,'cliente-'+c.nome.replace(/\s/g,'_'));
-  toast('Exportado!','success');
-}
-
-function exportarClienteJSON(){
-  var id=document.getElementById('sel-export-cliente').value;
-  if(!id){toast('Selecione um cliente','error');return;}
-  var c=clientes.find(function(x){return x.id===id;});if(!c)return;
-  var ped=pedidos.filter(function(p){return p.clienteId===id;});
-  var h=getHistoricos();
-  var data={cliente:c,pedidos:ped,timeline:h[id]||[],tarefas:tarefasAuto.filter(function(t){return t.prospectId===id;}),healthScore:calcularHealthScore(id),exportadoEm:new Date().toISOString()};
-  dlJSON(data,'cliente-360-'+c.nome.replace(/\s/g,'_'));
-  toast('Exportado!','success');
-}
-
-function gerarPropostaCSV(){
-  var id=document.getElementById('sel-export-cliente').value;
-  if(!id){toast('Selecione um cliente','error');return;}
-  var c=clientes.find(function(x){return x.id===id;});if(!c)return;
-  var ped=pedidos.filter(function(p){return p.clienteId===id&&p.status!=='cancelado';});
-  var rows=[['PROPOSTA COMERCIAL — D7 Representação'],[''],['Cliente:',c.nome],['CNPJ:',c.cnpj||''],['Cidade:',c.cidade||''],['Data:',new Date().toLocaleDateString('pt-BR')],[''],['HISTÓRICO DE PEDIDOS','','',''],['#','Data','Itens','Total']];
-  ped.forEach(function(p){rows.push([p.numero,new Date(p.criadoEm).toLocaleDateString('pt-BR'),p.itens.length,fmtMoeda(p.total)]);});
-  rows.push([''],['TOTAL GERAL','','',fmtMoeda(ped.reduce(function(s,p){return s+p.total;},0))]);
-  dlCSV(rows,'proposta-'+c.nome.replace(/\s/g,'_'));
-  toast('Proposta gerada!','success');
-}
-
-function exportarFunilJSON(){
-  dlJSON({funil:funil,totalProspects:funil.length,porEtapa:ETAPAS.reduce(function(o,et){o[et.id]=funil.filter(function(p){return p.etapa===et.id;}).length;return o;},{}),exportadoEm:new Date().toISOString()},'funil-completo');
-  toast('Funil exportado!','success');
-}
-function exportarFunilCSV(){
-  var rows=[['Nome','Telefone','Cidade','Etapa','Origem','Criado em']];
-  funil.forEach(function(p){rows.push([p.nome,p.tel||'',p.cidade||'',p.etapa,p.origem||'',p.criadoEm?new Date(p.criadoEm).toLocaleDateString('pt-BR'):'']);});
-  dlCSV(rows,'funil');toast('Funil exportado!','success');
-}
-function exportarClientesCSV(){
-  var rows=[['Nome','CNPJ','Cidade','Estado','Telefone','Email','Gestor','Status']];
-  clientes.forEach(function(c){rows.push([c.nome,c.cnpj||'',c.cidade||'',c.estado||'',c.tel||'',c.email||'',c.gestor||'',c.status]);});
-  dlCSV(rows,'clientes');toast('Exportado!','success');
-}
-function exportarPedidosCSV(){
-  var rows=[['#','Cliente','Data','Itens','Total','Status']];
-  pedidos.forEach(function(p){var c=clientes.find(function(x){return x.id===p.clienteId;})||{nome:'?'};rows.push([p.numero,c.nome,p.criadoEm?new Date(p.criadoEm).toLocaleDateString('pt-BR'):'',p.itens.length,fmtMoeda(p.total),p.status]);});
-  dlCSV(rows,'pedidos');toast('Exportado!','success');
-}
-
-// ── HEALTH DASHBOARD ──
-function renderHealthDashboard(){
-  var el=document.getElementById('health-dashboard');if(!el)return;
-  var all=[...clientes.map(function(c){return {id:c.id,nome:c.nome,tipo:'cliente'};}),
-           ...funil.map(function(p){return {id:p.id,nome:p.nome,tipo:'prospect'};})];
-  if(!all.length){el.innerHTML='<div style="color:var(--muted);font-size:13px">Nenhum cliente ou prospect cadastrado</div>';return;}
-  var scored=all.map(function(e){return Object.assign({},e,{score:calcularHealthScore(e.id)});}).sort(function(a,b){return a.score-b.score;});
-  var verde=scored.filter(function(e){return e.score>=70;}).length;
-  var amarelo=scored.filter(function(e){return e.score>=40&&e.score<70;}).length;
-  var vermelho=scored.filter(function(e){return e.score<40;}).length;
-  el.innerHTML='<div style="display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;">'
-    +'<span class="health-badge health-verde">🟢 '+verde+' Saudável</span>'
-    +'<span class="health-badge health-amarelo">🟡 '+amarelo+' Atenção</span>'
-    +'<span class="health-badge health-vermelho">🔴 '+vermelho+' Em risco</span>'
-    +'</div>'
-    +'<div style="font-size:12px;color:var(--text2);margin-bottom:8px;">Contas que precisam de atenção:</div>'
-    +scored.filter(function(e){return e.score<70;}).slice(0,5).map(function(e){
-      return '<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);">'
-        +'<span style="font-size:11px;color:var(--text2);min-width:60px">'+(e.tipo==='prospect'?'🔻 Prospect':'🏢 Cliente')+'</span>'
-        +'<span style="flex:1;font-size:13px">'+esc(e.nome)+'</span>'
-        +renderHealthBadge(e.score)
-        +'<button class="btn btn-ghost btn-sm" onclick="abrirTimelineModal(\''+e.id+'\',\''+esc(e.nome)+'\')">📋</button>'
-        +'</div>';
-    }).join('')||'<div style="color:var(--muted);font-size:13px;padding:8px;">🎉 Todas as contas estão saudáveis!</div>';
-}
-
-// ── INICIALIZAÇÃO ──
-function init(){
-  loadTheme();loadConfig();
-  // Popular selects de agendamentos
-  populateAgClientes();
-  // Adicionar 'automacao' ao mapa de títulos e ao navigate
-  var navTitlesExt={'automacao':'⚡ Central de Automação e Inteligência'};
-  var origNavigate=navigate;
-  navigate=function(panel){
-    if(panel==='automacao'){
-      painelAtual=panel;
-      document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
-      var nav=document.querySelector('[data-panel="automacao"]');if(nav)nav.classList.add('active');
-      document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
-      var panelEl=document.getElementById('panel-automacao');if(panelEl)panelEl.classList.add('active');
-      document.getElementById('topbar-title').textContent='⚡ Central de Automação e Inteligência';
-      document.getElementById('btn-acao').style.display='none';
-      renderAutomacao();
-    } else {
-      origNavigate(panel);
-      document.getElementById('btn-acao').style.display='';
-    }
-  };
-  renderDashboard();
-  atualizarPipeline();
-}
-
-
 function tentarAutoLogin(){
-  var cfg=JSON.parse(localStorage.getItem('d7_cfg')||'{}');
-  var clientId=cfg.gclient||GDRIVE_CLIENT_ID;
-  if(!clientId)return;
-  try{
-    var client=google.accounts.oauth2.initTokenClient({
-      client_id:clientId,
-      scope:GDRIVE_SCOPE,
-      prompt:'none',
-      callback:function(resp){
-        if(!resp.error){
-          _gdriveToken=resp.access_token;
-          mostrarStatusAutoSave('salvo'.replace('salvo','☁️ Drive conectado'));
-          document.getElementById('autosave-status').textContent='☁️ Drive conectado';
-        }
-      }
-    });
-    client.requestAccessToken({prompt:'none'});
-  }catch(e){}
+  var key=GDRIVE_CLIENT_ID;
+  var el=document.getElementById('gdrive-status');
+  if(key&&el){el.textContent='Google Drive pronto. Clique para salvar.';el.style.color='var(--accent)';}
 }
-
-document.addEventListener('DOMContentLoaded',init);
+function initApp(){
+  navigate('dashboard');
+  loadConfig();
+  renderDashboard();
+  renderClientes();
+  renderFornecedores();
+  renderCatalogo();
+  renderPedidos();
+  renderFunil();
+  renderAgenda();
+  renderOrigens();
+  if(typeof renderAutomacoes==='function')renderAutomacoes();
+  if(typeof renderTarefas==='function')renderTarefas();
+  if(typeof renderTimeline==='function')renderTimeline();
+  atualizarMetaDistribuidores();
+  atualizarStatusBrevo();
+}
+document.addEventListener('DOMContentLoaded',initApp);
 document.addEventListener('DOMContentLoaded',function(){setTimeout(tentarAutoLogin,2000);});
-// Iniciar auto-save periódico após autenticação
 document.addEventListener('DOMContentLoaded',function(){setTimeout(iniciarAutoSavePeriodico,5000);});
+
 </script>
 </body>
 </html>
-               
