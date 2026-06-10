@@ -1,0 +1,25 @@
+{
+"name": "D7 HUB — Representação Comercial",
+"short_name": "D7 HUB",
+"start_url": "./index.html",
+"display": "standalone",
+"background_color": "#0b0f16",
+"theme_color": "#0b0f16",
+"orientation": "portrait-primary",
+"scope": "./",
+"lang": "pt-BR",
+"icons": [
+{
+"src": "icon-192.png",
+"sizes": "192x192",
+"type": "image/png",
+"purpose": "any maskable"
+},
+{
+"src": "icon-152.png",
+"sizes": "152x152",
+"type": "image/png",
+"purpose": "any maskable"
+}
+]
+}
