@@ -1,4 +1,4 @@
-const CACHE_NAME = 'd7hub-v6';
+const CACHE_NAME = 'd7hub-v7';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-152.png'];
 
 self.addEventListener('install', e => {
