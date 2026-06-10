@@ -2019,56 +2019,63 @@ function imprimirPedido(id){
   var css='*{margin:0;padding:0;box-sizing:border-box;}'
     +'body{font-family:Arial,sans-serif;font-size:11px;color:#000;background:#fff;}'
     +'@page{margin:12mm;size:A4 portrait;}'
-    +'.hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px;}'
-    +'.co{font-size:10px;line-height:1.6;}'
-    +'.co h2{font-size:14px;font-weight:bold;margin-bottom:2px;}'
-    +'.pi{text-align:right;}'
-    +'.pi .num{font-size:17px;font-weight:bold;}'
-    +'.pi .dt{font-size:10px;margin-top:2px;}'
-    +'.pi .st{display:inline-block;border:1px solid #000;border-radius:3px;padding:1px 7px;font-size:10px;margin-top:4px;}'
-    +'.cb{border:1px solid #aaa;border-radius:3px;padding:8px;margin-bottom:10px;}'
+    +'.hdr{display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:2px solid #000;margin-bottom:6px;}'
+    +'.logo{width:38px;height:38px;object-fit:contain;border-radius:4px;}'
+    +'.co-name{font-size:14px;font-weight:bold;}'
+    +'.co-det{font-size:10px;color:#333;margin-top:2px;}'
+    +'.pi-block{text-align:right;margin-bottom:12px;}'
+    +'.pi-num{font-size:18px;font-weight:bold;}'
+    +'.pi-dt{font-size:10px;margin-top:2px;}'
+    +'.pi-st{display:inline-block;border:1px solid #000;border-radius:3px;padding:1px 8px;font-size:10px;margin-top:4px;}'
+    +'.cb{border:1px solid #aaa;border-radius:3px;padding:8px;margin-bottom:12px;}'
     +'.cb .lbl{font-size:9px;text-transform:uppercase;color:#555;margin-bottom:3px;}'
     +'.cb .nm{font-size:13px;font-weight:bold;margin-bottom:2px;}'
     +'.cb .inf{font-size:10px;color:#333;}'
     +'.sec{font-size:10px;font-weight:bold;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:3px;margin-bottom:6px;}'
-    +'table{width:100%;border-collapse:collapse;margin-bottom:10px;}'
-    +'thead th{font-size:10px;font-weight:bold;text-transform:uppercase;padding:4px 4px;text-align:left;border-bottom:1px solid #000;}'
+    +'table{width:100%;border-collapse:collapse;margin-bottom:12px;}'
+    +'thead th{font-size:10px;font-weight:bold;text-transform:uppercase;padding:4px;text-align:left;border-bottom:1px solid #000;}'
     +'tbody tr{border-bottom:1px solid #e0e0e0;}'
-    +'tbody td{padding:4px 4px;font-size:10px;vertical-align:middle;}'
+    +'tbody td{padding:4px;font-size:10px;vertical-align:middle;}'
     +'.tr-tot td{border-top:2px solid #000;padding:5px 4px;font-size:13px;font-weight:bold;}'
-    +'.conds{display:flex;gap:8px;margin-bottom:14px;}'
-    +'.ci{flex:1;border:1px solid #aaa;border-radius:3px;padding:6px;}'
-    +'.cl{font-size:8px;text-transform:uppercase;color:#555;margin-bottom:2px;}'
-    +'.cv{font-size:11px;font-weight:bold;}'
-    +'.assin-wrap{margin-top:30px;text-align:center;}'
-    +'.assin-line{display:inline-block;border-top:1px solid #000;width:180px;padding-top:4px;font-size:10px;color:#555;text-align:center;}';
-
+    +'.conds{margin-bottom:14px;}'
+    +'.cond-item{border-left:3px solid #000;padding:3px 8px;margin-bottom:6px;}'
+    +'.cond-lbl{font-size:9px;text-transform:uppercase;color:#555;}'
+    +'.cond-val{font-size:11px;font-weight:bold;}'
+    +'.assin-wrap{margin-top:32px;text-align:center;}'
+    +'.assin-line{display:inline-block;border-top:1px solid #000;width:200px;padding-top:4px;font-size:10px;color:#555;text-align:center;}';
+  var logoUrl='https://d7representacao-hub.github.io/d7-app/icon-192.png';
   var htmlPdf='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Pedido #'+ped.numero+'</title>'
     +'<style>'+css+'</style></head><body>'
     +'<div class="hdr">'
-    +'<div class="co"><h2>D7 REPRESENTAÇÃO LTDA</h2>CNPJ: 62.201.584/0001-10<br>d7representacao@gmail.com<br>CEL: (62) 99600-0777</div>'
-    +'<div class="pi"><div class="num">Pedido #'+ped.numero+'</div><div class="dt">'+data+'</div>'
-    +'<div class="st">'+(ped.status||'ABERTO').toUpperCase()+'</div></div></div>'
+    +'<img class="logo" src="'+logoUrl+'" onerror="this.style.display=\'none\'">'
+    +'<div><div class="co-name">D7 REPRESENTAÇÃO LTDA</div>'
+    +'<div class="co-det">CNPJ: 62.201.584/0001-10 &nbsp;|&nbsp; d7representacao@gmail.com &nbsp;|&nbsp; CEL: (62) 99600-0777</div></div>'
+    +'</div>'
+    +'<div class="pi-block">'
+    +'<div class="pi-num">Pedido #'+ped.numero+'</div>'
+    +'<div class="pi-dt">'+data+'</div>'
+    +'<div class="pi-st">'+(ped.status||'ABERTO').toUpperCase()+'</div>'
+    +'</div>'
     +'<div class="cb"><div class="lbl">Cliente</div>'
     +'<div class="nm">'+(cli?cli.nome:'-')+'</div>'
     +'<div class="inf">'+(cli&&cli.cnpj?'CNPJ: '+cli.cnpj+'&nbsp;&nbsp;':'')+(cli&&cli.cidade?cli.cidade+(cli.estado?' / '+cli.estado:''):'')+'</div></div>'
     +'<div class="sec">Itens do Pedido</div>'
     +'<table><thead><tr>'
-    +'<th style="width:60px">Código</th>'
-    +'<th style="width:70px">EAN</th>'
+    +'<th style="width:55px">Código</th>'
+    +'<th style="width:65px">EAN</th>'
     +'<th>Produto</th>'
-    +'<th style="width:35px;text-align:center">Qtd</th>'
-    +'<th style="width:35px;text-align:center">Un.</th>'
-    +'<th style="width:70px;text-align:right">Unit.</th>'
-    +'<th style="width:75px;text-align:right">Total</th>'
+    +'<th style="width:30px;text-align:center">Un.</th>'
+    +'<th style="width:30px;text-align:center">Qtd</th>'
+    +'<th style="width:72px;text-align:right">Vl.Unit.</th>'
+    +'<th style="width:72px;text-align:right">Total</th>'
     +'</tr></thead><tbody>';
   (ped.itens||[]).forEach(function(item){
     htmlPdf+='<tr>'
-      +'<td>-</td>'
+      +'<td>—</td>'
       +'<td>—</td>'
       +'<td><strong>'+(item.nome||'')+'</strong></td>'
-      +'<td style="text-align:center">'+(item.qtd||0)+'</td>'
       +'<td style="text-align:center">'+(item.unidade||'UN')+'</td>'
+      +'<td style="text-align:center">'+(item.qtd||0)+'</td>'
       +'<td style="text-align:right">'+fmtMoeda(item.preco)+'</td>'
       +'<td style="text-align:right">'+fmtMoeda(item.total)+'</td>'
       +'</tr>';
@@ -2078,11 +2085,11 @@ function imprimirPedido(id){
     +'<td style="text-align:right">'+fmtMoeda(ped.total)+'</td>'
     +'</tr></tfoot></table>'
     +'<div class="conds">'
-    +'<div class="ci"><div class="cl">Frete</div><div class="cv">'+freteLbl+'</div></div>'
-    +'<div class="ci"><div class="cl">Descarga</div><div class="cv">'+descargaLbl+'</div></div>'
-    +(ped.produtoVenc?'<div class="ci"><div class="cl">Venc. Produto</div><div class="cv">'+ped.produtoVenc+'</div></div>':'')
-    +(ped.prazoEntrega?'<div class="ci"><div class="cl">Prazo Entrega</div><div class="cv">'+ped.prazoEntrega+' dias</div></div>':'')
-    +(ped.pesoPedido?'<div class="ci"><div class="cl">Peso Total</div><div class="cv">'+ped.pesoPedido+' kg</div></div>':'')
+    +'<div class="cond-item"><div class="cond-lbl">Frete</div><div class="cond-val">'+freteLbl+'</div></div>'
+    +'<div class="cond-item"><div class="cond-lbl">Descarga</div><div class="cond-val">'+descargaLbl+'</div></div>'
+    +(ped.produtoVenc?'<div class="cond-item"><div class="cond-lbl">Venc. Produto</div><div class="cond-val">'+ped.produtoVenc+'</div></div>':'')
+    +(ped.prazoEntrega?'<div class="cond-item"><div class="cond-lbl">Prazo Entrega</div><div class="cond-val">'+ped.prazoEntrega+' dias</div></div>':'')
+    +(ped.pesoPedido?'<div class="cond-item"><div class="cond-lbl">Peso Total</div><div class="cond-val">'+ped.pesoPedido+' kg</div></div>':'')
     +'</div>'
     +(ped.prazosPgto?'<div style="margin-bottom:10px;font-size:11px;"><strong>Prazos Pgto:</strong> '+ped.prazosPgto+'</div>':'')
     +(ped.obs?'<div style="margin-bottom:10px;font-size:10px;"><strong>Obs:</strong> '+ped.obs+'</div>':'')
@@ -2093,7 +2100,6 @@ function imprimirPedido(id){
   w.document.close();
   w.print();
 }
-
 function compartilharWhatsApp(id){
   var ped=pedidos.find(function(p){return p.id===(id||pedidoIdVer);});
   if(!ped)return;
