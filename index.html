@@ -2041,7 +2041,7 @@ function imprimirPedido(id){
     +'.cl{font-size:8px;text-transform:uppercase;color:#555;}'
     +'.cv{font-size:11px;font-weight:bold;margin-top:2px;}'
     +'.assin{margin-top:28px;border-top:1px dashed #000;padding-top:4px;text-align:center;font-size:10px;color:#555;}'
-    +'.rodape{margin-top:14px;border-top:1px solid #ccc;padding-top:5px;text-align:center;font-size:9px;color:#777;}';
+    ;
 
   var htmlPdf='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Pedido #'+ped.numero+'</title>'
     +'<style>'+css+'</style></head><body>'
@@ -2082,8 +2082,7 @@ function imprimirPedido(id){
     +'</div>'
     +(ped.prazosPgto?'<div style="margin-bottom:10px;font-size:11px;"><strong>Prazos Pgto:</strong> '+ped.prazosPgto+'</div>':'')
     +(ped.obs?'<div style="margin-bottom:10px;font-size:10px;"><strong>Obs:</strong> '+ped.obs+'</div>':'')
-    +'<div class="assin">Assinatura do Comprador</div>'
-    +'<div class="rodape">D7 REPRESENTAÇÃO LTDA • CNPJ 62.201.584/0001-10 • d7representacao@gmail.com<br>Este documento não possui valor fiscal. Gerado em '+data+'.</div>'
+    +'<div style="margin-top:28px;text-align:center;"><div style="display:inline-block;border-top:1px solid #000;width:180px;padding-top:4px;font-size:10px;color:#555;">Assinatura do Comprador</div></div>'
     +'</body></html>';
   var w=window.open('','_blank','width=900,height=700');
   w.document.write(htmlPdf);
