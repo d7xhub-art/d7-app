@@ -2148,7 +2148,7 @@ function imprimirPedido(id){
   var descargaLbl=ped.descarga&&ped.descarga!=='nao_informado'?ped.descarga:'—';
   var css='*{margin:0;padding:0;box-sizing:border-box;}'
     +'@page{size:A4 landscape;margin:0;}'
-    +'body{font-family:Arial,sans-serif;font-size:11px;color:#000;background:#fff;padding:14mm 14mm 12mm 14mm;}'
+    +'body{font-family:Arial,sans-serif;font-size:11px;color:#000;background:#fff;padding:14mm 14mm 12mm 14mm;display:flex;flex-direction:column;min-height:calc(210mm - 26mm);}'
     +'.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;margin-bottom:14px;}'
     +'.pi-num{font-size:20px;font-weight:bold;text-align:right;}'
     +'.pi-dt{font-size:10px;margin-top:3px;text-align:right;}'
@@ -2211,23 +2211,24 @@ function imprimirPedido(id){
     +(ped.prazoEntrega?'<div style="padding:3px 12px 3px 0;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Prazo Entrega</div><div style="font-size:11px;font-weight:bold;">'+ped.prazoEntrega+'</div></div>':'')
     +(ped.pesoPedido?'<div style="padding:3px 12px 3px 0;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Peso Total</div><div style="font-size:11px;font-weight:bold;">'+ped.pesoPedido+' kg</div></div>':'')
     +'</div>'
-    +'<table class="pay-tbl" style="width:100%;border-collapse:collapse;font-size:10px;margin-top:8px;">'
-    +'<thead></thead><tbody>'
-    +'<tr style="border-bottom:none;">'
-    +'<td style="font-weight:bold;padding:4px 8px 4px 0;width:190px;vertical-align:top;border-bottom:none;">FORMA DE PAGAMENTO PRODUTO</td>'
-    +'<td style="padding:4px 12px 4px 0;border-bottom:none;"><strong>P1</strong> '+(ped.pp1||'')+'</td>'
-    +'<td style="padding:4px 12px 4px 0;border-bottom:none;"><strong>P2</strong> '+(ped.pp2||'')+'</td>'
-    +'<td style="padding:4px 12px 4px 0;border-bottom:none;"><strong>P3</strong> '+(ped.pp3||'')+'</td>'
-    +'<td style="padding:4px 0;border-bottom:none;"><strong>P4</strong> '+(ped.pp4||'')+'</td>'
-    +'</tr>'
-    +'<tr style="border-bottom:none;">'
-    +'<td style="font-weight:bold;padding:4px 8px 4px 0;border-bottom:none;vertical-align:top;">FORMA DE PAGAMENTO FRETE</td>'
-    +'<td style="padding:4px 12px 4px 0;border-bottom:none;"><strong>P1</strong> '+(ped.pf1||'')+'</td>'
-    +'<td style="padding:4px 12px 4px 0;border-bottom:none;"><strong>P2</strong> '+(ped.pf2||'')+'</td>'
-    +'<td style="padding:4px 0;border-bottom:none;" colspan="2"><strong>P3</strong> '+(ped.pf3||'')+'</td>'
-    +'</tr>'
-    +'</tbody></table>'
-    +'<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:16px;">'
+    +'<div style="flex:1;">'
+    +'<div style="margin-bottom:6px;">'
+    +'<div style="font-size:9px;text-transform:uppercase;color:#555;margin-bottom:3px;">Forma de Pagamento Produto</div>'
+    +'<div style="display:flex;flex-wrap:wrap;">'
+    +(ped.pp1?'<div style="padding:2px 14px 2px 0;"><div style="font-size:9px;color:#555;">P1</div><div style="font-size:11px;font-weight:bold;">'+ped.pp1+'</div></div>':'')
+    +(ped.pp2?'<div style="padding:2px 14px 2px 0;"><div style="font-size:9px;color:#555;">P2</div><div style="font-size:11px;font-weight:bold;">'+ped.pp2+'</div></div>':'')
+    +(ped.pp3?'<div style="padding:2px 14px 2px 0;"><div style="font-size:9px;color:#555;">P3</div><div style="font-size:11px;font-weight:bold;">'+ped.pp3+'</div></div>':'')
+    +(ped.pp4?'<div style="padding:2px 14px 2px 0;"><div style="font-size:9px;color:#555;">P4</div><div style="font-size:11px;font-weight:bold;">'+ped.pp4+'</div></div>':'')
+    +'</div></div>'
+    +'<div>'
+    +'<div style="font-size:9px;text-transform:uppercase;color:#555;margin-bottom:3px;">Forma de Pagamento Frete</div>'
+    +'<div style="display:flex;flex-wrap:wrap;">'
+    +(ped.pf1?'<div style="padding:2px 14px 2px 0;"><div style="font-size:9px;color:#555;">P1</div><div style="font-size:11px;font-weight:bold;">'+ped.pf1+'</div></div>':'')
+    +(ped.pf2?'<div style="padding:2px 14px 2px 0;"><div style="font-size:9px;color:#555;">P2</div><div style="font-size:11px;font-weight:bold;">'+ped.pf2+'</div></div>':'')
+    +(ped.pf3?'<div style="padding:2px 14px 2px 0;"><div style="font-size:9px;color:#555;">P3</div><div style="font-size:11px;font-weight:bold;">'+ped.pf3+'</div></div>':'')
+    +'</div></div>'
+    +'</div>'
+    +'<div style="margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;padding-top:8px;">'
     +(ped.obs?'<div style="font-size:10px;"><strong>Obs:</strong> '+ped.obs+'</div>':'<div></div>')
     +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;">Assinatura do Comprador</div>'
     +'</div>'
