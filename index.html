@@ -1671,6 +1671,22 @@ function buscarCNPJFornecedor(){
     })
     .catch(function(){if(hint)hint.textContent='Erro ao buscar CNPJ. Tente novamente.';});
 }
+function buscarCNPJFornecedor(){
+  var cnpj=document.getElementById('ff-cnpj').value.replace(/\D/g,'');
+  if(cnpj.length!==14){toast('Digite um CNPJ válido (14 dígitos)','error');return;}
+  var hint=document.getElementById('ff-cnpj-hint');
+  if(hint)hint.textContent='Buscando...';
+  fetch('https://brasilapi.com.br/api/cnpj/v1/'+cnpj)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.status===400||d.message){if(hint)hint.textContent='CNPJ não encontrado';return;}
+      document.getElementById('ff-nome').value=d.razao_social||'';
+      document.getElementById('ff-tel').value=d.ddd_telefone_1||'';
+      document.getElementById('ff-email').value=d.email||'';
+      if(hint)hint.textContent='Dados preenchidos via Receita Federal';
+    })
+    .catch(function(){if(hint)hint.textContent='Erro ao buscar CNPJ. Tente novamente.';});
+}
 function buscarCNPJ(){
   var cnpj=document.getElementById('f-cnpj').value.replace(/\D/g,'');
   if(cnpj.length!==14){toast('Digite um CNPJ v\u00e1lido (14 d\u00edgitos)','error');return;}
