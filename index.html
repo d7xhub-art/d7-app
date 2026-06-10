@@ -2157,7 +2157,7 @@ function imprimirPedido(id){
     +'.cb .lbl{font-size:9px;text-transform:uppercase;color:#555;margin-bottom:4px;font-weight:bold;letter-spacing:.5px;}'
     +'.cb .nm{font-size:13px;font-weight:bold;margin-bottom:2px;}'
     +'.cb .inf{font-size:10px;color:#333;}'
-    +'.sec{font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;color:#555;padding-bottom:4px;border-bottom:1px solid #000;margin-bottom:6px;}'
+    +'.sec{font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;color:#555;padding-bottom:4px;margin-bottom:6px;}'
     +'table{width:100%;border-collapse:collapse;margin-bottom:16px;}'
     +'thead th{font-size:9px;font-weight:bold;text-transform:uppercase;padding:5px 4px;text-align:left;letter-spacing:.4px;}'
     +'tbody tr{border-bottom:1px solid #e0e0e0;}'
@@ -2170,7 +2170,7 @@ function imprimirPedido(id){
     +'.cond-val{font-size:11px;font-weight:bold;}';
   var htmlPdf='<!DOCTYPE html><html><head><meta charset="UTF-8"><title></title>'
     +'<style>'+css+'</style></head><body>'
-    +'<div class="hdr">'+'<div style="display:flex;flex-direction:column;align-items:flex-start;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 52" width="115" height="52"><text font-family="Arial Black,Arial,sans-serif" font-size="46" font-weight="900" font-style="italic" fill="#111"><tspan x="0" y="44">D</tspan><tspan fill="#444">7</tspan></text><line x1="0" y1="32" x2="112" y2="25" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg><div style="font-size:8px;font-weight:bold;letter-spacing:1.2px;text-transform:uppercase;color:#555;margin-top:-2px;">Representação Comercial</div></div>'
+    +'<div class="hdr">'+'<div style="display:flex;align-items:center;gap:12px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 52" width="115" height="52"><text font-family="Arial Black,Arial,sans-serif" font-size="46" font-weight="900" font-style="italic" fill="#111"><tspan x="0" y="44">D</tspan><tspan fill="#444">7</tspan></text><line x1="0" y1="32" x2="112" y2="25" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg><div style="font-size:8px;font-weight:bold;letter-spacing:1.2px;text-transform:uppercase;color:#555;margin-top:-2px;">Representação Comercial</div></div>'
     +'<div>'
     +'<div class="pi-num">Pedido #'+ped.numero+'</div>'
     +'<div class="pi-dt">'+data+'</div>'
@@ -2205,7 +2205,7 @@ function imprimirPedido(id){
     +'<td style="text-align:right">'+fmtMoeda(ped.total)+'</td>'
     +'</tr></tfoot></table>'
     +(ped.obs?'<div style="margin-bottom:12px;font-size:10px;"><strong>Obs:</strong> '+ped.obs+'</div>':'')
-    +'<div style="border-top:1px solid #000;padding-top:10px;margin-top:4px;">'
+    +'<div style="padding-top:10px;margin-top:4px;">'
     +'<table style="width:100%;border-collapse:collapse;font-size:10px;">'
     +'<tr>'
     +'<td style="font-weight:bold;padding:4px 8px 4px 0;width:190px;vertical-align:top;">FORMA DE PAGAMENTO PRODUTO</td>'
