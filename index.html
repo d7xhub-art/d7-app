@@ -1983,78 +1983,126 @@ function deletarPedido(id){
   savePed();renderPedidos();renderDashboard();toast('Pedido excluído','success');
 }
 function imprimirPedido(id){
-  var ped=pedidos.find(function(p){return p.id===(id||pedidoIdVer);});
+  var pedId=id||window._verPedidoId;
+  var ped=pedidos.find(function(p){return p.id===pedId;});
   if(!ped)return;
   var cli=clientes.find(function(c){return c.id===ped.clienteId;});
-  var data=new Date(ped.criadoEm).toLocaleDateString('pt-BR');
-  var validade=new Date(ped.criadoEm);validade.setDate(validade.getDate()+7);
-  var cfg=JSON.parse(localStorage.getItem('d7_cfg')||'{}');
-  var empresa=cfg.empresa||'D7 Representação Comercial';
-  var iHtml=ped.itens.map(function(it,i){
-    return '<tr style="background:'+(i%2===0?'#fff':'#f9f7ff')+'">'
-      +'<td style="padding:9px 12px;border-bottom:1px solid #ece8ff;">'+esc(it.nome)+'</td>'
-      +'<td style="padding:9px 12px;border-bottom:1px solid #ece8ff;text-align:center;">'+it.qtd+' '+esc(it.unidade||'un')+'</td>'
-      +'<td style="padding:9px 12px;border-bottom:1px solid #ece8ff;text-align:right;">'+fmtMoeda(it.preco)+'</td>'
-      +'<td style="padding:9px 12px;border-bottom:1px solid #ece8ff;text-align:right;font-weight:700;color:#6d28d9;">'+fmtMoeda(it.total)+'</td></tr>';
-  }).join('');
-  var desconto=ped.desconto||0;
+  var data=new Date().toLocaleDateString('pt-BR');
   var freteTipo=ped.freteTipo||'cif';
-  var freteValor=ped.freteValor||0;
-  var freteLabel=freteTipo==='cif'?'CIF — Frete Incluso':freteTipo==='fob'?'FOB — Cliente paga frete (R$ '+fmtMoeda(freteValor)+')':'Não informado';
+  var freteValor=parseFloat(ped.freteValor||0);
+  var prodVenc=ped.produtoVenc||'—';
+  var freteVenc=ped.freteVenc||'—';
+  var desconto=parseFloat(ped.desconto||0);
+  var freteLabel=freteTipo==='cif'?'CIF — Frete Incluso':freteTipo==='fob'?'FOB — Cliente paga frete (R$ '+fmtNum(freteValor)+')':'Sem frete';
   var descarga=ped.descarga==='cliente'?'Pelo Cliente':ped.descarga==='representante'?'Pela Transportadora':'Não informado';
-  var prodVenc=ped.produtoVenc?new Date(ped.produtoVenc).toLocaleDateString('pt-BR'):'—';
-  var freteVenc=ped.freteVenc?new Date(ped.freteVenc).toLocaleDateString('pt-BR'):'—';
+  var subtotal=ped.itens.reduce(function(s,i){return s+i.total;},0);
+  var totalFinal=desconto>0?subtotal*(1-desconto/100):subtotal;
+  var iHtml=ped.itens.map(function(it,i){
+    var prod=produtos.find(function(p){return p.id===it.produtoId;})||{};
+    var forn=fornecedores.find(function(f){return f.id===prod.fornecedorId;})||{};
+    return '<tr style="background:'+(i%2===0?'#fff':'#f9f9f9')+'">'
+      +'<td>'+(prod.codigo||'—')+'</td>'
+      +'<td>'+(prod.ean||'—')+'</td>'
+      +'<td>'+esc(it.nome||'')+(forn.nome?'<br><small style="color:#888">'+esc(forn.nome)+'</small>':'')+'</td>'
+      +'<td style="text-align:center">'+(it.unidade||'UN')+'</td>'
+      +'<td style="text-align:center">'+it.qtd+'</td>'
+      +'<td style="text-align:right">'+fmtMoeda(it.preco||0)+'</td>'
+      +'<td style="text-align:right;font-weight:600">'+fmtMoeda(it.total||0)+'</td>'
+      +'</tr>';
+  }).join('');
+  var empresa='D7 REPRESENTAÇÃO LTDA';
+  var cnpjEmpresa='62.201.584/0001-10';
   var htmlPdf='<!DOCTYPE html><html><head><meta charset="UTF-8">'
-    +'<title>Pedido #'+ped.numero+' — '+esc(empresa)+'</title>'
-    +'<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;font-size:13px;color:#222;}'
-    +'.pg{max-width:750px;margin:0 auto;padding:30px;}'
-    +'.header{background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff;padding:24px 28px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;}'
-    +'.header h1{font-size:22px;font-weight:800;}.header .sub{font-size:12px;opacity:.8;margin-top:3px;}'
-    +'.header .num{text-align:right;font-size:28px;font-weight:900;opacity:.9;}'
-    +'.info{display:flex;justify-content:space-between;padding:18px 28px;background:#f8f7ff;border:1px solid #e0d8ff;border-top:none;gap:20px;}'
-    +'.info-col{flex:1;}.info-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}'
-    +'.info-val{font-weight:700;font-size:14px;color:#333;}.info-sub{font-size:12px;color:#666;margin-top:2px;}'
+    +'<title>Pedido #'+ped.numero+'</title>'
+    +'<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;font-size:11px;color:#222;}'
+    +'.pg{max-width:720px;margin:0 auto;padding:20px;}'
+    /* HEADER: logo info esquerda | nº pedido direita */
+    +'.header{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 16px;background:#6d28d9;color:#fff;border-radius:6px 6px 0 0;}'
+    +'.hd-left .co{font-size:13px;font-weight:800;letter-spacing:.3px;}'
+    +'.hd-left .hd-line{font-size:10px;opacity:.85;margin-top:3px;}'
+    +'.hd-right{text-align:right;}'
+    +'.hd-right .num{font-size:17px;font-weight:800;}'
+    +'.hd-right .dt{font-size:10px;opacity:.85;margin-top:3px;}'
+    +'.hd-right .st{display:inline-block;background:rgba(255,255,255,.2);padding:1px 8px;border-radius:10px;font-size:10px;margin-top:4px;}'
+    /* CLIENTE: bloco logo abaixo do header */
+    +'.cli-block{border:1px solid #d8d0ff;border-top:none;padding:10px 16px;background:#f8f7ff;}'
+    +'.cli-title{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}'
+    +'.cli-nome{font-size:13px;font-weight:800;color:#3b0764;margin-bottom:3px;}'
+    +'.cli-info{font-size:10px;color:#444;line-height:1.6;}'
+    /* TABELA */
     +'table{width:100%;border-collapse:collapse;margin-top:0;}'
-    +'thead tr{background:#6d28d9;color:#fff;}thead th{padding:10px 12px;text-align:left;font-size:12px;letter-spacing:.3px;}'
-    +'thead th:not(:first-child){text-align:right;}'
-    +'tbody td{padding:9px 12px;border-bottom:1px solid #ece8ff;font-size:13px;}'
-    +'tbody td:not(:first-child){text-align:right;}'
-    +'.total-row{background:#6d28d9;color:#fff;padding:12px 28px;display:flex;justify-content:space-between;align-items:center;}'
-    +'.total-row .tl{font-size:14px;opacity:.9;}.total-row .tv{font-size:24px;font-weight:900;}'
-    +'.conds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid #e0d8ff;border-top:none;}'
-    +'.cond-item{padding:12px 16px;border-right:1px solid #e0d8ff;}.cond-item:last-child{border-right:none;}'
-    +'.cond-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}'
-    +'.cond-val{font-weight:700;font-size:13px;}'
-    +'.obs{padding:12px 16px;background:#fffbf0;border:1px solid #ffe4a0;border-top:none;font-size:12px;}'
-    +'.footer{margin-top:20px;text-align:center;font-size:11px;color:#aaa;border-top:1px dashed #ddd;padding-top:12px;}'
-    +'.validity{font-size:12px;color:#e07000;font-weight:600;}'
+    +'thead tr{background:#6d28d9;color:#fff;}thead th{padding:6px 9px;text-align:left;font-size:10px;letter-spacing:.3px;font-weight:700;}'
+    +'tbody td{padding:5px 9px;border-bottom:1px solid #ece8ff;font-size:11px;}'
+    /* TOTAL */
+    +'.total-row{background:#6d28d9;color:#fff;padding:9px 16px;display:flex;justify-content:space-between;align-items:center;}'
+    +'.total-row .tl{font-size:11px;opacity:.9;}.total-row .tv{font-size:15px;font-weight:800;}'
+    /* CONDIÇÕES */
+    +'.conds{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #d8d0ff;border-top:none;}'
+    +'.cond-item{padding:7px 11px;border-right:1px solid #d8d0ff;}'
+    +'.cond-item:last-child{border-right:none;}'
+    +'.cond-label{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}'
+    +'.cond-val{font-weight:700;font-size:11px;}'
+    +'.obs{padding:7px 11px;background:#fffbf0;border:1px solid #ffe4a0;border-top:none;font-size:10px;}'
+    /* ASSINATURAS */
+    +'.sigs{display:flex;justify-content:space-between;margin-top:30px;gap:60px;}'
+    +'.sig{flex:1;text-align:center;}'
+    +'.sig-line{border-top:1px solid #555;margin-bottom:5px;}'
+    +'.sig-label{font-size:10px;color:#555;}'
+    +'.footer{margin-top:12px;text-align:center;font-size:9px;color:#aaa;border-top:1px dashed #ddd;padding-top:8px;}'
     +'@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}'
     +'</style></head><body><div class="pg">'
-    +'<div class="header"><div><h1>'+esc(empresa)+'</h1><div class="sub">Pedido de Venda • '+data+'</div>'
-    +'<div class="sub validity" style="margin-top:4px;">Válido até: '+validade.toLocaleDateString("pt-BR")+'</div></div>'
-    +'<div class="num">#'+ped.numero+'</div></div>'
-    +'<div class="info"><div class="info-col"><div class="info-label">Cliente</div>'
-    +'<div class="info-val">'+(cli?esc(cli.nome):'—')+'</div>'
-    +(cli&&cli.cnpj?'<div class="info-sub">CNPJ: '+esc(cli.cnpj)+'</div>':'')
-    +(cli&&cli.cidade?'<div class="info-sub">'+esc(cli.cidade)+(cli.estado?' — '+esc(cli.estado):'')+'</div>':'')
-    +(cli&&cli.tel?'<div class="info-sub">📲 '+esc(cli.tel)+'</div>':'')
+    /* HEADER */
+    +'<div class="header">'
+    +'<div class="hd-left">'
+    +'<div class="co">'+esc(empresa)+'</div>'
+    +'<div class="hd-line">CNPJ: '+cnpjEmpresa+'</div>'
+    +'<div class="hd-line">d7representacao@gmail.com</div>'
+    +'<div class="hd-line">CEL: (62) 99600-0777</div>'
     +'</div>'
-    +(cli&&cli.contato?'<div class="info-col"><div class="info-label">Contato</div><div class="info-val">'+esc(cli.contato)+'</div>'+(cli.email?'<div class="info-sub">'+esc(cli.email)+'</div>':'')+'</div>':'')
-    +'<div class="info-col" style="text-align:right;"><div class="info-label">Status</div>'
-    +'<div class="info-val" style="text-transform:capitalize;">'+esc(ped.status||'aberto')+'</div></div></div>'
-    +'<table><thead><tr><th>Produto</th><th style="text-align:center">Qtd</th><th>Preço Unit.</th><th>Total</th></tr></thead><tbody>'+iHtml+'</tbody></table>'
-    +'<div class="total-row">'+(desconto>0?'<span class="tl">Desconto aplicado: '+desconto+'%</span>':'<span></span>')+'<span class="tv">Total: '+fmtMoeda(ped.total)+'</span></div>'
+    +'<div class="hd-right">'
+    +'<div class="num">Pedido #'+ped.numero+'</div>'
+    +'<div class="dt">'+ped.data+'</div>'
+    +'<div class="st">'+((ped.status||'aberto').toUpperCase())+'</div>'
+    +'</div>'
+    +'</div>'
+    /* CLIENTE */
+    +'<div class="cli-block">'
+    +'<div class="cli-title">Cliente</div>'
+    +'<div class="cli-nome">'+(cli?esc(cli.nome):'—')+'</div>'
+    +'<div class="cli-info">'
+    +(cli&&cli.cnpj?'CNPJ: '+esc(cli.cnpj)+'&nbsp;&nbsp;':'')
+    +(cli&&cli.cidade?esc(cli.cidade)+(cli.estado?' / '+esc(cli.estado):''):'')
+    +(cli&&cli.endereco?'&nbsp;&nbsp;'+esc(cli.endereco):'')
+    +'</div>'
+    +'</div>'
+    /* TABELA */
+    +'<table><thead><tr>'
+    +'<th>Código</th><th>EAN</th><th>Produto</th>'
+    +'<th style="text-align:center">Un.</th>'
+    +'<th style="text-align:center">Qtd</th>'
+    +'<th style="text-align:right">Vl. Unit.</th>'
+    +'<th style="text-align:right">Total</th>'
+    +'</tr></thead><tbody>'+iHtml+'</tbody></table>'
+    /* TOTAL */
+    +'<div class="total-row">'
+    +(desconto>0?'<span class="tl">Desconto: '+desconto+'%</span>':'<span></span>')
+    +'<span class="tv">'+fmtMoeda(totalFinal)+'</span></div>'
+    /* CONDIÇÕES */
     +'<div class="conds">'
     +'<div class="cond-item"><div class="cond-label">Frete</div><div class="cond-val">'+freteLabel+'</div></div>'
     +'<div class="cond-item"><div class="cond-label">Descarga</div><div class="cond-val">'+descarga+'</div></div>'
-    +'<div class="cond-item"><div class="cond-label">Venc. Boleto Produto</div><div class="cond-val">'+prodVenc+'</div></div>'
-    +(freteVenc!=='—'?'<div class="cond-item"><div class="cond-label">Venc. Boleto Frete</div><div class="cond-val">'+freteVenc+'</div></div>':'')
+    +'<div class="cond-item"><div class="cond-label">Venc. Produto</div><div class="cond-val">'+prodVenc+'</div></div>'
+    +(freteVenc!=='—'?'<div class="cond-item"><div class="cond-label">Venc. Frete</div><div class="cond-val">'+freteVenc+'</div></div>':'')
     +'</div>'
     +(ped.obs?'<div class="obs"><b>Obs:</b> '+esc(ped.obs)+'</div>':'')
-    +'<div class="footer">'+esc(empresa)+' • www.d7x.com.br • d7representacao@gmail.com<br>'
-    +'Este documento não possui valor fiscal. Pedido gerado em '+data+'.</div>'
+    /* ASSINATURAS */
+    +'<div class="sigs">'
+    +'<div class="sig"><div class="sig-line"></div><div class="sig-label">Assinatura do Comprador</div></div>'
+    +'</div>'
+    +'<div class="footer">'+esc(empresa)+' • CNPJ '+cnpjEmpresa+' • d7representacao@gmail.com<br>'
+    +'Este documento não possui valor fiscal. Gerado em '+data+'.</div>'
     +'</div></body></html>';
-  var w=window.open('','_blank','width=800,height=900');
+  var w=window.open('','_blank','width=800,height=700');
   w.document.write(htmlPdf);w.document.close();
   setTimeout(function(){w.print();},600);
 }
