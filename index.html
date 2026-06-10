@@ -1596,6 +1596,25 @@ function savePed(){localStorage.setItem(KEY_PED,JSON.stringify(pedidos));}
 // ── NAVEGAÇÃO ──
 // ── UTILS ──
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+var KEY_HIST='d7_historico';
+var _historico=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');
+function logEvento(entidadeId,tipo,descricao,extras){
+  var ev={id:uid(),entidadeId:entidadeId,tipo:tipo,descricao:descricao,extras:extras||{},criadoEm:new Date().toISOString()};
+  _historico.unshift(ev);
+  if(_historico.length>200)_historico=_historico.slice(0,200);
+  localStorage.setItem(KEY_HIST,JSON.stringify(_historico));
+  renderFeedAtividade();
+}
+function renderFeedAtividade(){
+  var el=document.getElementById('feed-atividade');
+  if(!el)return;
+  if(!_historico.length){el.innerHTML='<div class="empty"><div class="empty-text">Nenhuma atividade</div></div>';return;}
+  el.innerHTML=_historico.slice(0,10).map(function(ev){
+    var icone=ev.tipo==='criacao'?'✅':ev.tipo==='edicao'?'✏️':ev.tipo==='pedido'?'🛒':ev.tipo==='exclusao'?'🗑️':'📌';
+    var dt=new Date(ev.criadoEm).toLocaleString('pt-BR');
+    return '<div class="activity-item"><div class="hist-icon">'+icone+'</div><div class="activity-body"><div class="activity-title">'+ev.descricao+'</div><div class="activity-time">'+dt+'</div></div></div>';
+  }).join('');
+}
 function esc(s){return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtMoeda(n){return 'R$ '+(parseFloat(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmtNum(n){return (parseFloat(n)||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
