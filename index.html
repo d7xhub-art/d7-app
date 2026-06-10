@@ -2167,7 +2167,7 @@ function imprimirPedido(id){
     +'.conds{margin-bottom:14px;}'
     +'.cond-item{border-left:3px solid #000;padding:3px 8px;margin-bottom:6px;}'
     +'.cond-lbl{font-size:9px;text-transform:uppercase;color:#555;}'
-    +'.cond-val{font-size:11px;font-weight:bold;}';
+    +'.cond-val{font-size:11px;font-weight:bold;}'+'.pay-tbl tr,.pay-tbl td{border:none!important;border-bottom:none!important;}';
   var htmlPdf='<!DOCTYPE html><html><head><meta charset="UTF-8"><title></title>'
     +'<style>'+css+'</style></head><body>'
     +'<div class="hdr">'+'<div style="display:flex;align-items:center;gap:12px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 52" width="115" height="52"><text font-family="Arial Black,Arial,sans-serif" font-size="46" font-weight="900" font-style="italic" fill="#111"><tspan x="0" y="44">D</tspan><tspan fill="#444">7</tspan></text><line x1="0" y1="32" x2="112" y2="25" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg><div style="font-size:8px;font-weight:bold;letter-spacing:1.2px;text-transform:uppercase;color:#555;margin-top:-2px;">Representação Comercial</div></div>'
@@ -2205,13 +2205,13 @@ function imprimirPedido(id){
     +'<td style="text-align:right">'+fmtMoeda(ped.total)+'</td>'
     +'</tr></tfoot></table>'
     +'<div style="display:flex;flex-wrap:wrap;gap:0;margin-bottom:14px;">'
-    +'<div style="border-left:3px solid #000;padding:3px 12px 3px 8px;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Frete</div><div style="font-size:11px;font-weight:bold;">'+(isCIF?'CIF — Incluso':'FOB — Por conta do Cliente')+'</div></div>'
-    +'<div style="border-left:3px solid #000;padding:3px 12px 3px 8px;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Descarga</div><div style="font-size:11px;font-weight:bold;">'+descargaLbl+'</div></div>'
-    +(ped.produtoVenc?'<div style="border-left:3px solid #000;padding:3px 12px 3px 8px;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Venc. Produto</div><div style="font-size:11px;font-weight:bold;">'+ped.produtoVenc+'</div></div>':'')
-    +(ped.prazoEntrega?'<div style="border-left:3px solid #000;padding:3px 12px 3px 8px;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Prazo Entrega</div><div style="font-size:11px;font-weight:bold;">'+ped.prazoEntrega+'</div></div>':'')
-    +(ped.pesoPedido?'<div style="border-left:3px solid #000;padding:3px 12px 3px 8px;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Peso Total</div><div style="font-size:11px;font-weight:bold;">'+ped.pesoPedido+' kg</div></div>':'')
+    +'<div style="padding:3px 12px 3px 0;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Frete</div><div style="font-size:11px;font-weight:bold;">'+(isCIF?'CIF — Incluso':'FOB — Por conta do Cliente')+'</div></div>'
+    +'<div style="padding:3px 12px 3px 0;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Descarga</div><div style="font-size:11px;font-weight:bold;">'+descargaLbl+'</div></div>'
+    +(ped.produtoVenc?'<div style="padding:3px 12px 3px 0;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Venc. Produto</div><div style="font-size:11px;font-weight:bold;">'+ped.produtoVenc+'</div></div>':'')
+    +(ped.prazoEntrega?'<div style="padding:3px 12px 3px 0;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Prazo Entrega</div><div style="font-size:11px;font-weight:bold;">'+ped.prazoEntrega+'</div></div>':'')
+    +(ped.pesoPedido?'<div style="padding:3px 12px 3px 0;margin-right:16px;margin-bottom:6px;"><div style="font-size:9px;text-transform:uppercase;color:#555;">Peso Total</div><div style="font-size:11px;font-weight:bold;">'+ped.pesoPedido+' kg</div></div>':'')
     +'</div>'
-    +'<table style="width:100%;border-collapse:collapse;font-size:10px;margin-top:8px;">'
+    +'<table class="pay-tbl" style="width:100%;border-collapse:collapse;font-size:10px;margin-top:8px;">'
     +'<thead></thead><tbody>'
     +'<tr style="border-bottom:none;">'
     +'<td style="font-weight:bold;padding:4px 8px 4px 0;width:190px;vertical-align:top;border-bottom:none;">FORMA DE PAGAMENTO PRODUTO</td>'
