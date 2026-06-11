@@ -1604,6 +1604,17 @@ WhatsApp: [Seu Telefone]</textarea>
 <div class="toast-container" id="toast-container"></div>
 
 <script>
+// ── AUTO-RESTORE via ?restore ──
+(function(){
+  if(window.location.search.includes('restore')) {
+    localStorage.setItem('d7_clientes','[{"id":"mq8aqhtjomcx6","nome":"N. BEVILACQUA JUNIOR LTDA","fantasia":"N. BEVILACQUA JUNIOR EIRELI","cnpj":"05.354.945/0008-00","ie":"","segmento":"","cep":"78643000","endereco":"NORBERTO SCHWANTES S/N - QUADRA04 LOTE 03 LOTE 04","cidade":"QUERENCIA","estado":"MT","tel":"6634015516","email":"","contato":"","gestor":"","desconto":0,"status":"ativo","obs":"","criadoEm":"2026-06-10T16:41:52.567Z"}]');
+    localStorage.setItem('d7_fornecedores','[{"id":"mq8ewq6l66rn8","nome":"SAL NOTA 10 LTDA","cnpj":"40.807.281/0001-03","contato":"","tel":"8433165457","email":"","obs":""}]');
+    localStorage.setItem('d7_produtos','[{"id":"mq8hbsz841au8","fornecedorId":"mq8ewq6l66rn8","nome":"A\u00e7\u00facar Mascavo 1kg","codigo":"ACM-001","categoria":"A\u00e7\u00facar","unidade":"KG","estoque":100,"custo":5.5,"preco":8.9,"margem":38,"ean":"","ncm":"","info":"","descricao":""},{"id":"mq8hnck38a27m","fornecedorId":"mq8ewq6l66rn8","nome":"Sal Parrilla 1kg","codigo":"SAL-001","categoria":"Sal","unidade":"KG","estoque":200,"custo":3.2,"preco":5.9,"margem":45,"ean":"","ncm":"","info":"","descricao":""},{"id":"mq8ikly3dr3s9","fornecedorId":"mq8ewq6l66rn8","nome":"SAL NOTA 10","codigo":"202020","categoria":"","unidade":"UN","estoque":0,"custo":0,"preco":0,"margem":0,"ean":"303030","ncm":"","info":"","descricao":""}]');
+    localStorage.setItem('d7_pedidos','[{"id":"mq8inktijc8g9","numero":1,"clienteId":"mq8aqhtjomcx6","status":"aberto","desconto":0,"obs":"FALAR COM GERENTE DO ESTOQUE","descarga":"cliente","freteTipo":"fob","freteValor":10,"freteVenc":"","produtoVenc":"","prazoEntrega":"15","pesoPedido":"40000","pp1":"30","pp2":"45","pp3":"60","pp4":"","pf1":"15","pf2":"30","pf3":"","itens":[{"produtoId":"mq8hbsz841au8","nome":"A\u00e7\u00facar Mascavo 1kg","unidade":"KG","preco":4.6,"qtd":10,"total":46},{"produtoId":"mq8hnck38a27m","nome":"Sal Parrilla 1kg","unidade":"KG","preco":7.9,"qtd":20,"total":158},{"produtoId":"mq8ikly3dr3s9","nome":"SAL NOTA 10","unidade":"UN","preco":24.9,"qtd":30,"total":747}],"total":951,"criadoEm":"2026-06-10T20:23:33.414Z"}]');
+    window.history.replaceState({}, '', window.location.pathname);
+    alert('Dados restaurados com sucesso!');
+  }
+})();
 // ── STORAGE ──
 var KEY_C='d7_clientes', KEY_F='d7_fornecedores', KEY_P='d7_produtos', KEY_PED='d7_pedidos';
 var clientes=JSON.parse(localStorage.getItem(KEY_C)||'[]');
