@@ -3042,6 +3042,62 @@ function backupJSON(){
   dlJSON(data,'d7hub-backup-'+new Date().toISOString().slice(0,10));
   toast('Backup gerado!','success');
 }
+// ── GOOGLE DRIVE BACKUP ──
+function gDriveGetToken(callback){
+  var clientId=(document.getElementById('gdrive-clientid')||{}).value||gv('cfg-gclient')||'';
+  if(!clientId){alert('Configure o Client ID do Google em Config IA → Google Drive.');return;}
+  function init(){
+    var tc=google.accounts.oauth2.initTokenClient({
+      client_id:clientId,
+      scope:'https://www.googleapis.com/auth/drive.file',
+      callback:function(r){if(r.error){alert('Erro OAuth: '+r.error);return;}callback(r.access_token);}
+    });
+    tc.requestAccessToken({prompt:''});
+  }
+  if(typeof google==='undefined'||!google.accounts){
+    var s=document.createElement('script');
+    s.src='https://accounts.google.com/gsi/client';
+    s.onload=init;document.head.appendChild(s);
+  } else {init();}
+}
+function gDriveSave(){
+  gDriveGetToken(function(token){
+    var data=JSON.stringify({clientes:clientes,fornecedores:fornecedores,produtos:produtos,pedidos:pedidos,tabelasPreco:tabelasPreco,historico:historico},null,2);
+    fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%22d7hub_backup.json%22+and+trashed%3Dfalse',{headers:{'Authorization':'Bearer '+token}})
+    .then(r=>r.json()).then(function(res){
+      var fid=res.files&&res.files[0]?res.files[0].id:null;
+      if(fid){
+        return fetch('https://www.googleapis.com/upload/drive/v3/files/'+fid+'?uploadType=media',{method:'PATCH',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:data});
+      } else {
+        return fetch('https://www.googleapis.com/drive/v3/files',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({name:'d7hub_backup.json',mimeType:'application/json'})})
+        .then(r=>r.json()).then(function(f){
+          return fetch('https://www.googleapis.com/upload/drive/v3/files/'+f.id+'?uploadType=media',{method:'PATCH',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:data});
+        });
+      }
+    }).then(function(){
+      var el=document.getElementById('gdrive-status');
+      if(el)el.textContent='✅ Salvo no Drive: '+new Date().toLocaleString('pt-BR');
+      else alert('✅ Backup salvo no Google Drive!');
+    }).catch(function(e){alert('Erro Drive: '+e.message);});
+  });
+}
+function gDriveRestore(){
+  gDriveGetToken(function(token){
+    fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%22d7hub_backup.json%22+and+trashed%3Dfalse',{headers:{'Authorization':'Bearer '+token}})
+    .then(r=>r.json()).then(function(res){
+      if(!res.files||!res.files[0]){alert('Nenhum backup encontrado no Drive.');return Promise.reject('no file');}
+      return fetch('https://www.googleapis.com/drive/v3/files/'+res.files[0].id+'?alt=media',{headers:{'Authorization':'Bearer '+token}});
+    }).then(r=>r.json()).then(function(d){
+      if(d.clientes){localStorage.setItem('d7_clientes',JSON.stringify(d.clientes));clientes=d.clientes;}
+      if(d.fornecedores){localStorage.setItem('d7_fornecedores',JSON.stringify(d.fornecedores));fornecedores=d.fornecedores;}
+      if(d.produtos){localStorage.setItem('d7_produtos',JSON.stringify(d.produtos));produtos=d.produtos;}
+      if(d.pedidos){localStorage.setItem('d7_pedidos',JSON.stringify(d.pedidos));pedidos=d.pedidos;}
+      if(d.tabelasPreco){localStorage.setItem('d7_tabelas',JSON.stringify(d.tabelasPreco));tabelasPreco=d.tabelasPreco;}
+      if(d.historico){localStorage.setItem('d7_historico',JSON.stringify(d.historico));historico=d.historico;}
+      alert('✅ Dados restaurados do Google Drive!');location.reload();
+    }).catch(function(e){if(e!=='no file')alert('Erro Drive: '+e.message);});
+  });
+}
 function restaurarJSON(input){
   var file=input.files[0];if(!file)return;
   var reader=new FileReader();
