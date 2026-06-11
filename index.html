@@ -3044,7 +3044,7 @@ function backupJSON(){
 }
 // ── GOOGLE DRIVE BACKUP ──
 function gDriveGetToken(callback){
-  var clientId=(document.getElementById('gdrive-clientid')||{}).value||gv('cfg-gclient')||'';
+  var clientId=(document.getElementById('gdrive-clientid')||{}).value||gv('cfg-gclient')||'283973846228-d25qk8gglbh8ckc5ba66oq6b592qss60.apps.googleusercontent.com';
   if(!clientId){alert('Configure o Client ID do Google em Config IA → Google Drive.');return;}
   function init(){
     var tc=google.accounts.oauth2.initTokenClient({
