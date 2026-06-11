@@ -1323,7 +1323,7 @@ WhatsApp: [Seu Telefone]</textarea>
 
 <!-- MODAL PEDIDO -->
 <div class="overlay" id="modal-pedido">
-  <div class="modal modal-lg">
+  <div class="modal">
     <div id="modal-ped-topbar">
       <h3>📋 <span id="modal-pedido-title">Novo Pedido</span></h3>
       <div class="ped-header-btns">
@@ -2094,13 +2094,11 @@ function previewPedido(){
   var cliSel=document.getElementById('fp-cliente-pedido');
   var cliNome=cliSel&&cliSel.selectedIndex>=0?cliSel.options[cliSel.selectedIndex].text:'—';
   if(!cliNome||cliNome.indexOf('Selecio')>=0)cliNome='—';
-  var cliLetra=(cliNome!='—'?cliNome.trim().charAt(0).toUpperCase():'?');
   var fornSel=document.getElementById('sel-forn-pedido');
   var fornNome=fornSel&&fornSel.selectedIndex>0?fornSel.options[fornSel.selectedIndex].text:'—';
-  var fornLetra=(fornNome!='—'?fornNome.trim().charAt(0).toUpperCase():'?');
   var statusEl=document.getElementById('fp-status-pedido');
   var statusVal=statusEl?statusEl.value||'Aberto':'Aberto';
-  var desconto=document.getElementById('fp-desconto-pedido')?document.getElementById('fp-desconto-pedido').value||'0':'0';
+  var desconto=document.getElementById('fp-desconto-pedido')?document.getElementById('fp-desconto-pedido').value||'':'';
   var obs=document.getElementById('fp-obs-pedido')?document.getElementById('fp-obs-pedido').value||'':'';
   var prazoEnt=document.getElementById('fp-prazo-entrega')?document.getElementById('fp-prazo-entrega').value||'':'';
   var peso=document.getElementById('fp-peso-pedido')?document.getElementById('fp-peso-pedido').value||'':'';
@@ -2109,7 +2107,6 @@ function previewPedido(){
   var freteTipoEl=document.getElementById('fp-frete-tipo');
   var freteTipoVal=freteTipoEl?freteTipoEl.value||'':'';
   var freteValor=document.getElementById('fp-frete-valor')?document.getElementById('fp-frete-valor').value||'':'';
-  var prodVenc=document.getElementById('fp-produto-venc')?document.getElementById('fp-produto-venc').value||'':'';
   var totalEl=document.getElementById('pedido-total-value');
   var total=totalEl?totalEl.textContent.trim()||'R$ 0,00':'R$ 0,00';
   var ppQtd=parseInt((document.getElementById('fp-pp-qtd')||{value:'1'}).value)||1;
@@ -2129,70 +2126,63 @@ function previewPedido(){
     var tot=tds[5]?tds[5].textContent.trim():'';
     return nome?{nome:nome,qtd:qtd,emb:emb,un:un,unit:unit,total:tot}:null;
   }).filter(Boolean);
-  var totalItens=itens.length;
   var h='';
-  h+='<div style="background:var(--primary);padding:14px 18px;margin:-28px -32px 18px;display:flex;justify-content:space-between;align-items:center;">';
-  h+='<div><div style="font-size:14px;font-weight:700;color:#fff;letter-spacing:.5px;">D7 REPRESENTAÇÃO</div>';
-  if(fornNome!='—'||cliNome!='—')h+='<div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;">'+fornNome+' → '+cliNome+'</div>';
-  h+='</div>';
-  h+='<span style="background:rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;">'+statusVal.toUpperCase()+'</span>';
-  h+='</div>';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">';
-  h+='<div style="border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;align-items:center;gap:10px;">';
-  h+='<div style="width:36px;height:36px;border-radius:50%;background:rgba(124,58,237,.2);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--primary);flex-shrink:0;">'+fornLetra+'</div>';
-  h+='<div><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:2px;">FORNECEDOR</div><div style="font-size:12px;font-weight:600;line-height:1.3;">'+fornNome+'</div></div></div>';
-  h+='<div style="border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;align-items:center;gap:10px;">';
-  h+='<div style="width:36px;height:36px;border-radius:50%;background:rgba(16,185,129,.15);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#10b981;flex-shrink:0;">'+cliLetra+'</div>';
-  h+='<div><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:2px;">CLIENTE</div><div style="font-size:12px;font-weight:600;line-height:1.3;">'+cliNome+'</div></div></div>';
-  h+='</div>';
-  h+='<div style="margin-bottom:16px;">';
-  h+='<div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin-bottom:8px;">'+(totalItens>0?totalItens+' ITEM'+(totalItens>1?'S':''):'ITENS DO PEDIDO')+'</div>';
-  h+='<div style="display:grid;grid-template-columns:1fr 52px 52px 40px 72px 72px;gap:4px;padding:5px 8px;border-bottom:1px solid var(--border);margin-bottom:4px;">';
-  h+='<span style="font-size:10px;font-weight:600;opacity:.5;letter-spacing:.5px;">PRODUTO</span>';
-  h+='<span style="font-size:10px;font-weight:600;opacity:.5;letter-spacing:.5px;text-align:center;">QTD</span>';
-  h+='<span style="font-size:10px;font-weight:600;opacity:.5;letter-spacing:.5px;text-align:center;">EMB</span>';
-  h+='<span style="font-size:10px;font-weight:600;opacity:.5;letter-spacing:.5px;text-align:center;">UN</span>';
-  h+='<span style="font-size:10px;font-weight:600;opacity:.5;letter-spacing:.5px;text-align:right;">VL.UNIT</span>';
-  h+='<span style="font-size:10px;font-weight:600;opacity:.5;letter-spacing:.5px;text-align:right;">VL.TOTAL</span>';
-  h+='</div>';
-  if(itens.length){
-    itens.forEach(function(it,idx){
-      h+='<div style="display:grid;grid-template-columns:1fr 52px 52px 40px 72px 72px;gap:4px;align-items:center;padding:7px 8px;border-radius:6px;'+(idx%2?'background:rgba(255,255,255,.04);':'')+'">';
-      h+='<div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+it.nome+'</div>';
-      h+='<div style="text-align:center;"><span style="background:rgba(124,58,237,.2);color:var(--primary);font-size:13px;font-weight:700;padding:2px 8px;border-radius:4px;display:inline-block;">'+it.qtd+'</span></div>';
-      h+='<div style="font-size:12px;text-align:center;opacity:.7;">'+it.emb+'</div>';
-      h+='<div style="font-size:12px;text-align:center;opacity:.7;">'+it.un+'</div>';
-      h+='<div style="font-size:12px;text-align:right;opacity:.7;">'+it.unit+'</div>';
-      h+='<div style="font-size:13px;font-weight:700;text-align:right;color:var(--primary);">'+it.total+'</div>';
-      h+='</div>';
-    });
-  }else{
-    h+='<div style="text-align:center;padding:24px;opacity:.3;font-style:italic;font-size:12px;">Adicione produtos no formulário</div>';
+  h+='<div style="background:var(--primary);padding:14px 20px;margin:-28px -32px 20px;display:flex;justify-content:space-between;align-items:center;">';
+  h+='<div><div style="font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px;">D7 REPRESENTAÇÃO</div>';
+  if(fornNome!='—'||cliNome!='—')h+='<div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;">Pedido de compra · '+fornNome+' → '+cliNome+'</div>';
+  h+='</div><span style="background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:.5px;">'+statusVal.toUpperCase()+'</span></div>';
+  var totalItens=itens.length;
+  if(totalItens>0||true){
+    h+='<div style="font-size:10px;letter-spacing:.8px;opacity:.45;margin-bottom:10px;">'+(totalItens>0?totalItens+' ITEM'+(totalItens>1?'S':''):'ITENS DO PEDIDO')+'</div>';
+    h+='<table style="width:100%;border-collapse:collapse;margin-bottom:20px;">';
+    h+='<thead><tr style="border-bottom:1px solid var(--border);">';
+    h+='<th style="text-align:left;padding:6px 0;font-size:11px;font-weight:600;opacity:.5;letter-spacing:.5px;">PRODUTO</th>';
+    h+='<th style="text-align:center;padding:6px 8px;font-size:11px;font-weight:600;opacity:.5;letter-spacing:.5px;">QTD</th>';
+    h+='<th style="text-align:right;padding:6px 8px;font-size:11px;font-weight:600;opacity:.5;letter-spacing:.5px;">UNIT.</th>';
+    h+='<th style="text-align:right;padding:6px 0;font-size:11px;font-weight:600;opacity:.5;letter-spacing:.5px;">TOTAL</th>';
+    h+='</tr></thead><tbody>';
+    if(itens.length){
+      itens.forEach(function(it,idx){
+        h+='<tr style="border-bottom:1px solid rgba(255,255,255,.06);">';
+        h+='<td style="padding:10px 0;">';
+        h+='<div style="font-size:13px;font-weight:500;">'+it.nome+'</div>';
+        if(it.emb||it.un)h+='<div style="font-size:11px;opacity:.45;margin-top:2px;">'+[it.emb,it.un].filter(Boolean).join(' · ')+'</div>';
+        h+='</td>';
+        h+='<td style="text-align:center;padding:10px 8px;"><span style="background:rgba(124,58,237,.25);color:var(--primary);font-size:14px;font-weight:700;padding:3px 10px;border-radius:6px;">'+it.qtd+'</span></td>';
+        h+='<td style="text-align:right;padding:10px 8px;font-size:13px;opacity:.65;">'+it.unit+'</td>';
+        h+='<td style="text-align:right;padding:10px 0;font-size:14px;font-weight:700;color:var(--primary);">'+it.total+'</td>';
+        h+='</tr>';
+      });
+    }else{
+      h+='<tr><td colspan="4" style="text-align:center;padding:28px 0;opacity:.25;font-style:italic;font-size:13px;">Adicione produtos no formulário</td></tr>';
+    }
+    h+='</tbody></table>';
   }
+  h+='<div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:20px;">';
+  if(desconto&&parseFloat(desconto)>0)h+='<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;"><span style="opacity:.6;">Subtotal</span><span>—</span></div><div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;"><span style="color:#f59e0b;">Desconto '+desconto+'%</span><span style="color:#f59e0b;">− —</span></div>';
+  if(freteValor&&parseFloat(freteValor)>0)h+='<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;"><span style="opacity:.6;">Frete '+freteTipoVal+'</span><span style="opacity:.7;">R$ '+freteValor+'</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:17px;font-weight:700;"><span>Total</span><span style="color:var(--primary);">'+total+'</span></div>';
   h+='</div>';
-  h+='<div style="display:flex;justify-content:flex-end;margin-bottom:16px;">';
-  h+='<div style="min-width:55%;border:1px solid var(--border);border-radius:8px;overflow:hidden;">';
-  if(desconto&&desconto!='0')h+='<div style="display:flex;justify-content:space-between;padding:7px 12px;font-size:12px;border-bottom:1px solid var(--border);"><span style="opacity:.6;">Desconto</span><span style="color:#f59e0b;font-weight:600;">−'+desconto+'%</span></div>';
-  if(freteValor&&freteValor!='0')h+='<div style="display:flex;justify-content:space-between;padding:7px 12px;font-size:12px;border-bottom:1px solid var(--border);"><span style="opacity:.6;">Frete ('+freteTipoVal+')</span><span>R$ '+freteValor+'</span></div>';
-  h+='<div style="display:flex;justify-content:space-between;padding:10px 12px;font-size:16px;font-weight:800;background:rgba(124,58,237,.1);"><span>TOTAL</span><span style="color:var(--primary);">'+total+'</span></div>';
-  h+='</div></div>';
-  var info=[];
-  if(prazoEnt)info.push({l:'PRAZO',v:prazoEnt+' dias'});
-  if(peso)info.push({l:'PESO',v:peso+' kg'});
-  if(descargaVal)info.push({l:'DESCARGA',v:descargaVal});
-  if(prodVenc)info.push({l:'VENC. PRODUTO',v:prodVenc});
-  if(info.length){
-    h+='<div style="display:grid;grid-template-columns:repeat('+Math.min(info.length,4)+',1fr);gap:8px;margin-bottom:16px;">';
-    info.forEach(function(x){h+='<div style="border:1px solid var(--border);border-radius:6px;padding:8px 10px;"><div style="font-size:9px;letter-spacing:.8px;opacity:.4;margin-bottom:3px;">'+x.l+'</div><div style="font-size:13px;font-weight:700;">'+x.v+'</div></div>';});
+  var hasInfo=(ppDatas.length||pfDatas.length||prazoEnt||peso||descargaVal);
+  if(hasInfo){
+    h+='<div style="display:grid;grid-template-columns:'+(ppDatas.length&&(prazoEnt||peso||descargaVal)?'1fr 1fr':'1fr')+';gap:12px;">';
+    if(ppDatas.length||pfDatas.length){
+      var bols='';
+      if(ppDatas.length){bols+='<div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin-bottom:8px;">BOLETOS FORNECEDOR</div>';bols+=ppDatas.map(function(d,i){return '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06);"><span style="opacity:.5;">'+(i+1)+'ª parcela</span><strong>'+d+'</strong></div>';}).join('');}
+      if(pfDatas.length){bols+='<div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin:'+(ppDatas.length?'12px':'0')+'px 0 8px;">BOLETOS FRETE</div>';bols+=pfDatas.map(function(d,i){return '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06);"><span style="opacity:.5;">'+(i+1)+'ª parcela</span><strong>'+d+'</strong></div>';}).join('');}
+      h+='<div>'+bols+'</div>';
+    }
+    var entrega='';
+    if(prazoEnt||peso||descargaVal){
+      entrega+='<div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin-bottom:8px;">ENTREGA</div>';
+      if(prazoEnt)entrega+='<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06);"><span style="opacity:.5;">Prazo</span><strong>'+prazoEnt+' dias</strong></div>';
+      if(peso)entrega+='<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06);"><span style="opacity:.5;">Peso total</span><strong>'+peso+' kg</strong></div>';
+      if(descargaVal)entrega+='<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="opacity:.5;">Descarga</span><strong>'+descargaVal+'</strong></div>';
+      h+='<div>'+entrega+'</div>';
+    }
     h+='</div>';
   }
-  if(ppDatas.length||pfDatas.length){
-    h+='<div style="display:grid;grid-template-columns:'+(ppDatas.length&&pfDatas.length?'1fr 1fr':'1fr')+';gap:10px;margin-bottom:16px;">';
-    if(ppDatas.length){h+='<div style="border:1px solid var(--border);border-radius:8px;padding:10px;"><div style="font-size:9px;letter-spacing:.8px;opacity:.4;margin-bottom:8px;">BOLETOS FORNECEDOR</div>'+ppDatas.map(function(d,i){return '<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="opacity:.5;">'+(i+1)+'ª parc.</span><strong>'+d+'</strong></div>';}).join('')+'</div>';}
-    if(pfDatas.length){h+='<div style="border:1px solid var(--border);border-radius:8px;padding:10px;"><div style="font-size:9px;letter-spacing:.8px;opacity:.4;margin-bottom:8px;">BOLETOS FRETE</div>'+pfDatas.map(function(d,i){return '<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="opacity:.5;">'+(i+1)+'ª parc.</span><strong>'+d+'</strong></div>';}).join('')+'</div>';}
-    h+='</div>';
-  }
-  if(obs)h+='<div style="border:1px solid var(--border);border-radius:8px;padding:10px;"><div style="font-size:9px;letter-spacing:.8px;opacity:.4;margin-bottom:6px;">OBSERVAÇÕES</div><div style="font-size:12px;font-style:italic;opacity:.75;">'+obs+'</div></div>';
+  if(obs)h+='<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);"><div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin-bottom:6px;">OBSERVAÇÕES</div><div style="font-size:13px;font-style:italic;opacity:.7;">'+obs+'</div></div>';
   el.innerHTML=h;
 }
 if(!window._previewInterval){window._previewInterval=setInterval(function(){var m=document.getElementById('modal-pedido');if(m&&getComputedStyle(m).display!='none')previewPedido();},500);}
