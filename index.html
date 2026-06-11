@@ -141,7 +141,7 @@ tr:hover td { background: var(--surface2); }
     .modal-close-ped { background:none; border:none; color:rgba(255,255,255,.7); font-size:20px; cursor:pointer; padding:4px 10px; line-height:1; flex-shrink:0; }
     .modal-close-ped:hover { color:#fff; }
     #modal-ped-body { flex:1; display:flex; overflow:hidden; }
-    #modal-ped-form-bar { flex:0 0 40%; min-width:380px; overflow-y:auto; padding:20px; background:var(--surface); border-right:2px solid var(--border); }
+    #modal-ped-form-bar { flex:0 0 60%; min-width:480px; overflow-y:auto; padding:20px; background:var(--surface); border-right:2px solid var(--border); }
     #modal-ped-preview-area { flex:1; overflow-y:auto; background:rgba(0,0,0,.2); padding:24px; display:flex; justify-content:center; }
     #pedido-live-preview { background:var(--surface); border-radius:10px; padding:28px 32px; max-width:100%; width:100%; box-shadow:0 4px 32px rgba(0,0,0,.5); }
 .modal-lg { width: 860px; }
@@ -2113,19 +2113,7 @@ function previewPedido(){
   var pfQtd=parseInt((document.getElementById('fp-pf-qtd')||{value:'0'}).value)||0;
   var ppDatas=[];for(var i=1;i<=ppQtd;i++){var dd=document.getElementById('fp-pp-d'+i);if(dd&&dd.value)ppDatas.push(dd.value);}
   var pfDatas=[];for(var jj=1;jj<=pfQtd;jj++){var ee=document.getElementById('fp-pf-d'+jj);if(ee&&ee.value)pfDatas.push(ee.value);}
-  var rows=Array.from(document.querySelectorAll('#pedido-items-body tr'));
-  var itens=rows.map(function(tr){
-    var tds=tr.querySelectorAll('td');
-    if(tds.length<5)return null;
-    var nome=tds[0]?tds[0].textContent.trim():'';
-    var qtdEl2=tds[1]?tds[1].querySelector('input'):null;
-    var qtd=qtdEl2?qtdEl2.value:'';
-    var emb=tds[2]?tds[2].textContent.trim():'';
-    var un=tds[3]?tds[3].textContent.trim():'';
-    var unit=tds[4]?tds[4].textContent.trim():'';
-    var tot=tds[5]?tds[5].textContent.trim():'';
-    return nome?{nome:nome,qtd:qtd,emb:emb,un:un,unit:unit,total:tot}:null;
-  }).filter(Boolean);
+  var itens=itensPedido.map(function(it){return {nome:it.nome,qtd:it.qtd,emb:it.emb||'',un:it.unidade||'UN',unit:it.preco,total:it.total};}).filter(Boolean);
   var h='';
   h+='<div style="background:var(--primary);padding:14px 20px;margin:-28px -32px 20px;display:flex;justify-content:space-between;align-items:center;">';
   h+='<div><div style="font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px;">D7 REPRESENTAÇÃO</div>';
