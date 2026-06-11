@@ -1383,16 +1383,18 @@ WhatsApp: [Seu Telefone]</textarea>
         <label class="form-label">Peso Total (kg)</label>
         <input class="form-input" id="fp-peso-pedido" type="number" step="0.01" placeholder="ex: 1500">
       </div>
+        <!-- ===== PARCELAS DINAMICAS - CONCLUIDO - NAO MODIFICAR ===== -->
       <div class="form-group full">
         <label class="form-label" style="font-weight:700;color:var(--primary);margin-bottom:6px;">💳 Boletos Fornecedor</label>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:11px;opacity:.7;">Parcelas:</span><select id="fp-pp-qtd" class="form-input" style="width:60px;padding:3px 6px;" onchange="atualizarParcelas('pp',+this.value)"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select></div>
-        <div id="fp-pp-datas" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        <div id="fp-pp-datas" style="display:flex;flex-direction:column;gap:4px;margin-top:2px;"></div>
       </div>
       <div class="form-group full">
         <label class="form-label" style="font-weight:700;color:var(--primary);margin-bottom:6px;">🚚 Boletos Frete</label>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:11px;opacity:.7;">Parcelas (0=CIF):</span><select id="fp-pf-qtd" class="form-input" style="width:60px;padding:3px 6px;" onchange="atualizarParcelas('pf',+this.value)"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-        <div id="fp-pf-datas" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        <div id="fp-pf-datas" style="display:flex;flex-direction:column;gap:4px;margin-top:2px;"></div>
       </div>
+        <!-- ===== FIM PARCELAS DINAMICAS ===== -->
 
     <div style="margin-bottom:10px;">
       <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Adicionar Produto</div>
@@ -2035,17 +2037,20 @@ function recalcularPedido(){
   document.getElementById('pedido-desconto-display').textContent=desc+'%';
   document.getElementById('pedido-total-value').textContent=fmtMoeda(total);
 }
+// ===== PARCELAS DINAMICAS - CONCLUIDO - NAO MODIFICAR =====
 function atualizarParcelas(tipo,qtd){
   var cont=document.getElementById('fp-'+tipo+'-datas');
   if(!cont)return;
   cont.innerHTML='';
   for(var i=1;i<=qtd;i++){
     var d=document.createElement('div');
-    d.style.cssText='display:flex;flex-direction:column;gap:2px;align-items:center;';
-    d.innerHTML='<span style="font-size:10px;opacity:.6;">'+i+'x</span><input class="form-input" id="fp-'+tipo+'-d'+i+'" type="text" placeholder="DD" style="width:60px;padding:4px;text-align:center;">';
+    d.style.cssText='display:flex;align-items:center;gap:8px;';
+    d.innerHTML='<span style="font-size:11px;opacity:.7;min-width:22px;">'+i+'x</span><input class="form-input" id="fp-'+tipo+'-d'+i+'" type="text" placeholder="ex: 30D" style="flex:1;padding:4px 8px;">';
     cont.appendChild(d);
   }
 }
+// ===== FIM PARCELAS DINAMICAS =====
+
 function salvarPedido(){
   var clienteId=document.getElementById('fp-cliente-pedido').value;
   if(!clienteId){toast('Selecione um cliente','error');return;}
