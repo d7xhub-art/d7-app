@@ -133,8 +133,16 @@ tr:hover td { background: var(--surface2); }
 /* MODAL */
 .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
 .overlay.open { display: flex; }
-.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; width: 98vw; max-width: 98vw; max-height: 96vh; overflow-y: auto; padding: 20px; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,.6); animation: fadeUp .2s ease; }
-.modal-sm { width: 480px; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 0; width: 100vw; max-width: 100vw; height: 100vh; max-height: 100vh; overflow: hidden; padding: 0; position: relative; display: flex; flex-direction: column; box-shadow: none; animation: fadeUp .2s ease; }
+
+    #modal-ped-topbar { display:flex; align-items:center; gap:12px; padding:12px 20px; background:var(--primary); flex-shrink:0; min-height:56px; }
+    #modal-ped-topbar h3 { font-size:15px; font-weight:700; margin:0; color:#fff; white-space:nowrap; }
+    .ped-header-btns { display:flex; gap:8px; margin-left:auto; }
+    .modal-close-ped { background:none; border:none; color:rgba(255,255,255,.7); font-size:20px; cursor:pointer; padding:4px 10px; line-height:1; flex-shrink:0; }
+    .modal-close-ped:hover { color:#fff; }
+    #modal-ped-form-bar { padding:12px 20px 16px; background:var(--surface); border-bottom:2px solid var(--border); flex-shrink:0; overflow-y:auto; max-height:50vh; }
+    #modal-ped-preview-area { flex:1; overflow-y:auto; background:rgba(0,0,0,.25); padding:28px 20px; display:flex; justify-content:center; }
+    #pedido-live-preview { background:var(--surface); border-radius:10px; padding:28px 32px; max-width:700px; width:100%; box-shadow:0 4px 32px rgba(0,0,0,.5); }.modal-sm { width: 480px; }
 .modal-lg { width: 860px; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
 .modal-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
@@ -1315,8 +1323,15 @@ WhatsApp: [Seu Telefone]</textarea>
 <!-- MODAL PEDIDO -->
 <div class="overlay" id="modal-pedido">
   <div class="modal modal-lg">
-    <button class="modal-close" onclick="fecharModal('modal-pedido')">✕</button>
-    <div class="modal-title">🛒 <span id="modal-pedido-title">Novo Pedido</span></div>
+    <div id="modal-ped-topbar">
+      <h3>📋 <span id="modal-pedido-titulo">Novo Pedido</span></h3>
+      <div class="ped-header-btns">
+        <button class="btn btn-outline" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3);" onclick="fecharModal('modal-pedido')">Cancelar</button>
+        <button class="btn btn-green" onclick="salvarPedido()">🛒 Salvar</button>
+      </div>
+      <button class="modal-close-ped" onclick="fecharModal('modal-pedido')">✕</button>
+    </div>
+    <div id="modal-ped-form-bar" oninput="previewPedido()" onchange="previewPedido()">
     <div class="form-grid" style="margin-bottom:16px;">
       <div class="form-group">
         <label class="form-label">Cliente *</label>
@@ -1426,9 +1441,9 @@ WhatsApp: [Seu Telefone]</textarea>
       <span class="pedido-total-value" id="pedido-total-value">R$ 0,00</span>
     </div>
 
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="fecharModal('modal-pedido')">Cancelar</button>
-      <button class="btn btn-green" onclick="salvarPedido()">💾 Salvar Pedido</button>
+    </div>
+    <div id="modal-ped-preview-area">
+      <div id="pedido-live-preview"><p style="text-align:center;opacity:.3;padding:60px 0;font-size:14px;">Preencha os dados acima para ver o preview do pedido</p></div>
     </div>
   </div>
 </div>
@@ -2070,6 +2085,65 @@ function atualizarParcelas(tipo,qtd){
 }
 // ===== FIM PARCELAS DINAMICAS =====
 
+function previewPedido(){
+  var el=document.getElementById('pedido-live-preview');
+  if(!el)return;
+  var cliSel=document.getElementById('fp-cliente-pedido');
+  var cliNome=cliSel&&cliSel.selectedIndex>=0?cliSel.options[cliSel.selectedIndex].text:'—';
+  if(!cliNome||cliNome.indexOf('Selecionar')>=0)cliNome='—';
+  var fornSel=document.getElementById('sel-forn-pedido');
+  var fornNome=fornSel&&fornSel.selectedIndex>0?fornSel.options[fornSel.selectedIndex].text:'';
+  var statusEl=document.getElementById('fp-status-pedido');
+  var statusVal=statusEl?statusEl.value||'—':'—';
+  var desconto=document.getElementById('fp-desconto-pedido')?document.getElementById('fp-desconto-pedido').value||'0':'0';
+  var obs=document.getElementById('fp-obs-pedido')?document.getElementById('fp-obs-pedido').value||'':'';
+  var prazoEnt=document.getElementById('fp-prazo-entrega')?document.getElementById('fp-prazo-entrega').value||'—':'—';
+  var peso=document.getElementById('fp-peso-pedido')?document.getElementById('fp-peso-pedido').value||'':'';
+  var freteTipoEl=document.getElementById('fp-frete-tipo');
+  var freteTipoVal=freteTipoEl?freteTipoEl.value||'':'';
+  var freteValor=document.getElementById('fp-frete-valor')?document.getElementById('fp-frete-valor').value||'0':'0';
+  var totalEl=document.getElementById('pedido-total-value');
+  var total=totalEl?totalEl.textContent.trim()||'R$ 0,00':'R$ 0,00';
+  var ppQtd=parseInt((document.getElementById('fp-pp-qtd')||{value:'1'}).value)||1;
+  var pfQtd=parseInt((document.getElementById('fp-pf-qtd')||{value:'0'}).value)||0;
+  var ppDatas=[];for(var i=1;i<=ppQtd;i++){var dd=document.getElementById('fp-pp-d'+i);if(dd&&dd.value)ppDatas.push(dd.value);}
+  var pfDatas=[];for(var jj=1;jj<=pfQtd;jj++){var ee=document.getElementById('fp-pf-d'+jj);if(ee&&ee.value)pfDatas.push(ee.value);}
+  var rows=Array.from(document.querySelectorAll('#pedido-items-body tr'));
+  var itens=rows.map(function(tr){var tds=tr.querySelectorAll('td');if(tds.length<6)return null;var nome=tds[0]?tds[0].textContent.trim():'';var qtdEl2=tds[1]?tds[1].querySelector('input'):null;var qtd=qtdEl2?qtdEl2.value:'';var tot=tds[5]?tds[5].textContent.trim():'';return nome?{nome:nome,qtd:qtd,total:tot}:null;}).filter(Boolean);
+  var h='<div style="font-size:10px;letter-spacing:1.5px;font-weight:700;color:var(--primary);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--primary);display:flex;align-items:center;justify-content:space-between;">';
+  h+='<span>PEDIDO</span><span style="font-size:12px;font-weight:400;opacity:.6;">'+statusVal+'</span></div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">';
+  h+='<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px;"><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:4px;">CLIENTE</div><div style="font-size:15px;font-weight:700;">'+cliNome+'</div></div>';
+  if(fornNome){h+='<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px;"><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:4px;">FORNECEDOR</div><div style="font-size:14px;font-weight:600;">'+fornNome+'</div></div>';}
+  h+='</div>';
+  if(itens.length){
+    h+='<div style="margin-bottom:20px;"><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:8px;">PRODUTOS</div>';
+    h+='<table style="width:100%;border-collapse:collapse;"><thead><tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:6px 0;font-size:10px;opacity:.5;font-weight:600;">PRODUTO</th><th style="text-align:center;padding:6px;font-size:10px;opacity:.5;font-weight:600;">QTD</th><th style="text-align:right;padding:6px 0;font-size:10px;opacity:.5;font-weight:600;">TOTAL</th></tr></thead><tbody>';
+    itens.forEach(function(it){h+='<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:8px 0;font-size:13px;">'+it.nome+'</td><td style="text-align:center;font-size:13px;">'+it.qtd+'</td><td style="text-align:right;font-size:13px;font-weight:600;">'+it.total+'</td></tr>';});
+    h+='</tbody></table></div>';
+  } else {
+    h+='<div style="text-align:center;padding:20px;opacity:.25;font-size:12px;border:1px dashed rgba(255,255,255,.12);border-radius:8px;margin-bottom:20px;">Nenhum produto adicionado</div>';
+  }
+  h+='<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:16px;margin-bottom:20px;">';
+  if(desconto&&desconto!='0'){h+='<div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;"><span style="opacity:.6;">Desconto</span><span style="color:#f59e0b;">-'+desconto+'%</span></div>';}
+  if(freteValor&&freteValor!='0'){h+='<div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;"><span style="opacity:.6;">Frete ('+freteTipoVal+')</span><span>R$ '+freteValor+'</span></div>';}
+  h+='<div style="display:flex;justify-content:space-between;font-size:22px;font-weight:800;border-top:1px solid var(--border);padding-top:12px;margin-top:4px;"><span>TOTAL</span><span style="color:var(--primary);">'+total+'</span></div></div>';
+  if(ppDatas.length||pfDatas.length){
+    h+='<div style="display:grid;grid-template-columns:'+(ppDatas.length&&pfDatas.length?'1fr 1fr':'1fr')+';gap:12px;margin-bottom:20px;">';
+    if(ppDatas.length){h+='<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px;"><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:8px;">BOLETOS FORNECEDOR</div>'+ppDatas.map(function(d,i){return '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="opacity:.6;">Parcela '+(i+1)+'</span><strong>'+d+'</strong></div>';}).join('')+'</div>';}
+    if(pfDatas.length){h+='<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px;"><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:8px;">BOLETOS FRETE</div>'+pfDatas.map(function(d,i){return '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="opacity:.6;">Parcela '+(i+1)+'</span><strong>'+d+'</strong></div>';}).join('')+'</div>';}
+    h+='</div>';
+  }
+  if(prazoEnt!='—'||peso){
+    h+='<div style="display:flex;gap:12px;margin-bottom:20px;">';
+    if(prazoEnt!='—'){h+='<div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:12px;"><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:4px;">PRAZO ENTREGA</div><div style="font-weight:700;">'+prazoEnt+' dias</div></div>';}
+    if(peso){h+='<div style="flex:1;background:rgba(255,255,255,.04);border-radius:8px;padding:12px;"><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:4px;">PESO TOTAL</div><div style="font-weight:700;">'+peso+' kg</div></div>';}
+    h+='</div>';
+  }
+  if(obs){h+='<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:12px;"><div style="font-size:9px;letter-spacing:1px;opacity:.45;margin-bottom:6px;">OBSERVAÇÕES</div><div style="font-size:13px;font-style:italic;opacity:.8;">'+obs+'</div></div>';}
+  el.innerHTML=h;
+}
+if(!window._previewInterval){window._previewInterval=setInterval(function(){var m=document.getElementById('modal-pedido');if(m&&getComputedStyle(m).display!='none')previewPedido();},500);}
 function salvarPedido(){
   var clienteId=document.getElementById('fp-cliente-pedido').value;
   if(!clienteId){toast('Selecione um cliente','error');return;}
