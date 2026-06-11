@@ -2156,9 +2156,7 @@ function previewPedido(){
     h+='<div style="display:grid;grid-template-columns:'+(ppDatas.length&&(prazoEnt||peso||descargaVal)?'1fr 1fr':'1fr')+';gap:12px;">';
     if(ppDatas.length||pfDatas.length){
       var bols='';
-      if(ppDatas.length){bols+='<div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin-bottom:8px;">BOLETOS FORNECEDOR</div>';bols+=ppDatas.map(function(d,i){return '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06);"><span style="opacity:.5;">'+(i+1)+'ª parcela</span><strong>'+d+'</strong></div>';}).join('');}
-      if(pfDatas.length){bols+='<div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin:'+(ppDatas.length?'12px':'0')+'px 0 8px;">BOLETOS FRETE</div>';bols+=pfDatas.map(function(d,i){return '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06);"><span style="opacity:.5;">'+(i+1)+'ª parcela</span><strong>'+d+'</strong></div>';}).join('');}
-      h+='<div>'+bols+'</div>';
+      if(ppDatas.length){bols+='<div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin-bottom:8px;">BOLETOS FORNECEDOR</div>';bols+=ppDatas.map(function(d){return '<span style="display:inline-block;background:rgba(124,58,237,.15);color:var(--primary);padding:2px 10px;border-radius:4px;font-size:13px;font-weight:700;margin:2px 4px 2px 0;">'+d+'</span>';}).join('');      if(pfDatas.length){bols+='<div style="font-size:10px;letter-spacing:.8px;opacity:.4;margin:'+(ppDatas.length?'12px':'0')+'px 0 8px;">BOLETOS FRETE</div>';bols+=pfDatas.map(function(d){return '<span style="display:inline-block;background:rgba(124,58,237,.15);color:var(--primary);padding:2px 10px;border-radius:4px;font-size:13px;font-weight:700;margin:2px 4px 2px 0;">'+d+'</span>';}).join('');      h+='<div>'+bols+'</div>';
     }
     var entrega='';
     if(prazoEnt||peso||descargaVal){
