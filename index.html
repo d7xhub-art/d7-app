@@ -140,8 +140,9 @@ tr:hover td { background: var(--surface2); }
     .ped-header-btns { display:flex; gap:8px; margin-left:auto; }
     .modal-close-ped { background:none; border:none; color:rgba(255,255,255,.7); font-size:20px; cursor:pointer; padding:4px 10px; line-height:1; flex-shrink:0; }
     .modal-close-ped:hover { color:#fff; }
-    #modal-ped-form-bar { padding:12px 20px 16px; background:var(--surface); border-bottom:2px solid var(--border); flex-shrink:0; overflow-y:auto; max-height:50vh; }
-    #modal-ped-preview-area { flex:1; overflow-y:auto; background:rgba(0,0,0,.25); padding:28px 20px; display:flex; justify-content:center; }
+    #modal-ped-body { flex:1; display:flex; overflow:hidden; }
+    #modal-ped-form-bar { flex:0 0 44%; overflow-y:auto; padding:20px; background:var(--surface); border-right:2px solid var(--border); }
+    #modal-ped-preview-area { flex:1; overflow-y:auto; background:rgba(0,0,0,.2); padding:24px; display:flex; justify-content:center; }
     #pedido-live-preview { background:var(--surface); border-radius:10px; padding:28px 32px; max-width:700px; width:100%; box-shadow:0 4px 32px rgba(0,0,0,.5); }.modal-sm { width: 480px; }
 .modal-lg { width: 860px; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
@@ -1324,13 +1325,14 @@ WhatsApp: [Seu Telefone]</textarea>
 <div class="overlay" id="modal-pedido">
   <div class="modal modal-lg">
     <div id="modal-ped-topbar">
-      <h3>📋 <span id="modal-pedido-titulo">Novo Pedido</span></h3>
+      <h3>📋 <span id="modal-pedido-title">Novo Pedido</span></h3>
       <div class="ped-header-btns">
         <button class="btn btn-outline" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3);" onclick="fecharModal('modal-pedido')">Cancelar</button>
         <button class="btn btn-green" onclick="salvarPedido()">🛒 Salvar</button>
       </div>
       <button class="modal-close-ped" onclick="fecharModal('modal-pedido')">✕</button>
     </div>
+    <div id="modal-ped-body">
     <div id="modal-ped-form-bar" oninput="previewPedido()" onchange="previewPedido()">
     <div class="form-grid" style="margin-bottom:16px;">
       <div class="form-group">
@@ -1444,6 +1446,7 @@ WhatsApp: [Seu Telefone]</textarea>
     </div>
     <div id="modal-ped-preview-area">
       <div id="pedido-live-preview"><p style="text-align:center;opacity:.3;padding:60px 0;font-size:14px;">Preencha os dados acima para ver o preview do pedido</p></div>
+    </div>
     </div>
   </div>
 </div>
