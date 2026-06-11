@@ -182,7 +182,7 @@ tr:hover td { background: var(--surface2); }
 
 /* PEDIDO BUILDER */
 .pedido-items { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 14px; }
-.pedido-item-row { display: grid; grid-template-columns: 1fr 100px 110px 90px 36px; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); align-items: center; }
+.pedido-item-row { display: grid; grid-template-columns: 1fr 100px 70px 110px 90px 36px; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); align-items: center; }
 .pedido-item-row:last-child { border-bottom: none; }
 .pedido-item-header { background: var(--surface2); font-size: 11px; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
 .pedido-total { display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding: 12px 16px; background: var(--surface2); border-top: 1px solid var(--border); }
@@ -1416,7 +1416,7 @@ WhatsApp: [Seu Telefone]</textarea>
 
     <div class="pedido-items" id="pedido-items-wrap">
       <div class="pedido-item-row pedido-item-header">
-        <span>Produto</span><span>Qtd</span><span>Preço Unit.</span><span>Total</span><span></span>
+        <span>Produto</span><span>Qtd</span><span>Emb.</span><span>Preço Unit.</span><span>Total</span><span></span>
       </div>
       <div id="pedido-items-body">
         <div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Nenhum item adicionado</div>
@@ -2017,6 +2017,7 @@ function renderItensPedido(){
     return '<div class="pedido-item-row">'
       +'<span>'+esc(it.nome)+'<small style="display:block;color:var(--muted);font-size:10px">'+it.unidade+'</small></span>'
       +'<input type="number" class="form-input" min="0.01" step="0.01" value="'+it.qtd+'" style="width:80px;padding:4px;" onchange="updateItemPedido('+idx+',\'qtd\',this.value)">'
+      +'<span style="font-size:12px;text-align:center">'+(it.emb||'—')+'</span>'
       +'<input type="number" class="form-input" min="0" step="0.01" value="'+it.preco+'" style="width:100px;padding:4px;" onchange="updateItemPedido('+idx+',\'preco\',this.value)">'
       +'<span style="color:var(--accent);font-weight:600;">'+fmtMoeda(it.total)+'</span>'
       +'<button class="btn btn-ghost btn-sm" onclick="removeItemPedido('+idx+')" style="color:var(--danger)">🗑</button>'
