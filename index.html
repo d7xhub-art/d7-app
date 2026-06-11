@@ -922,6 +922,7 @@ WhatsApp: [Seu Telefone]</textarea>
                 <textarea class="form-textarea" id="cfg-prompt" style="min-height:100px;">Você é D7X, assistente da D7 Representação Comercial. Ajude com informações sobre clientes, pedidos e produtos de forma profissional e objetiva.</textarea></div>
             </div>
           </div>
+<!-- ===== BACKUP GOOGLE DRIVE - CONCLUIDO - NAO MODIFICAR ===== -->
           <div class="config-section">
             <div class="config-section-title">☁️ Google Drive (Backup)</div>
             <div class="form-grid">
@@ -1484,6 +1485,7 @@ WhatsApp: [Seu Telefone]</textarea>
   </div>
 </div>
 
+<!-- ===== BACKUP GOOGLE DRIVE - CONCLUIDO - NAO MODIFICAR ===== -->
 <!-- MODAL BACKUP -->
 <div class="overlay" id="modal-backup">
   <div class="modal" style="max-width:460px;">
@@ -3037,6 +3039,7 @@ function loadConfig(){
 }
 
 // ── BACKUP ──
+// ===== BACKUP GOOGLE DRIVE - CONCLUIDO - NAO MODIFICAR =====
 function backupJSON(){
   var data={clientes:clientes,fornecedores:fornecedores,produtos:produtos,pedidos:pedidos,funil:funil,agenda:agenda,historico:getHistoricos(),tarefas:tarefasAuto,automacoes:automacoes,exportadoEm:new Date().toISOString(),versao:'D7HUB_6_2'};
   dlJSON(data,'d7hub-backup-'+new Date().toISOString().slice(0,10));
