@@ -2237,7 +2237,7 @@ function imprimirPedido(id){
   (ped.itens||[]).forEach(function(item){
     htmlPdf+='<tr>'
       +'<td style="font-size:9px;">'+(item.ean||'—')+'</td>'+'<td style="font-size:9px;">'+(item.ncm||'—')+'</td>'+'<td style="font-size:9px;">'+(item.codigo||'—')+'</td>'
-      +'<td style="padding-left:40px">'+(item.nome||'')+'</td>''
+      +'<td style="padding-left:40px">'+(item.nome||'')+'</td>'
       +'<td style="text-align:center">'+(item.qtd||0)+'</td>'+'<td style="text-align:center">'+(item.emb||'—')+'</td>'
       +'<td style="text-align:center">'+(item.unidade||'UN')+'</td>'
       +'<td style="text-align:right">'+fmtMoeda(item.preco)+'</td>'
