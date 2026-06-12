@@ -1419,18 +1419,16 @@ WhatsApp: [Seu Telefone]</textarea>
         <!-- ===== FIM PARCELAS DINAMICAS ===== -->
 
     <div style="margin-bottom:10px;">
-      <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Adicionar Produto</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <select class="form-select" id="sel-forn-pedido" onchange="filtrarProdutosPedido()" style="flex:1;min-width:160px;">
-          <option value="">Filtrar fornecedor...</option>
-        </select>
-        <div style="position:relative;flex:2;min-width:200px;">
-          <input class="form-input" id="prod-busca-input" type="text" placeholder="Digite o produto..." autocomplete="off" oninput="filtrarProdutos()" onfocus="filtrarProdutos()" onblur="setTimeout(function(){var d=document.getElementById('prod-lista-drop');if(d)d.style.display='none';},200)" style="width:100%;">
-          <div id="prod-lista-drop" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;z-index:9999;max-height:220px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.5);"></div>
-          <select id="sel-prod-pedido" style="display:none;"></select>
-        </div>
-        <input class="form-input" id="qtd-pedido" type="number" min="1" value="1" placeholder="Qtd" style="width:80px;">
-        <button class="btn btn-primary" onclick="adicionarItemPedido();var bi=document.getElementById('prod-busca-input');if(bi){bi.value='';var d=document.getElementById('prod-lista-drop');if(d)d.style.display='none';}">+ Adicionar</button>
+          <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
+      <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">📦 Adicionar Produto</div>
+      <select class="form-select" id="sel-forn-pedido" onchange="filtrarProdutosPedido()" style="width:100%;margin-bottom:8px;">
+        <option value="">Todos os fornecedores</option>
+      </select>
+      <div id="prod-catalog" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;max-height:160px;overflow-y:auto;margin-bottom:8px;"></div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span id="prod-selected-nome" style="flex:1;font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">← Selecione um produto</span>
+        <input class="form-input" id="qtd-pedido" type="number" min="1" value="1" placeholder="Qtd" style="width:70px;">
+        <button class="btn btn-primary" onclick="adicionarItemPedido()">+ Adicionar</button>
       </div>
     </div>
 
@@ -2007,49 +2005,44 @@ function aplicarDescontoCliente(){
 
 function filtrarProdutosPedido(){
   var fornId=document.getElementById('sel-forn-pedido').value;
-  var sel=document.getElementById('sel-prod-pedido');
-  sel.innerHTML='<option value="">Selecione o produto...</option>';var bi=document.getElementById('prod-busca-input');if(bi)bi.value='';
-  var prods=fornId?produtos.filter(function(p){return p.fornecedorId===fornId;}):produtos;
-  prods.forEach(function(p){
-    var forn=fornecedores.find(function(f){return f.id===p.fornecedorId;});
-    sel.innerHTML+='<option value="'+p.id+'">'+(forn?'['+esc(forn.nome)+'] ':'')+esc(p.nome)+' — R$ '+fmtNum(p.preco||0)+'</option>';
-  });
+  var catalog=document.getElementById('prod-catalog');
+  if(!catalog)return;
+  var lista=produtos.filter(function(p){return !fornId||p.fornecedorId===fornId;});
+  catalog.innerHTML=lista.length?lista.map(function(p){
+    return '<div onclick="selecionarProdutoPedido(\''+p.id+'\')" id="pcard-'+p.id+'" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 8px;cursor:pointer;font-size:12px;">'
+      +'<div style="font-weight:600;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+p.nome+'</div>'
+      +'<div style="color:var(--text2);">'+(p.unidade||'UN')+' &middot; R$ '+(parseFloat(p.preco)||0).toFixed(2)+'</div>'
+      +'</div>';
+  }).join(''):'<div style="color:var(--text2);font-size:12px;padding:8px;">Nenhum produto cadastrado</div>';
+  window._prodSelecionadoPedido=null;
+  var n=document.getElementById('prod-selected-nome');
+  if(n)n.textContent='← Selecione um produto';
 }
 
-function filtrarProdutos(){
-  var inp=document.getElementById('prod-busca-input');
-  var drop=document.getElementById('prod-lista-drop');
-  var sel=document.getElementById('sel-prod-pedido');
-  if(!inp||!drop||!sel)return;
-  var q=inp.value.toLowerCase().trim();
-  var opts=Array.from(sel.options).filter(function(o){return o.value&&(!q||o.text.toLowerCase().includes(q));});
-  if(!opts.length){drop.style.display='none';return;}
-  drop.innerHTML=opts.map(function(o){return '<div style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);" onmousedown="selecionarProduto(this)">'+o.text+'<\/div>';}).join('');
-  opts.forEach(function(o,i){drop.children[i]._prodId=o.value;});
-  drop.style.display='block';
-}
-function selecionarProduto(el){
-  document.getElementById('sel-prod-pedido').value=el._prodId;
-  document.getElementById('prod-busca-input').value=el.textContent;
-  document.getElementById('prod-lista-drop').style.display='none';
+function selecionarProdutoPedido(id){
+  window._prodSelecionadoPedido=id;
+  var prod=produtos.find(function(p){return p.id===id;});
+  if(!prod)return;
+  document.querySelectorAll('[id^="pcard-"]').forEach(function(el){el.style.borderColor='var(--border)';el.style.background='var(--surface2)';});
+  var card=document.getElementById('pcard-'+id);
+  if(card){card.style.borderColor='var(--primary)';card.style.background='var(--surface)';}
+  var n=document.getElementById('prod-selected-nome');
+  if(n)n.textContent=prod.nome+' — R$ '+(parseFloat(prod.preco)||0).toFixed(2);
+  var q=document.getElementById('qtd-pedido');
+  if(q){q.value=1;q.focus();}
 }
 function adicionarItemPedido(){
-  var prodId=document.getElementById('sel-prod-pedido').value;
+  var prodId=window._prodSelecionadoPedido;
   var qtd=parseFloat(document.getElementById('qtd-pedido').value)||1;
-  if(!prodId){toast('Selecione um produto','error');return;}
+  if(!prodId){toast('Selecione um produto acima','error');return;}
   var prod=produtos.find(function(p){return p.id===prodId;});
   if(!prod)return;
-  // Se já existe, incrementar
   var existing=itensPedido.find(function(i){return i.produtoId===prodId;});
   if(existing){existing.qtd+=qtd;existing.total=existing.qtd*existing.preco;}
-  else{itensPedido.push({produtoId:prodId,nome:prod.nome,codigo:prod.codigo||'',ean:prod.ean||'',ncm:prod.ncm||'',emb:prod.emb||'',emb2:prod.emb2||'',unidade:prod.unidade||'UN',preco:parseFloat(prod.preco||0),qtd:qtd,total:qtd*parseFloat(prod.preco||0)});}
+  else{itensPedido.push({produtoId:prodId,nome:prod.nome,unidade:prod.unidade||'UN',emb:prod.emb||'',preco:parseFloat(prod.preco||0),qtd:qtd,total:qtd*parseFloat(prod.preco||0)});}
   renderItensPedido();
-  document.getElementById('sel-prod-pedido').value='';
   document.getElementById('qtd-pedido').value=1;
 }
-
-
-// ── RENDERIZAR ITENS DO PEDIDO ──
 function renderItensPedido(){
   var body=document.getElementById('pedido-items-body');
   if(!itensPedido.length){
