@@ -1094,9 +1094,17 @@ WhatsApp: [Seu Telefone]</textarea>
 
 <!-- MODAL CLIENTE -->
 <div class="overlay" id="modal-cliente">
-  <div class="modal">
-    <button class="modal-close" onclick="fecharModal('modal-cliente')">✕</button>
-    <div class="modal-title">🏢 <span id="modal-cliente-title">Novo Cliente</span></div>
+  <div class="modal" style="max-width:720px">
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="modal-close" onclick="fecharModal('modal-cliente')" style="position:static;margin:0;">✕</button>
+        <span style="font-size:15px;font-weight:700;">🏢 <span id="modal-cliente-title">Novo Cliente</span></span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline" onclick="fecharModal('modal-cliente')">Cancelar</button>
+        <button class="btn btn-green" onclick="salvarCliente()">💾 Salvar</button>
+      </div>
+    </div>
     <div class="form-grid">
       <div class="form-group full">
         <label class="form-label">CNPJ</label>
@@ -1178,10 +1186,7 @@ WhatsApp: [Seu Telefone]</textarea>
         <textarea class="form-textarea" id="f-obs" placeholder="Notas sobre o cliente..."></textarea>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="fecharModal('modal-cliente')">Cancelar</button>
-      <button class="btn btn-green" onclick="salvarCliente()">💾 Salvar Cliente</button>
-    </div>
+
   </div>
 </div>
 
