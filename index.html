@@ -1960,8 +1960,6 @@ function abrirModalPedido(id){
     document.getElementById('fp-descarga-pedido').value=ped.descarga||'nao_informado';
     document.getElementById('fp-frete-tipo').value=ped.freteTipo||'cif';
     document.getElementById('fp-frete-valor').value=ped.freteValor||'';
-    document.getElementById('fp-frete-venc').value=ped.freteVenc||'';
-    document.getElementById('fp-produto-venc').value=ped.produtoVenc||'';
     document.getElementById('fp-prazo-entrega').value=ped.prazoEntrega||'';
     document.getElementById('fp-peso-pedido').value=ped.pesoPedido||'';
     (function(){var v=(ped.ppPrazo||'').split('/').filter(Boolean);var q=v.length||1;var s=document.getElementById('fp-pp-qtd');if(s){s.value=q;atualizarParcelas('pp',q);v.forEach(function(x,i){var e=document.getElementById('fp-pp-d'+(i+1));if(e)e.value=x;});}})();
@@ -1974,8 +1972,6 @@ function abrirModalPedido(id){
     document.getElementById('fp-descarga-pedido').value='nao_informado';
     document.getElementById('fp-frete-tipo').value='cif';
     document.getElementById('fp-frete-valor').value='';
-    document.getElementById('fp-frete-venc').value='';
-    document.getElementById('fp-produto-venc').value='';
     document.getElementById('fp-prazo-entrega').value='';
     document.getElementById('fp-peso-pedido').value='';
     document.getElementById('fp-pp-qtd').value='1';atualizarParcelas('pp',1);
@@ -2182,8 +2178,6 @@ function salvarPedido(){
     descarga:document.getElementById('fp-descarga-pedido').value,
     freteTipo:document.getElementById('fp-frete-tipo').value,
     freteValor:parseFloat(document.getElementById('fp-frete-valor').value)||0,
-    freteVenc:document.getElementById('fp-frete-venc').value,
-    produtoVenc:document.getElementById('fp-produto-venc').value,
     prazoEntrega:document.getElementById('fp-prazo-entrega').value||'',
     pesoPedido:document.getElementById('fp-peso-pedido').value||'',
     ppPrazo:(function(){var q=+(document.getElementById('fp-pp-qtd')||{value:1}).value||1;var r=[];for(var i=1;i<=q;i++){var v=(document.getElementById('fp-pp-d'+i)||{value:''}).value;if(v)r.push(v);}return r.join('/');})(),
