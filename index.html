@@ -191,7 +191,7 @@ tr:hover td { background: var(--surface2); }
 
 /* PEDIDO BUILDER */
 .pedido-items { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 14px; }
-.pedido-item-row { display: grid; grid-template-columns: 1fr 100px 70px 60px 110px 90px 36px; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); align-items: center; }
+.pedido-item-row { display: grid; grid-template-columns: 1fr 36px; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); align-items: center; }
 .pedido-item-row:last-child { border-bottom: none; }
 .pedido-item-header { background: var(--surface2); font-size: 11px; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
 .pedido-total { display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding: 12px 16px; background: var(--surface2); border-top: 1px solid var(--border); }
@@ -1391,9 +1391,6 @@ WhatsApp: [Seu Telefone]</textarea>
             <label class="form-label">Prazo Entrega (dias)</label>
             <input class="form-input" id="fp-prazo-entrega" type="number" min="0" placeholder="ex: 15">
           </div>
-          <div style="grid-column:span 2">
-            <label class="form-label">Peso Total (kg)</label>
-            <input class="form-input" id="fp-peso-pedido" type="number" step="0.01" placeholder="ex: 1500">
           </div></div>
       </div>
     </div>
@@ -1404,10 +1401,16 @@ WhatsApp: [Seu Telefone]</textarea>
           <div id="fp-pp-datas" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"></div>
         </div>
       </div>
-      <div class="form-group full">
-        <label class="form-label" style="font-weight:700;color:var(--primary);margin-bottom:6px;">🚚 Boletos Frete</label>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:11px;opacity:.7;">Parcelas (0=CIF):</span><select id="fp-pf-qtd" class="form-input" style="width:60px;padding:3px 6px;" onchange="atualizarParcelas('pf',+this.value)"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
-          <div id="fp-pf-datas" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"></div>
+      <div class="form-group full" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;">
+        <div>
+          <label class="form-label">Peso Total (kg)</label>
+          <input class="form-input" id="fp-peso-pedido" type="number" step="0.01" placeholder="ex: 1500">
+        </div>
+        <div>
+          <label class="form-label" style="font-weight:700;color:var(--primary);margin-bottom:6px;">🚚 Boletos Frete</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:11px;opacity:.7;">Parcelas (0=CIF):</span><select id="fp-pf-qtd" class="form-input" style="width:60px;padding:3px 6px;" onchange="atualizarParcelas('pf',+this.value)"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+            <div id="fp-pf-datas" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"></div>
+          </div>
         </div>
       </div>
         <!-- ===== FIM PARCELAS DINAMICAS ===== -->
@@ -1428,7 +1431,7 @@ WhatsApp: [Seu Telefone]</textarea>
 
     <div class="pedido-items" id="pedido-items-wrap">
       <div class="pedido-item-row pedido-item-header">
-        <span>Produto</span><span>Qtd</span><span>Emb.</span><span>Un.</span><span>Preço Unit.</span><span>Total</span><span></span>
+        <span>Produto</span><span></span>
       </div>
       <div id="pedido-items-body">
         <div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Nenhum item adicionado</div>
@@ -2035,20 +2038,11 @@ function adicionarItemPedido(){
 }
 function renderItensPedido(){
   var body=document.getElementById('pedido-items-body');
-  if(!itensPedido.length){
-    body.innerHTML='<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Nenhum item adicionado</div>';
-    document.getElementById('pedido-desconto-display').textContent='0%';
-    document.getElementById('pedido-total-value').textContent='R$ 0,00';return;
-  }
-  body.innerHTML=itensPedido.map(function(it,idx){
+  if(!itensPedido.length){body.innerHTML='<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Nenhum item adicionado</div>';recalcularPedido();return;}
+  body.innerHTML=itensPedido.map(function(it,i){
     return '<div class="pedido-item-row">'
-      +'<span>'+esc(it.nome)+'</span>'
-      +'<input type="number" class="form-input" min="0.01" step="0.01" value="'+it.qtd+'" style="width:80px;padding:4px;" onchange="updateItemPedido('+idx+',\'qtd\',this.value)">'
-      +'<input class="form-input" value="'+esc(it.emb||'')+'" style="width:65px;padding:4px;text-align:center;" onchange="updateItemPedido('+idx+',\'emb\',this.value)">'
-      +'<input class="form-input" value="'+esc(it.unidade)+'" style="width:55px;padding:4px;text-align:center;" onchange="updateItemPedido('+idx+',\'unidade\',this.value)">'
-      +'<input type="number" class="form-input" min="0" step="0.01" value="'+it.preco+'" style="width:100px;padding:4px;" onchange="updateItemPedido('+idx+',\'preco\',this.value)">'
-      +'<span style="color:var(--accent);font-weight:600;">'+fmtMoeda(it.total)+'</span>'
-      +'<button class="btn btn-ghost btn-sm" onclick="removeItemPedido('+idx+')" style="color:var(--danger)">🗑</button>'
+      +'<span><strong>'+esc(it.nome)+'</strong><br><small style="color:var(--text2)">'+it.unidade+' · R$ '+fmtNum(it.preco)+' · '+it.qtd+'x</small></span>'
+      +'<span><button class="btn btn-ghost btn-sm" onclick="removeItemPedido('+i+')" style="color:var(--danger)">🗑</button></span>'
       +'</div>';
   }).join('');
   recalcularPedido();
