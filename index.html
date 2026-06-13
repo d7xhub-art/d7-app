@@ -133,7 +133,7 @@ tr:hover td { background: var(--surface2); }
 /* MODAL */
 .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
 .overlay.open { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 700px; max-width: 96vw; max-height: 92vh; overflow: hidden; padding: 26px; position: relative; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,.6); animation: fadeUp .2s ease; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 860px; max-width: 96vw; max-height: 92vh; overflow: hidden; padding: 26px; position: relative; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,.6); animation: fadeUp .2s ease; }
 
     #modal-ped-topbar { display:flex; align-items:center; gap:12px; padding:12px 20px; background:var(--primary); flex-shrink:0; min-height:56px; }
     #modal-ped-topbar h3 { font-size:15px; font-weight:700; margin:0; color:#fff; white-space:nowrap; }
@@ -1441,7 +1441,7 @@ WhatsApp: [Seu Telefone]</textarea>
       </div>
     </div>
 
-    <div class="pedido-items" id="pedido-items-wrap">
+    <div class="pedido-items" id="pedido-items-wrap" style="display:none">
       
       <div id="pedido-items-body">
         <div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Nenhum item adicionado</div>
