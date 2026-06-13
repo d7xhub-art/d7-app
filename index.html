@@ -2741,7 +2741,7 @@ function deletarProduto(id){if(!confirm('Excluir produto?'))return;produtos=prod
 // ── TABELAS DE PREÇO ──
 function renderTabelas(){
   var margMin=parseFloat((document.getElementById('filter-marg')||{value:'0'}).value)||0;
-  var forn=document.getElementById('filter-forn-tab').value;
+  var forn=(document.getElementById('filter-forn-tab')||{value:''}).value;
 var selForn=document.getElementById('filter-forn-tab');
   if(selForn){
     selForn.innerHTML='<option value="">Todos os fornecedores<\/option>';
