@@ -2073,7 +2073,7 @@ function atualizarParcelas(tipo,qtd){
   cont.innerHTML='';
   for(var i=1;i<=qtd;i++){
     var d=document.createElement('div');
-    d.style.cssText='display:flex;flex-direction:column;gap:2px;align-items:center;';
+    d.style.cssText='display:flex;flex-direction:row;gap:4px;align-items:center;';
     d.innerHTML='<span style="font-size:10px;opacity:.6;">'+i+'x</span><input class="form-input" id="fp-'+tipo+'-d'+i+'" type="text" placeholder="DD" style="width:65px;padding:4px;text-align:center;">';
     cont.appendChild(d);
   }
