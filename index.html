@@ -2742,10 +2742,12 @@ function deletarProduto(id){if(!confirm('Excluir produto?'))return;produtos=prod
 function renderTabelas(){
   var margMin=parseFloat((document.getElementById('filter-marg')||{value:'0'}).value)||0;
   var forn=document.getElementById('filter-forn-tab').value;
-  var selForn=document.getElementById('filter-forn-tab');
-  selForn.innerHTML='<option value="">Todos os fornecedores</option>';
-  fornecedores.forEach(function(f){selForn.innerHTML+='<option value="'+f.id+'">'+esc(f.nome)+'</option>';});
-  selForn.value=forn;
+var selForn=document.getElementById('filter-forn-tab');
+  if(selForn){
+    selForn.innerHTML='<option value="">Todos os fornecedores<\/option>';
+    fornecedores.forEach(function(f){selForn.innerHTML+='<option value="'+f.id+'">'+(f.nome)+'<\/option>';});
+    selForn.value=forn;
+  }
   var prods=produtos.filter(function(p){return (!forn||p.fornecedorId===forn)&&(p.margem||0)>=margMin;});
   if(tabelaMode==='fornecedor')renderTabelaFornecedor(prods);
   else renderTabelaCliente(prods);
