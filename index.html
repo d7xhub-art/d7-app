@@ -1941,6 +1941,38 @@ function mudarStatusPedido(id,status){
   toast('Status atualizado: '+status,'success');
 }
 
+var pedidoVer=null;
+function verPedido(id){
+  var p=pedidos.find(function(x){return x.id===id;});
+  if(!p){toast('Pedido não encontrado','error');return;}
+  pedidoVer=p;
+  var cli=clientes.find(function(c){return c.id===p.clienteId;});
+  var data=p.criadoEm?new Date(p.criadoEm).toLocaleDateString('pt-BR'):'—';
+  var itensHtml=p.itens.map(function(it){
+    return '<tr><td>'+esc(it.nome)+'</td><td style="text-align:center">'+it.qtd+' '+esc(it.unidade||'UN')+'</td><td style="text-align:right">'+fmtMoeda(it.preco)+'</td><td style="text-align:right;font-weight:600">'+fmtMoeda(it.total)+'</td></tr>';
+  }).join('');
+  var html='<div style="padding:8px 0">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">'
+    +'<h2 style="margin:0;font-size:18px">Pedido #'+p.numero+'</h2>'
+    +'<span class="tag tag-'+p.status+'">'+p.status+'</span>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">'
+    +'<div><span style="color:var(--text2);font-size:12px">CLIENTE</span><div style="font-weight:600">'+(cli?esc(cli.nome):'Cliente removido')+'</div></div>'
+    +'<div><span style="color:var(--text2);font-size:12px">DATA</span><div>'+data+'</div></div>'
+    +'</div>'
+    +'<table style="width:100%;border-collapse:collapse;margin-bottom:16px">'
+    +'<thead><tr style="background:var(--surface2);font-size:12px;color:var(--text2)">'
+    +'<th style="padding:8px;text-align:left">PRODUTO</th><th style="padding:8px;text-align:center">QTD</th><th style="padding:8px;text-align:right">PREÇO</th><th style="padding:8px;text-align:right">TOTAL</th>'
+    +'</tr></thead><tbody>'+itensHtml+'</tbody>'
+    +'</table>'
+    +(p.desconto?'<div style="text-align:right;margin-bottom:8px;color:var(--text2)">Desconto: '+p.desconto+'%</div>':'')
+    +'<div style="text-align:right;font-size:18px;font-weight:700;color:var(--accent)">Total: '+fmtMoeda(p.total)+'</div>'
+    +(p.obs?'<div style="margin-top:12px;padding:10px;background:var(--surface2);border-radius:6px;font-size:13px;color:var(--text2)">📝 '+esc(p.obs)+'</div>':'')
+    +'</div>';
+  document.getElementById('ver-pedido-content').innerHTML=html;
+  document.getElementById('modal-ver-pedido').classList.add('open');
+}
+
 // ── MODAL PEDIDO ──
 function abrirModalPedido(id){
   editPedidoId=id||null;
