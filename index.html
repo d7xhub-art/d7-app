@@ -12,9 +12,9 @@
 <style>
 :root {
   --bg: #0e0e14;
-  --bg2: #13131c;h
+  --bg2: #13131c;
   --surface: #1a1a26;
-  --surface2: #22223a;h
+  --surface2: #22223a;
   --border: #2a2a40;
   --border2: #353555;
   --primary: #7c3aed;
@@ -1355,22 +1355,13 @@ WhatsApp: [Seu Telefone]</textarea>
           <option value="">Selecione o cliente...</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="fp-status-pedido">
-          <option value="aberto">Aberto</option>
-          <option value="enviado">Enviado</option>
-          <option value="entregue">Entregue</option>
-          <option value="cancelado">Cancelado</option>
-        </select>
-      </div>
 <div class="form-group" style="margin:0">
         <label class="form-label">Desconto Geral (%)</label>
         <input class="form-input" id="fp-desconto-pedido" type="number" min="0" max="100" placeholder="0" oninput="recalcularPedido()">
       </div>
       
 
-      <div style="grid-column: 1 / -1" style="margin-bottom:10px;">
+      <div style="margin-bottom:10px;">
           <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
       <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">📦 Adicionar Produto</div>
       <select class="form-select" id="sel-forn-pedido" onchange="filtrarProdutosPedido()" style="width:100%;margin-bottom:8px;">
@@ -1457,6 +1448,16 @@ WhatsApp: [Seu Telefone]</textarea>
     <div id="modal-ped-preview-area">
       
           <div style="padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:10px;flex-shrink:0;">
+          <div class="form-group" style="margin:0">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="fp-status-pedido">
+          <option value="aberto">Aberto</option>
+          <option value="enviado">Enviado</option>
+          <option value="entregue">Entregue</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      
       <div class="form-group" style="margin:0">
         <label class="form-label">Observações</label>
         <input class="form-input" id="fp-obs-pedido" placeholder="Observações do pedido">
@@ -1467,6 +1468,16 @@ WhatsApp: [Seu Telefone]</textarea>
           </div>
   </div>
 </div>
+</div>
+✅      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="fp-status-pedido">
+          <option value="aberto">Aberto</option>
+          <option value="enviado">Enviado</option>
+          <option value="entregue">Entregue</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
 <!-- MODAL VER PEDIDO -->
 <div class="overlay" id="modal-ver-pedido">
   <div class="modal modal-lg">
