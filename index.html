@@ -1972,8 +1972,6 @@ function verPedido(id){
     +'<th style="padding:8px;text-align:left">PRODUTO</th><th style="padding:8px;text-align:center">QTD</th><th style="padding:8px;text-align:right">PREÇO</th><th style="padding:8px;text-align:right">TOTAL</th>'
     +'</tr></thead><tbody>'+itensHtml+'</tbody>'
     +'</table>'
-    +(p.desconto?'<div style="text-align:right;margin-bottom:8px;color:var(--text2)">Desconto: '+p.desconto+'%</div>':'')
-    +'<div style="text-align:right;font-size:18px;font-weight:700;color:var(--accent)">Total: '+fmtMoeda(p.total)+'</div>'
     +(p.obs?'<div style="margin-top:12px;padding:10px;background:var(--surface2);border-radius:6px;font-size:13px;color:var(--text2)">📝 '+esc(p.obs)+'</div>':'')
     +'</div>';
   document.getElementById('ver-pedido-content').innerHTML=html;
