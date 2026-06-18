@@ -1855,9 +1855,9 @@ function navigate(panel){
   var titles={dashboard:'Dashboard',clientes:'Clientes',pedidos:'Pedidos',catalogo:'Catálogo de Produtos',tabelas:'Tabelas de Preços',ai:'D7X — IA'};
   document.getElementById('topbar-title').textContent=titles[panel];
   var btn=document.getElementById('btn-acao');
-  if(panel==='clientes'){btn.textContent='+ Novo Cliente';btn.style.display='';}
+  if(panel==='clientes'){btn.textContent='+ Novo Cliente';btn.style.display='';btn.onclick=function(){acaoPrincipal();};}
   else if(panel==='pedidos'){btn.textContent='+ Novo Pedido';btn.style.display='';btn.onclick=function(){abrirModalPedido();};}
-  else if(panel==='catalogo'){btn.textContent='+ Ações';btn.style.display='';}
+  else if(panel==='catalogo'){btn.textContent='+ Ações';btn.style.display='';btn.onclick=function(){acaoPrincipal();};}
   else if(panel==='tabelas'){btn.style.display='none';}
   else if(panel==='ai'){btn.style.display='none';}
   else{btn.textContent='+ Novo Cliente';btn.style.display='';}
