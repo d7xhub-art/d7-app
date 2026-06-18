@@ -1351,20 +1351,8 @@ WhatsApp: [Seu Telefone]</textarea>
       </div>
       <button class="modal-close-ped" onclick="fecharModal('modal-pedido')">✕</button>
     </div>
-    <div id="modal-ped-subheader" style="flex-shrink:0;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--bg2);">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
-        <div>
-          <div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;">Fornecedor</div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);" id="sub-fornecedor">—</div>
-        </div>
-        <div style="color:var(--muted);padding-top:12px;">→</div>
-        <div style="text-align:right;">
-          <div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;">Cliente</div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);" id="sub-cliente">—</div>
-        </div>
-      </div>
-      <div style="border-top:1px solid var(--border);margin-bottom:8px;"></div>
-      <div style="display:flex;gap:20px;flex-wrap:wrap;">
+    <div id="modal-ped-subheader" style="flex-shrink:0;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--surface);">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;">
         <div><div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;">Itens</div><div style="font-size:13px;font-weight:500;color:var(--text);" id="sub-itens">0</div></div>
         <div><div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;">Total Geral</div><div style="font-size:13px;font-weight:600;color:var(--primary);" id="sub-total">R$ 0,00</div></div>
         <div><div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;">Frete</div><div style="font-size:13px;font-weight:500;color:var(--text);" id="sub-frete">—</div></div>
@@ -2150,6 +2138,7 @@ function previewPedido(){
   if(!cliNome||cliNome.indexOf('Selecio')>=0)cliNome='—';
   var fornSel=document.getElementById('sel-forn-pedido');
   var fornNome=fornSel&&fornSel.selectedIndex>0?fornSel.options[fornSel.selectedIndex].text:'—';
+  if(fornNome==='—'&&itensPedido.length){var _fp=produtos.find(function(p){return p.id===itensPedido[0].produtoId;});if(_fp){var _ff=fornecedores.find(function(f){return f.id===_fp.fornecedorId;});if(_ff)fornNome=_ff.nome;}}
   var statusEl=document.getElementById('fp-status-pedido');
   var statusVal=statusEl?statusEl.value||'Aberto':'Aberto';
   var desconto=document.getElementById('fp-desconto-pedido')?document.getElementById('fp-desconto-pedido').value||'':'';
