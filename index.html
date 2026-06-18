@@ -676,7 +676,7 @@ input:checked+.toggle-slider:before{transform:translateX(18px);}
         <!-- META 80 DISTRIBUIDORES -->
         <div class="card" style="margin-bottom:16px;border:1px solid var(--accent);">
           <div class="card-header" style="justify-content:space-between;">
-            <span class="card-title">🏆 Meta: 40 Novas Indústrias e Distribuidores</span>
+            <span class="card-title">🏆 Meta: <span id="prosp-meta-titulo">40</span> Novas Indústrias e Distribuidores <button onclick="editarMetaDistribuidores()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:0 4px;" title="Editar meta">✏️</button></span>
             <span style="font-size:12px;color:var(--muted);" id="prosp-meta-label">0 / 40</span>
           </div>
           <div style="background:var(--surface2);border-radius:8px;height:12px;overflow:hidden;margin-bottom:8px;">
@@ -3026,8 +3026,20 @@ function buscarInstagram(){window.open('https://www.instagram.com/explore/search
 var prospectos=JSON.parse(localStorage.getItem(getKeyProsp())||'[]');
 function saveProspectos(){localStorage.setItem(getKeyProsp(),JSON.stringify(prospectos));}
 
+function editarMetaDistribuidores(){
+  var atual=localStorage.getItem('d7_meta_distribuidores')||'40';
+  var novo=prompt('Nova meta de distribuidores:',atual);
+  if(novo===null)return;
+  var n=parseInt(novo);
+  if(!n||n<1){toast('Valor inválido','error');return;}
+  localStorage.setItem('d7_meta_distribuidores',String(n));
+  var el=document.getElementById('prosp-meta-titulo');
+  if(el)el.textContent=n;
+  atualizarMetaDistribuidores();
+  toast('Meta atualizada para '+n+'!','success');
+}
 function atualizarMetaDistribuidores(){
-  var meta=40;
+  var meta=parseInt(localStorage.getItem('d7_meta_distribuidores')||'40');
   var fechados=prospectos.filter(function(p){return p.status==='distribuidor';}).length;
   // também conta clients com origem prospecção
   var clientesFechados=clientes.filter(function(c){return c.status==='ativo'&&c.origem_prosp;}).length;
