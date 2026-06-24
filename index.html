@@ -372,6 +372,26 @@ input:checked+.toggle-slider:before{transform:translateX(18px);}
 <script>
 (function(){var FB={apiKey:"AIzaSyCCGcifX-Z0C2M9PFjREJ7Pa6B63jUK8PU",authDomain:"d7-hub-crm.firebaseapp.com",databaseURL:"https://d7-hub-crm-default-rtdb.firebaseio.com",projectId:"d7-hub-crm",storageBucket:"d7-hub-crm.firebasestorage.app",messagingSenderId:"382620912509",appId:"1:382620912509:web:fc4d293ff1e4f1db5c5a14"};var D7K=["d7_clientes","d7_fornecedores","d7_produtos","d7_pedidos","d7_cfg","d7_tabelas","d7_historico","d7_metas","d7_theme","d7_config"];var _db=null,_pw={},_wt=null;function ld(s,cb){var el=document.createElement("script");el.src=s;el.onload=cb;document.head.appendChild(el);}function sw(k,v){_pw[k]=v;clearTimeout(_wt);_wt=setTimeout(function(){if(!_db)return;var w=_pw;_pw={};Object.keys(w).forEach(function(k){_db.ref("d7app/"+k).set(w[k]);});},800);}function init(){ld("https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js",function(){ld("https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js",function(){firebase.initializeApp(FB);_db=firebase.database();D7K.forEach(function(k){_db.ref("d7app/"+k).once("value",function(s){if(s.exists()){var v=s.val();Object.getPrototypeOf(localStorage).setItem.call(localStorage,k,typeof v==="string"?v:JSON.stringify(v));}});});console.log("[D7] Firebase Sync ativo");});});}var _os=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){_os.call(this,k,v);if(D7K.indexOf(k)!==-1&&_db)sw(k,v);};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();})();
 </script>
+<!-- D7 Firebase Auth -->
+<script>
+(function(){
+  var S='<style id="d7as">#d7lo{position:fixed;top:0;left:0;width:100%;height:100%;background:#0e0e14;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif}#d7lb{background:#1a1a2e;padding:36px;border-radius:12px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,.6);text-align:center}#d7lb h2{color:#7c3aed;margin:0 0 4px;font-size:22px}#d7lb p{color:#888;margin:0 0 20px;font-size:13px}.d7i{width:100%;padding:9px 12px;margin:5px 0;border:1px solid #333;border-radius:6px;background:#13131c;color:#fff;font-size:14px;box-sizing:border-box}.d7b{width:100%;padding:10px;margin:5px 0;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-weight:600}.d7be{background:#7c3aed;color:#fff}.d7bg{background:#fff;color:#333;display:flex;align-items:center;justify-content:center;gap:8px}.d7bg img{width:17px}.d7sp{color:#444;margin:10px 0;font-size:12px}#d7er{color:#e94560;font-size:12px;min-height:14px;margin:3px 0}</style>';
+  var H='<div id="d7lo"><div id="d7lb"><h2>D7 Hub CRM</h2><p>Acesso restrito — faça login</p><input id="d7em" class="d7i" type="email" placeholder="E-mail"><input id="d7pw" class="d7i" type="password" placeholder="Senha"><div id="d7er"></div><button class="d7b d7be" onclick="d7Li()">Entrar</button><div class="d7sp">— ou —</div><button class="d7b d7bg" onclick="d7Lg()"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">Entrar com Google</button></div></div>';
+  function show(){document.body.insertAdjacentHTML('beforeend',S+H);}
+  function hide(){['d7lo','d7as'].forEach(function(id){var e=document.getElementById(id);if(e)e.remove();});}
+  function err(m){var e=document.getElementById('d7er');if(e)e.textContent=m;}
+  window.d7Li=function(){firebase.auth().signInWithEmailAndPassword(document.getElementById('d7em').value,document.getElementById('d7pw').value).catch(function(){err('E-mail ou senha inválidos.');});};
+  window.d7Lg=function(){firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(function(){err('Erro ao entrar com Google.');});};
+  function init(){
+    if(typeof firebase==='undefined'){setTimeout(init,300);return;}
+    var s=document.createElement('script');
+    s.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js';
+    s.onload=function(){firebase.auth().onAuthStateChanged(function(u){if(u){hide();console.log('[D7] Auth:',u.email);}else{show();}});};
+    document.head.appendChild(s);
+  }
+  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
+})();
+</script>
 </head>
 <body>
 <div class="app">
