@@ -135,17 +135,35 @@ tr:hover td { background: var(--surface2); }
 .overlay.open { display: flex; }
     .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 980px; max-width: 96vw; max-height: 92vh; overflow: hidden; padding: 26px; position: relative; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,.6); animation: fadeUp .2s ease; }
 
-    #modal-pedido{background:var(--bg)!important;backdrop-filter:none!important;align-items:stretch!important;justify-content:stretch!important;}
-    #modal-pedido .modal{width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;border-radius:0!important;border:none!important;padding:0!important;display:flex!important;flex-direction:column!important;box-shadow:none!important;}
-    #modal-ped-topbar { display:flex; align-items:center; gap:12px; padding:12px 20px; background:var(--primary); flex-shrink:0; min-height:56px; }
-    #modal-ped-topbar h3 { font-size:15px; font-weight:700; margin:0; color:#fff; white-space:nowrap; }
+    /* === NOVO PEDIDO — LIGHT THEME === */
+    #modal-pedido{background:#F0EEF8!important;backdrop-filter:none!important;align-items:stretch!important;justify-content:stretch!important;}
+    #modal-pedido .modal{width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;border-radius:0!important;border:none!important;padding:0!important;display:flex!important;flex-direction:column!important;box-shadow:none!important;background:#F0EEF8!important;}
+    #modal-ped-topbar { display:flex; align-items:center; gap:12px; padding:12px 20px; background:#fff; flex-shrink:0; min-height:56px; border-bottom:1px solid #E0DCF5; box-shadow:0 1px 4px rgba(127,119,221,.08); }
+    #modal-ped-topbar h3 { font-size:15px; font-weight:700; margin:0; color:#1a1a2e; white-space:nowrap; }
     .ped-header-btns { display:flex; gap:8px; margin-left:auto; }
-    .modal-close-ped { background:none; border:none; color:rgba(255,255,255,.7); font-size:20px; cursor:pointer; padding:4px 10px; line-height:1; flex-shrink:0; }
-    .modal-close-ped:hover { color:#fff; }
+    .modal-close-ped { background:none; border:1px solid #E0DCF5; color:#7F77DD; font-size:18px; cursor:pointer; padding:4px 10px; line-height:1; flex-shrink:0; border-radius:6px; transition:all .15s; }
+    .modal-close-ped:hover { background:#7F77DD; color:#fff; border-color:#7F77DD; }
+    #modal-ped-subheader { background:#fff!important; border-bottom:1px solid #E0DCF5!important; color:#5a5580!important; }
+    #modal-ped-subheader * { color:#5a5580!important; }
+    #modal-ped-subheader strong, #modal-ped-subheader b, #modal-ped-subheader .ped-sub-val { color:#1a1a2e!important; font-weight:600; }
+    #modal-ped-subheader .ped-sub-label { color:#8880a0!important; }
     #modal-ped-body { flex:1; display:flex; overflow:hidden; }
-    #modal-ped-form-bar { flex:0 0 42%; min-width:360px; overflow-y:auto; padding:20px; background:var(--surface); border-right:2px solid var(--border); }
-    #modal-ped-preview-area { flex:1; overflow:hidden; background:rgba(0,0,0,.2); padding:0; display:flex; flex-direction:column; align-items:stretch; }
-    #pedido-live-preview { background:var(--surface); border-radius:10px; padding:28px 32px; max-width:100%; width:100%; box-shadow:0 4px 32px rgba(0,0,0,.5); }
+    #modal-ped-form-bar { flex:0 0 42%; min-width:360px; overflow-y:auto; padding:20px; background:#fff; border-right:1px solid #E0DCF5; }
+    #modal-ped-preview-area { flex:1; overflow:hidden; background:#F4F2FC; padding:20px; display:flex; flex-direction:column; align-items:stretch; }
+    #pedido-live-preview { background:#fff; border-radius:10px; padding:28px 32px; max-width:100%; width:100%; box-shadow:0 2px 16px rgba(127,119,221,.12); border:1px solid #E0DCF5; }
+    #modal-ped-form-bar .form-input, #modal-ped-form-bar .form-select { background:#F8F7FF!important; border:1px solid #D8D4F0!important; color:#1a1a2e!important; }
+    #modal-ped-form-bar .form-input:focus, #modal-ped-form-bar .form-select:focus { border-color:#7F77DD!important; box-shadow:0 0 0 3px rgba(127,119,221,.15)!important; }
+    #modal-ped-form-bar .form-label { color:#5a5580!important; }
+    #modal-ped-form-bar .form-input::placeholder { color:#b0aac8!important; }
+    #modal-ped-form-bar h4, #modal-ped-form-bar .section-title { color:#1a1a2e!important; }
+    #modal-ped-form-bar .btn-outline { border-color:#D8D4F0!important; color:#7F77DD!important; background:#fff!important; }
+    #modal-ped-form-bar .btn-outline:hover { background:#7F77DD!important; color:#fff!important; }
+    #modal-pedido .pedido-items { background:#F8F7FF!important; border:1px solid #E0DCF5!important; }
+    #modal-pedido .pedido-item-header { background:#EDE9FA!important; color:#5a5580!important; }
+    #modal-pedido .pedido-item-row { border-top:1px solid #E0DCF5!important; color:#1a1a2e!important; }
+    #modal-pedido .pedido-item-row:hover { background:#F4F2FC!important; }
+    #modal-pedido .pedido-total { background:#EDE9FA!important; border-top:1px solid #D8D4F0!important; }
+    #modal-pedido .pedido-total-value { color:#7F77DD!important; }
 .modal-lg { width: 860px; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
 .modal-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
