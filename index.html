@@ -135,34 +135,17 @@ tr:hover td { background: var(--surface2); }
 .overlay.open { display: flex; }
     .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 980px; max-width: 96vw; max-height: 92vh; overflow: hidden; padding: 26px; position: relative; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,.6); animation: fadeUp .2s ease; }
 
-    /* === NOVO PEDIDO — LIGHT THEME === */
-    #modal-pedido{background:#F0EEF8!important;backdrop-filter:none!important;align-items:stretch!important;justify-content:stretch!important;}
-    #modal-pedido .modal{width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;border-radius:0!important;border:none!important;padding:0!important;display:flex!important;flex-direction:column!important;box-shadow:none!important;background:#F0EEF8!important;}
-    #modal-ped-topbar{display:flex!important;align-items:center!important;gap:12px!important;padding:12px 20px!important;background:#fff!important;flex-shrink:0!important;min-height:56px!important;border-bottom:1px solid #E0DCF5!important;box-shadow:0 1px 4px rgba(127,119,221,.08)!important;}
-    #modal-ped-topbar h3{font-size:15px!important;font-weight:700!important;margin:0!important;color:#1a1a2e!important;white-space:nowrap!important;}
-    .ped-header-btns{display:flex!important;gap:8px!important;margin-left:auto!important;}
-    .modal-close-ped{background:none!important;border:1px solid #E0DCF5!important;color:#7F77DD!important;font-size:18px!important;cursor:pointer!important;padding:4px 10px!important;line-height:1!important;flex-shrink:0!important;border-radius:6px!important;transition:all .15s!important;}
-    .modal-close-ped:hover{background:#7F77DD!important;color:#fff!important;border-color:#7F77DD!important;}
-    #modal-ped-subheader{background:#fff!important;border-bottom:1px solid #E0DCF5!important;color:#5a5580!important;}
-    #modal-ped-subheader *{color:#5a5580!important;}
-    #modal-ped-subheader strong,#modal-ped-subheader b,#modal-ped-subheader .ped-sub-val{color:#1a1a2e!important;font-weight:600!important;}
-    #modal-ped-body{flex:1!important;display:flex!important;overflow:hidden!important;}
-    #modal-ped-form-bar{flex:0 0 42%!important;min-width:360px!important;overflow-y:auto!important;padding:20px!important;background:#fff!important;border-right:1px solid #E0DCF5!important;}
-    #modal-ped-preview-area{flex:1!important;overflow:hidden!important;background:#F4F2FC!important;padding:20px!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;}
-    #pedido-live-preview{background:#fff!important;border-radius:10px!important;padding:28px 32px!important;max-width:100%!important;width:100%!important;box-shadow:0 2px 16px rgba(127,119,221,.12)!important;border:1px solid #E0DCF5!important;}
-    #modal-ped-form-bar .form-input,#modal-ped-form-bar .form-select{background:#F8F7FF!important;border:1px solid #D8D4F0!important;color:#1a1a2e!important;}
-    #modal-ped-form-bar .form-input:focus,#modal-ped-form-bar .form-select:focus{border-color:#7F77DD!important;box-shadow:0 0 0 3px rgba(127,119,221,.15)!important;}
-    #modal-ped-form-bar .form-label{color:#5a5580!important;}
-    #modal-ped-form-bar .form-input::placeholder{color:#b0aac8!important;}
-    #modal-ped-form-bar h4,#modal-ped-form-bar .section-title,#modal-ped-form-bar label{color:#1a1a2e!important;}
-    #modal-ped-form-bar .btn-outline{border-color:#D8D4F0!important;color:#7F77DD!important;background:#fff!important;}
-    #modal-ped-form-bar .btn-outline:hover{background:#7F77DD!important;color:#fff!important;}
-    #modal-pedido .pedido-items{background:#F8F7FF!important;border:1px solid #E0DCF5!important;}
-    #modal-pedido .pedido-item-header{background:#EDE9FA!important;color:#5a5580!important;}
-    #modal-pedido .pedido-item-row{border-top:1px solid #E0DCF5!important;color:#1a1a2e!important;}
-    #modal-pedido .pedido-item-row:hover{background:#F4F2FC!important;}
-    #modal-pedido .pedido-total{background:#EDE9FA!important;border-top:1px solid #D8D4F0!important;}
-    #modal-pedido .pedido-total-value{color:#7F77DD!important;}
+    #modal-pedido{background:var(--bg)!important;backdrop-filter:none!important;align-items:stretch!important;justify-content:stretch!important;}
+    #modal-pedido .modal{width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;border-radius:0!important;border:none!important;padding:0!important;display:flex!important;flex-direction:column!important;box-shadow:none!important;}
+    #modal-ped-topbar { display:flex; align-items:center; gap:12px; padding:12px 20px; background:var(--primary); flex-shrink:0; min-height:56px; }
+    #modal-ped-topbar h3 { font-size:15px; font-weight:700; margin:0; color:#fff; white-space:nowrap; }
+    .ped-header-btns { display:flex; gap:8px; margin-left:auto; }
+    .modal-close-ped { background:none; border:none; color:rgba(255,255,255,.7); font-size:20px; cursor:pointer; padding:4px 10px; line-height:1; flex-shrink:0; }
+    .modal-close-ped:hover { color:#fff; }
+    #modal-ped-body { flex:1; display:flex; overflow:hidden; }
+    #modal-ped-form-bar { flex:0 0 42%; min-width:360px; overflow-y:auto; padding:20px; background:var(--surface); border-right:2px solid var(--border); }
+    #modal-ped-preview-area { flex:1; overflow:hidden; background:rgba(0,0,0,.2); padding:0; display:flex; flex-direction:column; align-items:stretch; }
+    #pedido-live-preview { background:var(--surface); border-radius:10px; padding:28px 32px; max-width:100%; width:100%; box-shadow:0 4px 32px rgba(0,0,0,.5); }
     #modal-pedido textarea,#modal-ped-preview-area textarea{background:#fff!important;border:1px solid #E0DCF5!important;color:#1a1a2e!important;border-radius:8px!important;}
     #modal-pedido textarea::placeholder{color:#b0aac8!important;}
     #modal-ped-preview-area *{color:#1a1a2e!important;}
@@ -3461,143 +3444,5 @@ function initApp(){
 initApp();
 </script>
 <div id="modal-meta-dist" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:10000;align-items:center;justify-content:center;"><div style="background:#1a1a2e;border:1px solid var(--accent);border-radius:12px;padding:24px;min-width:280px;max-width:320px;"><h3 style="margin:0 0 16px;color:var(--text);font-size:16px;">&#9881;&#65039; Configurar Meta</h3><label style="color:var(--muted);font-size:12px;">Nome da Meta</label><input id="cfg-meta-dist-nome" type="text" style="width:100%;background:#0d0c1d;border:1px solid var(--accent);color:var(--text);border-radius:6px;padding:8px;margin:4px 0 12px;box-sizing:border-box;" placeholder="Novos Clientes"><label style="color:var(--muted);font-size:12px;">Total / Meta</label><input id="cfg-meta-dist-total" type="number" min="1" style="width:100%;background:#0d0c1d;border:1px solid var(--accent);color:var(--text);border-radius:6px;padding:8px;margin:4px 0 16px;box-sizing:border-box;" placeholder="80"><div style="display:flex;gap:8px;justify-content:flex-end;"><button onclick="fecharConfigMetaDist()" style="background:transparent;border:1px solid var(--muted);color:var(--muted);border-radius:6px;padding:6px 16px;cursor:pointer;">Cancelar</button><button onclick="salvarConfigMetaDist()" style="background:var(--accent);border:none;color:#fff;border-radius:6px;padding:6px 16px;cursor:pointer;">Salvar</button></div></div></div><script>(function(){function rMD(){try{var c=JSON.parse(localStorage.getItem("d7_config")||"{}");var tot=c.metaDistTotal||80;var nom=c.metaDistNome||"Novos Clientes";var t=document.getElementById("meta-dist-title");if(t)t.textContent=t.textContent.replace(/Meta:.*$/,"Meta: "+nom);var l=document.getElementById("prosp-meta-label");if(l){var p=l.textContent.split("/");l.textContent=(p[0]||"0").trim()+" / "+tot;}}catch(e){}}window.abrirConfigMetaDist=function(){var c=JSON.parse(localStorage.getItem("d7_config")||"{}");var n=document.getElementById("cfg-meta-dist-nome");var v=document.getElementById("cfg-meta-dist-total");if(n)n.value=c.metaDistNome||"Novos Clientes";if(v)v.value=c.metaDistTotal||80;var m=document.getElementById("modal-meta-dist");if(m)m.style.display="flex";};window.salvarConfigMetaDist=function(){var c=JSON.parse(localStorage.getItem("d7_config")||"{}");var n=document.getElementById("cfg-meta-dist-nome");var v=document.getElementById("cfg-meta-dist-total");c.metaDistNome=(n&&n.value.trim())||"Novos Clientes";c.metaDistTotal=parseInt((v&&v.value)||"80")||80;localStorage.setItem("d7_config",JSON.stringify(c));var m=document.getElementById("modal-meta-dist");if(m)m.style.display="none";rMD();};window.fecharConfigMetaDist=function(){var m=document.getElementById("modal-meta-dist");if(m)m.style.display="none";};if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",rMD);}else{rMD();}})()</script><div id="d7x-fab" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:10px;"><div id="d7x-panel" style="display:none;width:300px;background:#12112a;border:1px solid #3C3489;border-radius:14px;overflow:hidden;flex-direction:column;"><div style="background:#3C3489;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="color:#fff;font-size:13px;font-weight:600;">D7X — Assistente</span><button onclick="document.getElementById('d7x-panel').style.display='none'" style="background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;">&times;</button></div><div id="d7x-msgs" style="height:220px;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px;"><div style="background:#2a2a4a;padding:6px 10px;border-radius:8px;color:#e0e0e0;font-size:13px;">Olá! Sou o D7X, assistente da D7.</div></div><div style="padding:8px 10px;border-top:1px solid #2a2a4a;display:flex;gap:6px;"><input id="d7x-inp" type="text" placeholder="Digite sua mensagem..." style="flex:1;background:#2a2a4a;border:none;color:#fff;border-radius:6px;padding:6px 10px;font-size:13px;" onkeydown="if(event.key==='Enter')d7xEnviar()"><button onclick="d7xEnviar()" style="background:#3C3489;border:none;color:#fff;border-radius:6px;padding:6px 12px;cursor:pointer;font-size:16px;">&#9658;</button></div></div><button onclick="var p=document.getElementById('d7x-panel');p.style.display=p.style.display==='none'?'flex':'none';p.style.flexDirection='column'" style="width:50px;height:50px;border-radius:50%;background:#3C3489;border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 12px rgba(60,52,137,0.5);">&#128172;</button></div><script>function d7xEnviar(){var i=document.getElementById("d7x-inp"),t=i.value.trim();if(!t)return;var m=document.getElementById("d7x-msgs");m.innerHTML+='<div style="background:#3C3489;padding:6px 10px;border-radius:8px;color:#fff;font-size:13px;">'+t+'</div>';i.value="";m.scrollTop=m.scrollHeight;var u="https://d7-chat.d7representacao.workers.dev";try{var cc=JSON.parse(localStorage.getItem("d7_config")||"{}");if(cc.url)u=cc.url;}catch(e){}m.innerHTML+='<div id="d7x-t" style="background:#2a2a4a;padding:6px 10px;border-radius:8px;color:#aaa;font-size:13px;">digitando...</div>';fetch(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:t}]})}).then(r=>r.json()).then(d=>{var e=document.getElementById("d7x-t");if(e)e.remove();var rr=d.response||d.content||(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||"...";m.innerHTML+='<div style="background:#2a2a4a;padding:6px 10px;border-radius:8px;color:#e0e0e0;font-size:13px;">'+rr+'</div>';m.scrollTop=m.scrollHeight;}).catch(function(){var e=document.getElementById("d7x-t");if(e)e.remove();});}
-// === CADASTRO RÁPIDO DE CLIENTE NO NOVO PEDIDO ===
-function abrirModalRapidoCliente() {
-  // Remove se já existir
-  const existing = document.getElementById('modal-rapido-cliente');
-  if (existing) { existing.remove(); return; }
-
-  const overlay = document.createElement('div');
-  overlay.id = 'modal-rapido-cliente';
-  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:9999;display:flex;align-items:center;justify-content:center;';
-
-  overlay.innerHTML = `
-    <div style="background:#fff;border-radius:14px;padding:28px;width:480px;max-width:95vw;box-shadow:0 8px 40px rgba(127,119,221,.25);border:1px solid #E0DCF5;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-        <h3 style="margin:0;font-size:16px;font-weight:700;color:#1a1a2e;">+ Cadastrar Novo Cliente</h3>
-        <button onclick="document.getElementById('modal-rapido-cliente').remove()" style="background:none;border:none;color:#7F77DD;font-size:20px;cursor:pointer;">✕</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div style="grid-column:1/-1">
-          <label style="font-size:11px;font-weight:600;color:#5a5580;text-transform:uppercase;letter-spacing:.4px;">Razão Social *</label>
-          <input id="rc-nome" class="form-input" placeholder="Nome da empresa" style="width:100%;margin-top:4px;background:#F8F7FF;border:1px solid #D8D4F0;color:#1a1a2e;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:600;color:#5a5580;text-transform:uppercase;letter-spacing:.4px;">Nome Fantasia</label>
-          <input id="rc-fantasia" class="form-input" placeholder="Fantasia" style="width:100%;margin-top:4px;background:#F8F7FF;border:1px solid #D8D4F0;color:#1a1a2e;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:600;color:#5a5580;text-transform:uppercase;letter-spacing:.4px;">CNPJ</label>
-          <input id="rc-cnpj" class="form-input" placeholder="00.000.000/0000-00" style="width:100%;margin-top:4px;background:#F8F7FF;border:1px solid #D8D4F0;color:#1a1a2e;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:600;color:#5a5580;text-transform:uppercase;letter-spacing:.4px;">Telefone / WhatsApp</label>
-          <input id="rc-tel" class="form-input" placeholder="(00) 00000-0000" style="width:100%;margin-top:4px;background:#F8F7FF;border:1px solid #D8D4F0;color:#1a1a2e;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:600;color:#5a5580;text-transform:uppercase;letter-spacing:.4px;">Cidade</label>
-          <input id="rc-cidade" class="form-input" placeholder="Cidade" style="width:100%;margin-top:4px;background:#F8F7FF;border:1px solid #D8D4F0;color:#1a1a2e;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:600;color:#5a5580;text-transform:uppercase;letter-spacing:.4px;">Estado</label>
-          <input id="rc-estado" class="form-input" placeholder="UF" maxlength="2" style="width:100%;margin-top:4px;background:#F8F7FF;border:1px solid #D8D4F0;color:#1a1a2e;text-transform:uppercase;">
-        </div>
-        <div style="grid-column:1/-1">
-          <label style="font-size:11px;font-weight:600;color:#5a5580;text-transform:uppercase;letter-spacing:.4px;">E-mail</label>
-          <input id="rc-email" class="form-input" type="email" placeholder="email@empresa.com" style="width:100%;margin-top:4px;background:#F8F7FF;border:1px solid #D8D4F0;color:#1a1a2e;">
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
-        <button onclick="document.getElementById('modal-rapido-cliente').remove()" style="padding:8px 18px;background:none;border:1px solid #D8D4F0;color:#7F77DD;border-radius:8px;cursor:pointer;font-weight:600;">Cancelar</button>
-        <button onclick="salvarClienteRapido()" style="padding:8px 22px;background:#7F77DD;border:none;color:#fff;border-radius:8px;cursor:pointer;font-weight:700;">💾 Salvar e Selecionar</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  overlay.addEventListener('click', e => { if(e.target === overlay) overlay.remove(); });
-  document.getElementById('rc-nome').focus();
-}
-
-function salvarClienteRapido() {
-  const nome = document.getElementById('rc-nome')?.value?.trim();
-  if (!nome) { alert('Informe a Razão Social do cliente.'); return; }
-
-  const id = 'rc' + Date.now().toString(36);
-  const novo = {
-    id, nome,
-    fantasia: document.getElementById('rc-fantasia')?.value?.trim() || '',
-    cnpj: document.getElementById('rc-cnpj')?.value?.trim() || '',
-    ie: '', segmento: '', cep: '', endereco: '',
-    cidade: document.getElementById('rc-cidade')?.value?.trim() || '',
-    estado: document.getElementById('rc-estado')?.value?.trim().toUpperCase() || '',
-    tel: document.getElementById('rc-tel')?.value?.trim() || '',
-    email: document.getElementById('rc-email')?.value?.trim() || '',
-    contato: '', gestor: '', desconto: 0, status: 'ativo', obs: '',
-    criadoEm: new Date().toISOString()
-  };
-
-  // Save to localStorage
-  const clientes = JSON.parse(localStorage.getItem('d7_clientes') || '[]');
-  clientes.push(novo);
-  localStorage.setItem('d7_clientes', JSON.stringify(clientes));
-
-  // Refresh the dropdown in Novo Pedido
-  const sel = document.getElementById('fp-cliente-pedido');
-  if (sel) {
-    const opt = document.createElement('option');
-    opt.value = id;
-    opt.textContent = nome + (novo.cidade ? ' — ' + novo.cidade : '');
-    sel.appendChild(opt);
-    sel.value = id;
-    if (typeof aplicarDescontoCliente === 'function') aplicarDescontoCliente();
-  }
-
-  // Also refresh main client list if visible
-  if (typeof renderClientes === 'function') renderClientes();
-
-  document.getElementById('modal-rapido-cliente').remove();
-  alert('✅ Cliente "' + nome + '" cadastrado e selecionado!');
-}
-
-// === INJETAR BOTÃO CADASTRO RÁPIDO NO NOVO PEDIDO ===
-(function() {
-  function injetarBtnCadastroCliente() {
-    const sel = document.getElementById('fp-cliente-pedido');
-    if (!sel || document.getElementById('btn-cadastro-rapido')) return;
-    const btn = document.createElement('button');
-    btn.id = 'btn-cadastro-rapido';
-    btn.type = 'button';
-    btn.textContent = '+ Cadastrar Novo Cliente';
-    btn.style.cssText = 'margin-top:6px;width:100%;padding:7px 10px;background:none;border:1.5px dashed #D8D4F0;color:#7F77DD;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;display:block;';
-    btn.onmouseover = function(){ this.style.background='#7F77DD';this.style.color='#fff';this.style.borderColor='#7F77DD'; };
-    btn.onmouseout = function(){ this.style.background='none';this.style.color='#7F77DD';this.style.borderColor='#D8D4F0'; };
-    btn.onclick = function(){ if(typeof abrirModalRapidoCliente==='function') abrirModalRapidoCliente(); };
-    sel.parentElement.appendChild(btn);
-  }
-  // Watch for fp-cliente-pedido to appear in DOM
-  const observer = new MutationObserver(function(mutations) {
-    for(const m of mutations) {
-      if([...m.addedNodes].some(n => n.id==='modal-pedido' || (n.querySelector && n.querySelector('#fp-cliente-pedido')))) {
-        setTimeout(injetarBtnCadastroCliente, 100);
-      }
-    }
-    // Also try directly if select exists but button not yet added
-    injetarBtnCadastroCliente();
-  });
-  document.addEventListener('DOMContentLoaded', function() {
-    observer.observe(document.body, { childList: true, subtree: true });
-  });
-  // Patch acaoPrincipal after page load
-  window.addEventListener('load', function() {
-    if (typeof acaoPrincipal === 'function') {
-      const _origAcao = acaoPrincipal;
-      window.acaoPrincipal = function() {
-        const r = _origAcao.apply(this, arguments);
-        setTimeout(injetarBtnCadastroCliente, 150);
-        return r;
-      };
-    }
-  });
-})();
 </script></body>
 </html>
